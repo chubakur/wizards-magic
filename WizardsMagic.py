@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame.sprite
+#Wizards Magic
 #Copyright (C) 2011  сhubakur
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
