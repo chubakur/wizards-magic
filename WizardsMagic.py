@@ -33,12 +33,15 @@ clock = pygame.time.Clock()
 background = pygame.Surface(screen.get_size())
 background = background.convert()
 background.fill((0,0,0))
-panels = pygame.sprite.Group()
-interface = pygame.sprite.Group()
-upper_interface = pygame.sprite.Group()
+panels = pygame.sprite.Group() #Нижний уровень
+interface = pygame.sprite.Group() #Уровень кнопок
+upper_interface = pygame.sprite.Group() #Уровень дополнительный
+ccards_1 = pygame.sprite.Group() #  Карты, которые вывел первый игрок
+ccards_2 = pygame.sprite.Group() # Карты, которые вывел второй игрок
 current_player = 1 #id игрока, который ходит
 cards_of_element_shower = False #показывать или не показывать окно с выбором карты выбранной стихии
 cards_of_element_shower_element = "" #какой элемент показывать
+selected_card = False #Выбранная карта
 font = pygame.font.Font(None, 20)
 font.set_bold(0)
 #class GameParams():
@@ -136,6 +139,7 @@ class CardsOfElementShower(pygame.sprite.Sprite):
         background.blit(self.image,self.rect)
     def update(self):
         if not cards_of_element_shower:
+            interface.remove(self)
             upper_interface.empty()
             return
         if self.player != current_player:
@@ -295,9 +299,10 @@ class HealthWindow(pygame.sprite.Sprite):
     def update(self):
         self.draw()
 class Cardbox(pygame.sprite.Sprite):
-    def __init__(self,rect,player):
+    def __init__(self,rect,player,position):
         pygame.sprite.Sprite.__init__(self)
         self.type = 'cardbox'
+        self.position = position
         self.player = player #первый или второй
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
@@ -356,7 +361,7 @@ class Event_handler():
         if event.type == MOUSEBUTTONDOWN:
             global cards_of_element_shower
             if event.button == 1:
-                global current_player
+                global current_player, selected_card
                 #self.point.rect = self.point.get_rect()
                 point.draw(event.pos)
                 #collided = pygame.sprite.spritecollide(point, interface_up_layer, 0)
@@ -368,10 +373,21 @@ class Event_handler():
                 if not collided:
                     collided = pygame.sprite.spritecollide(point, interface, 0)
                 if not collided:
+                    collided = pygame.sprite.spritecollide(point, panels, 0)
+                if not collided:
                     return
                 item = collided[len(collided)-1]
-                print item
+                if item.type == "cardbox":
+                    if selected_card:
+                        item.card = selected_card
+                        item.card.parent = item
+                        if item.player == 1:
+                            ccards_1.add(item.card)
+                        else:
+                            ccards_2.add(item.card)
+                        selected_card = 0
                 if item.type == "card":
+                    selected_card = item
                     return
                 if item.player!=current_player:
                     return
@@ -406,19 +422,6 @@ class Event_handler():
                 item = collided[len(collided)-1]
                 if item.type == 'cardsofelementshower':
                     cards_of_element_shower = 0
-                #print current_player
-                #elif item.type == 'completethecoursebutton':
-                    #if current_player == 1:
-                        #current_player = 2
-                    #else:
-                        #current_player = 1
-                #print collided[len(collided)-1]
-                #if collided[len(collided)-1].type == "cardbox":
-                    #pass
-                    #collided[len(collided)-1].image.blit(test,(0,0))
-                #for elem in pygame.sprite.spritecollide(point, interface, 0):
-                 #print  elem,elem.player
-                #print event
 event_handler = Event_handler()
 infopanel1 = Infopanel((0,0),1) #Инициализация панели верхнего игрока
 infopanel2 = Infopanel((0,545),2) #Инициализация панели нижнего игрока
@@ -426,16 +429,16 @@ actionpanel1 = Actionpanel((0,25),1) #Панель с кнопками верх�
 actionpanel2 = Actionpanel((0,570),2) #Панель с кнопками нижнего игрока
 # 0 1 2 3 4   //Расположение
 # 5 6 7 8 9
-Cardbox((0,55),1) #0 место на поле
-Cardbox((160,55),1) #1 место на поле
-Cardbox((320,55),1) #2 место на поле
-Cardbox((480,55),1) #3 место на поле
-Cardbox((640,55),1) #4 место на поле
-Cardbox((0,301),2) #5 место на поле
-Cardbox((160,301),2) #6 место на поле
-Cardbox((320,301),2) #7 место на поле
-Cardbox((480,301),2) #8 место на поле
-Cardbox((640,301),2) #9 место на поле
+cardbox0 = Cardbox((0,55),1,0) #0 место на поле
+cardbox1 = Cardbox((160,55),1,1) #1 место на поле
+cardbox2 = Cardbox((320,55),1,2) #2 место на поле
+cardbox3 = Cardbox((480,55),1,3) #3 место на поле
+cardbox4 = Cardbox((640,55),1,4) #4 место на поле
+cardbox5 = Cardbox((0,301),2,5) #5 место на поле
+cardbox6 = Cardbox((160,301),2,6) #6 место на поле
+cardbox7 = Cardbox((320,301),2,7) #7 место на поле
+cardbox8 = Cardbox((480,301),2,8) #8 место на поле
+cardbox9 = Cardbox((640,301),2,9) #9 место на поле
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
@@ -473,14 +476,19 @@ pygame.display.flip()
 while 1:
     for event in pygame.event.get():
         event_handler.event(event)
+    if cards_of_element_shower:
+        interface.add(cardsofelementshower1)
+        interface.add(cardsofelementshower2)
     panels.update()
     interface.update()
     if current_player == 1:
-        upper_interface.update(cardsofelementshower1)
+        upper_interface.update(cardsofelementshower1,0)
+        ccards_1.update(0,1)
     else:
-        upper_interface.update(cardsofelementshower2)
+        upper_interface.update(cardsofelementshower2,0)
+        ccards_2.update(0,1)
     #interface_up_layer.update()
     screen.blit(background,(0,0))
     background.fill((0,0,0))
     pygame.display.flip()
-    clock.tick(20)
+    clock.tick(10)

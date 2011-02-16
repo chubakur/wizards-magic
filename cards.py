@@ -2,7 +2,6 @@
 import pygame.sprite
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
-
 __author__="chubakur"
 __date__ ="$13.02.2011 18:46:32$"
 water_cards = ["Nixie","Hydra","Waterfall","Leviathan","IceGuard","Poseidon","IceWizard","Testw"]
@@ -21,13 +20,16 @@ class Prototype(pygame.sprite.Sprite):
         pass
     def turn(self):
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
-    def update(self,cards_of_element_shower):
-        self.parent = cards_of_element_shower
-        xshift = self.parent.shift*(self.parent.cards+1)+self.parent.cards*160
-        self.parent.image.blit(self.image,(xshift,0))
-        self.rect = self.image.get_rect().move((self.parent.rect[0],self.parent.rect[1]))
-        self.rect = self.rect.move(xshift,0)
-        self.parent.cards+=1
+    def update(self,cards_of_element_shower,field): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+        if not field: #Рисование в колоде
+            self.parent = cards_of_element_shower
+            xshift = self.parent.shift*(self.parent.cards+1)+self.parent.cards*160
+            self.parent.image.blit(self.image,(xshift,0))
+            self.rect = self.image.get_rect().move((self.parent.rect[0],self.parent.rect[1]))
+            self.rect = self.rect.move(xshift,0)
+            self.parent.cards+=1
+        else:
+            self.parent.image.blit(self.image,(0,0))
 class Nixie(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
