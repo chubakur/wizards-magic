@@ -35,11 +35,10 @@ background = background.convert()
 background.fill((0,0,0))
 panels = pygame.sprite.Group() #Нижний уровень
 interface = pygame.sprite.Group() #Уровень кнопок
-upper_interface = pygame.sprite.Group() #Уровень дополнительный
+cards_in_deck = pygame.sprite.Group() #Уровень дополнительный
 ccards_1 = pygame.sprite.Group() #  Карты, которые вывел первый игрок
 ccards_2 = pygame.sprite.Group() # Карты, которые вывел второй игрок
 current_player = 1 #id игрока, который ходит
-cards_of_element_shower = False #показывать или не показывать окно с выбором карты выбранной стихии
 cards_of_element_shower_element = "" #какой элемент показывать
 selected_card = False #Выбранная карта
 font = pygame.font.Font(None, 20)
@@ -134,56 +133,50 @@ class CardsOfElementShower(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
         self.cards = 0
         self.shift = 32
-        interface.add(self)
     def draw(self):
         background.blit(self.image,self.rect)
     def update(self):
-        if not cards_of_element_shower:
-            interface.remove(self)
-            upper_interface.empty()
-            return
         if self.player != current_player:
             return
         self.cards = 0
         if self.player == 1:
             if cards_of_element_shower_element == "water":
                 for card in player1.water_cards:
-                    exec( "upper_interface.add(player1."+card.lower()+")")
-                    #shift+=192
+                    exec( "cards_in_deck.add(player1."+card.lower()+")")
             elif cards_of_element_shower_element == "fire":
                 for card in player1.fire_cards:
-                    exec( "upper_interface.add(player1."+card.lower()+")")
+                    exec( "cards_in_deck.add(player1."+card.lower()+")")
             elif cards_of_element_shower_element == "air":
                 for card in player1.air_cards:
-                    exec( "upper_interface.add(player1."+card.lower()+")")
+                    exec( "cards_in_deck.add(player1."+card.lower()+")")
             elif cards_of_element_shower_element == "earth":
                 for card in player1.earth_cards:
-                    exec( "upper_interface.add(player1."+card.lower()+")")
+                    exec( "cards_in_deck.add(player1."+card.lower()+")")
             elif cards_of_element_shower_element == "life":
                 for card in player1.life_cards:
-                    exec( "upper_interface.add(player1."+card.lower()+")")
+                    exec( "cards_in_deck.add(player1."+card.lower()+")")
             else:
                 for card in player1.death_cards:
-                    exec( "upper_interface.add(player1."+card.lower()+")")
+                    exec( "cards_in_deck.add(player1."+card.lower()+")")
         else:
             if cards_of_element_shower_element == "water":
                 for card in player2.water_cards:
-                    exec( "upper_interface.add(player2."+card.lower()+")")
+                    exec( "cards_in_deck.add(player2."+card.lower()+")")
             elif cards_of_element_shower_element == "fire":
                 for card in player2.fire_cards:
-                    exec( "upper_interface.add(player2."+card.lower()+")")
+                    exec( "cards_in_deck.add(player2."+card.lower()+")")
             elif cards_of_element_shower_element == "air":
                 for card in player2.air_cards:
-                    exec( "upper_interface.add(player2."+card.lower()+")")
+                    exec( "cards_in_deck.add(player2."+card.lower()+")")
             elif cards_of_element_shower_element == "earth":
                 for card in player2.earth_cards:
-                    exec( "upper_interface.add(player2."+card.lower()+")")
+                    exec( "cards_in_deck.add(player2."+card.lower()+")")
             elif cards_of_element_shower_element == "life":
                 for card in player2.life_cards:
-                    exec( "upper_interface.add(player2."+card.lower()+")")
+                    exec( "cards_in_deck.add(player2."+card.lower()+")")
             else:
                 for card in player2.death_cards:
-                    exec( "upper_interface.add(player2."+card.lower()+")")
+                    exec( "cards_in_deck.add(player2."+card.lower()+")")
         self.draw()
 class CompleteTheCourseButton(pygame.sprite.Sprite):
     def __init__(self,rect,panel):
@@ -351,7 +344,8 @@ class Point(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(rect)
 point = Point()
-#test = pygame.image.load('misc/cards/1.gif').convert_alpha()
+###############################################################################################################
+#ACTIONS
 class Event_handler():
     def __init__(self):
         pass
@@ -359,17 +353,10 @@ class Event_handler():
         if event.type == QUIT:
             sys.exit(0)
         if event.type == MOUSEBUTTONDOWN:
-            global cards_of_element_shower
             if event.button == 1:
                 global current_player, selected_card
-                #self.point.rect = self.point.get_rect()
                 point.draw(event.pos)
-                #collided = pygame.sprite.spritecollide(point, interface_up_layer, 0)
-                #if not collided:
-                    #collided = pygame.sprite.spritecollide(point, interface, 0)
-                    #if not collided:
-                        #return
-                collided = pygame.sprite.spritecollide(point, upper_interface, 0)
+                collided = pygame.sprite.spritecollide(point, cards_in_deck, 0)
                 if not collided:
                     collided = pygame.sprite.spritecollide(point, interface, 0)
                 if not collided:
@@ -381,6 +368,9 @@ class Event_handler():
                     if selected_card:
                         item.card = selected_card
                         item.card.parent = item
+                        interface.remove(cardsofelementshower1)
+                        interface.remove(cardsofelementshower2)
+                        cards_in_deck.empty()
                         if item.player == 1:
                             ccards_1.add(item.card)
                         else:
@@ -393,7 +383,11 @@ class Event_handler():
                     return
                 if item.type == 'elementbutton':
                     global cards_of_element_shower_element
-                    cards_of_element_shower = 1
+                    cards_in_deck.empty()
+                    if current_player == 1:
+                        interface.add(cardsofelementshower1)
+                    else:
+                        interface.add(cardsofelementshower2)
                     if item.element == 'water':
                         cards_of_element_shower_element = "water"
                     elif item.element == 'fire':
@@ -414,14 +408,17 @@ class Event_handler():
                         current_player = 1
             elif event.button == 3:
                 point.draw(event.pos)
-                collided = pygame.sprite.spritecollide(point,upper_interface,0)
+                collided = pygame.sprite.spritecollide(point,cards_in_deck,0)
                 if not collided:
                     collided = pygame.sprite.spritecollide(point, interface, 0)
                 if not collided:
                     return
                 item = collided[len(collided)-1]
                 if item.type == 'cardsofelementshower':
-                    cards_of_element_shower = 0
+                    interface.remove(cardsofelementshower1)
+                    interface.remove(cardsofelementshower2)
+                    cards_in_deck.empty()
+#################################################################################################3
 event_handler = Event_handler()
 infopanel1 = Infopanel((0,0),1) #Инициализация панели верхнего игрока
 infopanel2 = Infopanel((0,545),2) #Инициализация панели нижнего игрока
@@ -468,25 +465,18 @@ cardsofelementshower2 = CardsOfElementShower((0,55),2)
 screen.blit(background,(0,0))
 panels.update()
 interface.update()
-#interface_up_layer.update()
-#for elem in interface.sprites():
-    #print elem.type
-    #print elem.type,elem.rect,elem.rect[0]+elem.image.get_size()[0],elem.rect[1]+elem.image.get_size()[1]
 pygame.display.flip()
 while 1:
     for event in pygame.event.get():
         event_handler.event(event)
-    if cards_of_element_shower:
-        interface.add(cardsofelementshower1)
-        interface.add(cardsofelementshower2)
     panels.update()
     interface.update()
     if current_player == 1:
-        upper_interface.update(cardsofelementshower1,0)
         ccards_1.update(0,1)
+        cards_in_deck.update(cardsofelementshower1,0)
     else:
-        upper_interface.update(cardsofelementshower2,0)
         ccards_2.update(0,1)
+        cards_in_deck.update(cardsofelementshower2,0)
     #interface_up_layer.update()
     screen.blit(background,(0,0))
     background.fill((0,0,0))
