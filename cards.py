@@ -13,14 +13,24 @@ death_cards = ["Zombie","Vampire","GrimReaper","Ghost","Werewolf","Banshee","Dar
 import pygame
 class Prototype(pygame.sprite.Sprite):
     def __init__(self):
-        pass
+        self.parent = 0
+        self.surface_backup = self.image.copy()
+        self.font = pygame.font.Font(None,19)
+        self.type = "card"
     def attack(self):
         pass
     def cast(self):
         pass
     def turn(self):
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
-    def update(self,cards_of_element_shower,field): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+    def update(self,cards_of_element_shower,field,font): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+        textpower = font.render("ASD",True,(0,255,0))
+        #text_health = font.render(str(self.health),True,(0,255,0))
+        #self.image = self.surface_backup.copy()
+        #print text_power
+        self.image.blit(textpower,(10,230))
+        #self.image.blit(text_health,(150,230))
+        #Рендеринг шрифтов косячит!
         if not field: #Рисование в колоде
             self.parent = cards_of_element_shower
             xshift = self.parent.shift*(self.parent.cards+1)+self.parent.cards*160
@@ -34,527 +44,479 @@ class Nixie(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Nixie"
-        self.type = "card"
         self.element = "water"
         self.level = 4
         self.power = 3
         self.health = 10
         self.image = pygame.image.load('misc/cards/water/nixie.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Hydra(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Hydra"
-        self.type = "card"
         self.element = "water"
         self.level = 13
         self.power = 5
         self.health = 29
         self.image = pygame.image.load('misc/cards/water/hydra.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Waterfall(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Waterfall"
-        self.type = "card"
         self.element = "water"
         self.level = 9
         self.power = 1
         self.health = 33
         self.image = pygame.image.load('misc/cards/water/waterfall.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Leviathan(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Leviathan"
-        self.type = "card"
         self.element = "water"
         self.level = 11
         self.power = 6
         self.health = 37
         self.image = pygame.image.load('misc/cards/water/leviathan.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class IceGuard(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Ice Guard"
-        self.type = "card"
+        self.name = "Ice Guard" 
         self.element = "water"
         self.level = 5
         self.power = 4
         self.health = 19
         self.image = pygame.image.load('misc/cards/water/ice_guard.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Poseidon(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Poseidon"
-        self.type = "card"
+        self.name = "Poseidon"        
         self.element = "water"
         self.level = 8
         self.power = 3
         self.health = 25
         self.image = pygame.image.load('misc/cards/water/poseidon.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class IceWizard(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Ice Wizard"
-        self.type = "card"
+        self.name = "Ice Wizard"        
         self.element = "water"
         self.level = 10
         self.power = 4
         self.health = 22
         self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Testw(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Testw"
-        self.type = "card"
+        self.name = "Testw"        
         self.element = "water"
         self.level = 1
         self.power = 1
         self.health = 1
         self.image = pygame.image.load('misc/cards/water/testw.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Demon(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Demon"
-        self.type = "card"
+        self.name = "Demon"        
         self.element = "fire"
         self.level = 5
         self.power = 2
         self.health = 12
         self.image = pygame.image.load('misc/cards/fire/demon.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Devil(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Devil"
-        self.type = "card"
+        self.name = "Devil"        
         self.element = "fire"
         self.level = 6
         self.power = 4
         self.health = 27
         self.image = pygame.image.load('misc/cards/fire/devil.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class RedDrake(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Red Drake"
-        self.type = "card"
+        self.name = "Red Drake"        
         self.element = "fire"
         self.level = 7
         self.power = 5
         self.health = 16
         self.image = pygame.image.load('misc/cards/fire/red_drake.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Firelord(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Firelord"
-        self.type = "card"
+        self.name = "Firelord"        
         self.element = "fire"
         self.level = 11
         self.power = 7
         self.health = 21
         self.image = pygame.image.load('misc/cards/fire/firelord.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Salamander(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Salamander"
-        self.type = "card"
+        self.name = "Salamander"        
         self.element = "fire"
         self.level = 8
         self.power = 3
         self.health = 15
         self.image = pygame.image.load('misc/cards/fire/salamander.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Efreet(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Efreet"
-        self.type = "card"
+        self.name = "Efreet"        
         self.element = "fire"
         self.level = 10
         self.power = 6
         self.health = 33
         self.image = pygame.image.load('misc/cards/fire/efreet.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Vulcan(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Vulcan"
-        self.type = "card"
+        self.name = "Vulcan"        
         self.element = "fire"
         self.level = 12
         self.power = 1
         self.health = 27
         self.image = pygame.image.load('misc/cards/fire/vulcan.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Cerberus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Cerberus"
-        self.type = "card"
+        self.name = "Cerberus"        
         self.element = "fire"
         self.level = 4
         self.power = 4
         self.health = 6
         self.image = pygame.image.load('misc/cards/fire/cerberus.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Nymph(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Nymph"
-        self.type = "card"
+        self.name = "Nymph"        
         self.element = "air"
         self.level = 3
         self.power = 1
         self.health = 12
         self.image = pygame.image.load('misc/cards/air/nymph.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Fairy(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Fairy"
-        self.type = "card"
+        self.name = "Fairy"        
         self.element = "air"
         self.level = 3
         self.power = 3
         self.health = 7
         self.image = pygame.image.load('misc/cards/air/fairy.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Phoenix(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Phoenix"
-        self.type = "card"
+        self.name = "Phoenix"        
         self.element = "air"
         self.level = 6
         self.power = 4
         self.health = 20
         self.image = pygame.image.load('misc/cards/air/phoenix.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Zeus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Zeus"
-        self.type = "card"
+        self.name = "Zeus"        
         self.element = "air"
         self.level = 9
         self.power = 3
         self.health = 24
         self.image = pygame.image.load('misc/cards/air/zeus.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Gargoyle(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Gargoyle"
-        self.type = "card"
+        self.name = "Gargoyle"        
         self.element = "air"
         self.level = 5
         self.power = 4
         self.health = 15
         self.image = pygame.image.load('misc/cards/air/gargoyle.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Manticore(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Manticore"
-        self.type = "card"
+        self.name = "Manticore"        
         self.element = "air"
         self.level = 7
         self.power = 5
         self.health = 19
         self.image = pygame.image.load('misc/cards/air/manticore.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Titan(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Titan"
-        self.type = "card"
+        self.name = "Titan"        
         self.element = "air"
         self.level = 11
         self.power = 7
         self.health = 28
         self.image = pygame.image.load('misc/cards/air/titan.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Testa(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Testa"
-        self.type = "card"
+        self.name = "Testa"        
         self.element = "air"
         self.level = 1
         self.power = 1
         self.health = 1
         self.image = pygame.image.load('misc/cards/air/testa.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Satyr(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Satyr"
-        self.type = "card"
+        self.name = "Satyr"        
         self.element = "earth"
         self.level = 2
         self.power = 3
         self.health = 10
         self.image = pygame.image.load('misc/cards/earth/satyr.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Golem(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Golem"
-        self.type = "card"
+        self.name = "Golem"        
         self.element = "earth"
         self.level = 5
         self.power = 4
         self.health = 15
         self.image = pygame.image.load('misc/cards/earth/golem.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Dryad(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Dryad"
-        self.type = "card"
+        self.name = "Dryad"        
         self.element = "earth"
         self.level = 4
         self.power = 4
         self.health = 12
         self.image = pygame.image.load('misc/cards/earth/dryad.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class ForestSpirit(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Forest Spirit"
-        self.type = "card"
+        self.name = "Forest Spirit"        
         self.element = "earth"
         self.level = 3
         self.power = 2
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Centaur(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Centaur"
-        self.type = "card"
+        self.name = "Centaur"        
         self.element = "earth"
         self.level = 6
         self.power = 5
         self.health = 14
         self.image = pygame.image.load('misc/cards/earth/centaur.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Elemental(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Elemental"
-        self.element = "earth"
-        self.type = "card"
+        self.element = "earth"        
         self.level = 13
         self.power = 1
         self.health = 45
         self.image = pygame.image.load('misc/cards/earth/elemental.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Ent(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Ent"
-        self.element = "earth"
-        self.type = "card"
+        self.element = "earth"        
         self.level = 7
         self.power = 3
         self.health = 22
         self.image = pygame.image.load('misc/cards/earth/ent.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Echidna(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Echidna"
-        self.element = "earth"
-        self.type = "card"
+        self.element = "earth"        
         self.level = 10
         self.power = 7
         self.health = 26
         self.image = pygame.image.load('misc/cards/earth/echidna.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Priest(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Priest"
-        self.type = "card"
+        self.name = "Priest"        
         self.element = "life"
         self.level = 4
         self.power = 1
         self.health = 9
         self.image = pygame.image.load('misc/cards/life/priest.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Paladin(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Paladin"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 8
         self.power = 4
         self.health = 20
         self.image = pygame.image.load('misc/cards/life/paladin.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Pegasus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Pegasus"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 6
         self.power = 6
         self.health = 15
         self.image = pygame.image.load('misc/cards/life/pegasus.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Unicorn(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Unicorn"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 9
         self.power = 8
         self.health = 25
         self.image = pygame.image.load('misc/cards/life/unicorn.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Apostate(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Apostate"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 5
         self.power = 4
         self.health = 14
         self.image = pygame.image.load('misc/cards/life/apostate.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class MagicHealer(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Magic Healer"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 3
         self.power = 2
         self.health = 10
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Chimera(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Chimera"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 11
         self.power = 11
         self.health = 30
         self.image = pygame.image.load('misc/cards/life/chimera.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Testl(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Testl"
-        self.element = "life"
-        self.type = "card"
+        self.element = "life"        
         self.level = 1
         self.power = 1
         self.health = 1
         self.image = pygame.image.load('misc/cards/life/testl.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Zombie(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Zombie"
-        self.type = "card"
+        self.name = "Zombie"        
         self.element = "death"
         self.level = 4
         self.power = 3
         self.health = 11
         self.image = pygame.image.load('misc/cards/death/zombie.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Ghost(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Ghost"
-        self.element = "death"
-        self.type = "card"
+        self.element = "death"        
         self.level = 3
         self.power = 3
         self.health = 13
         self.image = pygame.image.load('misc/cards/death/ghost.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Vampire(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Vampire"
-        self.element = "death"
-        self.type = "card"
+        self.element = "death"        
         self.level = 9
         self.power = 6
         self.health = 22
         self.image = pygame.image.load('misc/cards/death/vampire.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Werewolf(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Werewolf"
-        self.type = "card"
+        self.name = "Werewolf"        
         self.element = "death"
         self.level = 6
         self.power = 6
         self.health = 16
         self.image = pygame.image.load('misc/cards/death/werewolf.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Banshee(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Banshee"
-        self.type = "card"
+        self.name = "Banshee"        
         self.element = "death"
         self.level = 7
         self.power = 5
         self.health = 12
         self.image = pygame.image.load('misc/cards/death/banshee.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class GrimReaper(Prototype):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.type = "card"
+        pygame.sprite.Sprite.__init__(self)        
         self.name = "Grim Reaper"
         self.element = "death"
         self.level = 12
         self.power = 8
         self.health = 22
         self.image = pygame.image.load('misc/cards/death/grim_reaper.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Darklord(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Darklord"
-        self.element = "death"
-        self.type = "card"
+        self.element = "death"        
         self.level = 8
         self.power = 4
         self.health = 14
         self.image = pygame.image.load('misc/cards/death/darklord.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)
 class Lich(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Lich"
-        self.element = "death"
-        self.type = "card"
+        self.element = "death"        
         self.level = 10
         self.power = 7
         self.health = 18
         self.image = pygame.image.load('misc/cards/death/lich.gif')
-        self.surface_backup = self.image.copy()
+        Prototype.__init__(self)

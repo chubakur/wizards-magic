@@ -19,6 +19,7 @@ import pygame.sprite
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 #import pygame.sprite
+#Внимание!! Для того, чтобы слои не наслаивались, я использую объект surface_backup , который является копией изображения. После этого они заменяются
 __author__="chubakur"
 __date__ ="$12.02.2011 12:11:42$"
 import pygame
@@ -111,10 +112,18 @@ player2 = Player2()
 player = player1
 def finish_turn():
     global player
+    #Меняем игрока
     if player.id == 1:
         player = player2
     else:
         player = player1
+    #Добавляем ману
+    player.water_mana+=1
+    player.fire_mana+=1
+    player.air_mana+=1
+    player.earth_mana+=1
+    player.life_mana+=1
+    player.death_mana+=1
 class CardsOfElementShower(pygame.sprite.Sprite):
     #Не прототип!
     def __init__(self,rect,player):
@@ -297,6 +306,7 @@ class Cardbox(pygame.sprite.Sprite):
         self.player = player #первый или второй
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
+        self.card = 0
         panels.add(self)
     def draw(self):
         background.blit(self.image,self.rect)
@@ -470,14 +480,13 @@ while 1:
     panels.update()
     interface.update()
     if player.id == 1:
-        ccards_1.update(0,1)
-        cards_in_deck.update(cardsofelementshower1,0)
+        ccards_1.update(0,1,font)
+        cards_in_deck.update(cardsofelementshower1,0,font)
     else:
-        ccards_2.update(0,1)
-        cards_in_deck.update(cardsofelementshower2,0)
+        ccards_2.update(0,1,font)
+        cards_in_deck.update(cardsofelementshower2,0,font)
     #interface_up_layer.update()
     screen.blit(background,(0,0))
     background.fill((0,0,0))
     pygame.display.flip()
-    print player.water_mana,player.fire_mana,player.air_mana,player.earth_mana,player.life_mana,player.death_mana
     clock.tick(8)
