@@ -79,7 +79,7 @@ class IceGuard(Prototype):
         self.level = 5
         self.power = 4
         self.health = 19
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/water/ice_guard.gif')
 class Poseidon(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -89,7 +89,7 @@ class Poseidon(Prototype):
         self.level = 8
         self.power = 3
         self.health = 25
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/water/poseidon.gif')
 class IceWizard(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -99,7 +99,7 @@ class IceWizard(Prototype):
         self.level = 10
         self.power = 4
         self.health = 22
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
 class Testw(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -109,7 +109,7 @@ class Testw(Prototype):
         self.level = 1
         self.power = 1
         self.health = 1
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/water/testw.gif')
 class Demon(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -119,7 +119,7 @@ class Demon(Prototype):
         self.level = 5
         self.power = 2
         self.health = 12
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/demon.gif')
 class Devil(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -129,7 +129,7 @@ class Devil(Prototype):
         self.level = 6
         self.power = 4
         self.health = 27
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/devil.gif')
 class RedDrake(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -139,7 +139,7 @@ class RedDrake(Prototype):
         self.level = 7
         self.power = 5
         self.health = 16
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/red_drake.gif')
 class Firelord(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -149,7 +149,7 @@ class Firelord(Prototype):
         self.level = 11
         self.power = 7
         self.health = 21
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/firelord.gif')
 class Salamander(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -159,7 +159,7 @@ class Salamander(Prototype):
         self.level = 8
         self.power = 3
         self.health = 15
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/salamander.gif')
 class Efreet(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -169,7 +169,7 @@ class Efreet(Prototype):
         self.level = 10
         self.power = 6
         self.health = 33
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/efreet.gif')
 class Vulcan(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -179,7 +179,7 @@ class Vulcan(Prototype):
         self.level = 12
         self.power = 1
         self.health = 27
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/vulcan.gif')
 class Cerberus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -189,7 +189,7 @@ class Cerberus(Prototype):
         self.level = 4
         self.power = 4
         self.health = 6
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/fire/cerberus.gif')
 class Nymph(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -199,7 +199,7 @@ class Nymph(Prototype):
         self.level = 3
         self.power = 1
         self.health = 12
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/nymph.gif')
 class Fairy(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -209,7 +209,7 @@ class Fairy(Prototype):
         self.level = 3
         self.power = 3
         self.health = 7
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/fairy.gif')
 class Phoenix(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -219,7 +219,7 @@ class Phoenix(Prototype):
         self.level = 6
         self.power = 4
         self.health = 20
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/phoenix.gif')
 class Zeus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -229,7 +229,7 @@ class Zeus(Prototype):
         self.level = 9
         self.power = 3
         self.health = 24
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/zeus.gif')
 class Gargoyle(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -239,7 +239,7 @@ class Gargoyle(Prototype):
         self.level = 5
         self.power = 4
         self.health = 15
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/gargoyle.gif')
 class Manticore(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -249,7 +249,7 @@ class Manticore(Prototype):
         self.level = 7
         self.power = 5
         self.health = 19
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/manticore.gif')
 class Titan(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -259,7 +259,7 @@ class Titan(Prototype):
         self.level = 11
         self.power = 7
         self.health = 28
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/titan.gif')
 class Testa(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -269,7 +269,7 @@ class Testa(Prototype):
         self.level = 1
         self.power = 1
         self.health = 1
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/air/testa.gif')
 class Satyr(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -279,7 +279,7 @@ class Satyr(Prototype):
         self.level = 2
         self.power = 3
         self.health = 10
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/satyr.gif')
 class Golem(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -289,7 +289,7 @@ class Golem(Prototype):
         self.level = 5
         self.power = 4
         self.health = 15
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/golem.gif')
 class Dryad(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -299,7 +299,7 @@ class Dryad(Prototype):
         self.level = 4
         self.power = 4
         self.health = 12
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/dryad.gif')
 class ForestSpirit(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -309,7 +309,7 @@ class ForestSpirit(Prototype):
         self.level = 3
         self.power = 2
         self.health = 3
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
 class Centaur(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -319,7 +319,7 @@ class Centaur(Prototype):
         self.level = 6
         self.power = 5
         self.health = 14
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/centaur.gif')
 class Elemental(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -329,7 +329,7 @@ class Elemental(Prototype):
         self.level = 13
         self.power = 1
         self.health = 45
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/elemental.gif')
 class Ent(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -339,7 +339,7 @@ class Ent(Prototype):
         self.level = 7
         self.power = 3
         self.health = 22
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/ent.gif')
 class Echidna(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -349,7 +349,7 @@ class Echidna(Prototype):
         self.level = 10
         self.power = 7
         self.health = 26
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/earth/echidna.gif')
 class Priest(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -359,7 +359,7 @@ class Priest(Prototype):
         self.level = 4
         self.power = 1
         self.health = 9
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/priest.gif')
 class Paladin(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -369,7 +369,7 @@ class Paladin(Prototype):
         self.level = 8
         self.power = 4
         self.health = 20
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/paladin.gif')
 class Pegasus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -379,7 +379,7 @@ class Pegasus(Prototype):
         self.level = 6
         self.power = 6
         self.health = 15
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/pegasus.gif')
 class Unicorn(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -389,7 +389,7 @@ class Unicorn(Prototype):
         self.level = 9
         self.power = 8
         self.health = 25
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/unicorn.gif')
 class Apostate(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -399,7 +399,7 @@ class Apostate(Prototype):
         self.level = 5
         self.power = 4
         self.health = 14
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/apostate.gif')
 class MagicHealer(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -409,7 +409,7 @@ class MagicHealer(Prototype):
         self.level = 3
         self.power = 2
         self.health = 10
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
 class Chimera(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -419,7 +419,7 @@ class Chimera(Prototype):
         self.level = 11
         self.power = 11
         self.health = 30
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/chimera.gif')
 class Testl(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -429,7 +429,7 @@ class Testl(Prototype):
         self.level = 1
         self.power = 1
         self.health = 1
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/life/testl.gif')
 class Zombie(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -439,7 +439,7 @@ class Zombie(Prototype):
         self.level = 4
         self.power = 3
         self.health = 11
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/zombie.gif')
 class Ghost(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -449,7 +449,7 @@ class Ghost(Prototype):
         self.level = 3
         self.power = 3
         self.health = 13
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/ghost.gif')
 class Vampire(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -459,7 +459,7 @@ class Vampire(Prototype):
         self.level = 9
         self.power = 6
         self.health = 22
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/vampire.gif')
 class Werewolf(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -469,7 +469,7 @@ class Werewolf(Prototype):
         self.level = 6
         self.power = 6
         self.health = 16
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/werewolf.gif')
 class Banshee(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -479,7 +479,7 @@ class Banshee(Prototype):
         self.level = 7
         self.power = 5
         self.health = 12
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/banshee.gif')
 class GrimReaper(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -489,7 +489,7 @@ class GrimReaper(Prototype):
         self.level = 12
         self.power = 8
         self.health = 22
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/grim_reaper.gif')
 class Darklord(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -499,7 +499,7 @@ class Darklord(Prototype):
         self.level = 8
         self.power = 4
         self.health = 14
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/darklord.gif')
 class Lich(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -509,4 +509,4 @@ class Lich(Prototype):
         self.level = 10
         self.power = 7
         self.health = 18
-        self.image = pygame.image.load('misc/cards/1.gif')
+        self.image = pygame.image.load('misc/cards/death/lich.gif')
