@@ -38,14 +38,13 @@ interface = pygame.sprite.Group() #Уровень кнопок
 cards_in_deck = pygame.sprite.Group() #Уровень дополнительный
 ccards_1 = pygame.sprite.Group() #  Карты, которые вывел первый игрок
 ccards_2 = pygame.sprite.Group() # Карты, которые вывел второй игрок
-current_player = 1 #id игрока, который ходит
 cards_of_element_shower_element = "" #какой элемент показывать
 selected_card = False #Выбранная карта
 font = pygame.font.Font(None, 20)
 font.set_bold(0)
 #class GameParams():
     #def __init__(self):
-       # self.current_player = 1
+       # self.player.id = 1
 #game_params = GameParams()
 class Player(): #Прототип игрока
     def __init__(self):
@@ -109,20 +108,13 @@ class Player2(Player):
         self.get_mana()
 player1 = Player1()
 player2 = Player2()
-#class ElementsWindow(pygame.sprite.Sprite):
-#    def __init__(self,rect,panel):
-#        pygame.sprite.Sprite.__init__(self)
-#        self.panel = panel
-#        self.type = 'elementswindow'
-#        self.player = panel.player
-#        self.image = pygame.image.load('misc/elements.gif').convert_alpha()
-#        self.relative_rect = self.image.get_rect().move((rect[0],rect[1])) #Координаты относительные к поверхности-родителю
-#        self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
-#        interface.add(self)
-#    def draw(self):
-#        self.panel.image.blit(self.image,self.relative_rect)
-#    def update(self):
-#        self.draw()
+player = player1
+def finish_turn():
+    global player
+    if player.id == 1:
+        player = player2
+    else:
+        player = player1
 class CardsOfElementShower(pygame.sprite.Sprite):
     #Не прототип!
     def __init__(self,rect,player):
@@ -136,7 +128,7 @@ class CardsOfElementShower(pygame.sprite.Sprite):
     def draw(self):
         background.blit(self.image,self.rect)
     def update(self):
-        if self.player != current_player:
+        if self.player != player.id:
             return
         self.cards = 0
         if self.player == 1:
@@ -189,7 +181,7 @@ class CompleteTheCourseButton(pygame.sprite.Sprite):
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
     def draw(self):
-        if not self.player == current_player:
+        if not self.player == player.id:
             return
         self.panel.image.blit(self.image,self.relative_rect)
     def update(self):
@@ -199,10 +191,10 @@ class ElementButton(pygame.sprite.Sprite):
         #Это прототип!
         pass
     def draw(self):
-        self.panel.image.blit(self.image,self.relative_rect)
-        font.set_bold(0)
+        self.image = self.surface_backup.copy()
         exec("text = font.render(str(player"+str(self.player)+"."+self.element+"_mana),True,(255,255,255))")
         self.image.blit(text,(5,16))
+        self.panel.image.blit(self.image,self.relative_rect)
     def update(self):
         self.draw()
 class WaterElementButton(ElementButton):
@@ -213,6 +205,7 @@ class WaterElementButton(ElementButton):
         self.element = 'water'
         self.player = panel.player
         self.image = pygame.image.load('misc/elements_water.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
@@ -224,6 +217,7 @@ class FireElementButton(ElementButton):
         self.element = 'fire'
         self.player = panel.player
         self.image = pygame.image.load('misc/elements_fire.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
@@ -235,6 +229,7 @@ class AirElementButton(ElementButton):
         self.element = 'air'
         self.player = panel.player
         self.image = pygame.image.load('misc/elements_air.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
@@ -246,6 +241,7 @@ class EarthElementButton(ElementButton):
         self.element = 'earth'
         self.player = panel.player
         self.image = pygame.image.load('misc/elements_earth.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
@@ -257,6 +253,7 @@ class LifeElementButton(ElementButton):
         self.element = 'life'
         self.player = panel.player
         self.image = pygame.image.load('misc/elements_life.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
@@ -268,6 +265,7 @@ class DeathElementButton(ElementButton):
         self.element = 'death'
         self.player = panel.player
         self.image = pygame.image.load('misc/elements_death.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
@@ -354,7 +352,7 @@ class Event_handler():
             sys.exit(0)
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
-                global current_player, selected_card
+                global player, selected_card
                 point.draw(event.pos)
                 collided = pygame.sprite.spritecollide(point, cards_in_deck, 0)
                 if not collided:
@@ -366,8 +364,12 @@ class Event_handler():
                 item = collided[len(collided)-1]
                 if item.type == "cardbox":
                     if selected_card:
+                        exec('available_mana = player.'+selected_card.element+'_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                        if available_mana<selected_card.level:
+                            return
                         item.card = selected_card
                         item.card.parent = item
+                        exec('player.'+selected_card.element+'_mana -= '+str(selected_card.level))
                         interface.remove(cardsofelementshower1)
                         interface.remove(cardsofelementshower2)
                         cards_in_deck.empty()
@@ -379,12 +381,12 @@ class Event_handler():
                 if item.type == "card":
                     selected_card = item
                     return
-                if item.player!=current_player:
+                if item.player!=player.id:
                     return
                 if item.type == 'elementbutton':
                     global cards_of_element_shower_element
                     cards_in_deck.empty()
-                    if current_player == 1:
+                    if player.id == 1:
                         interface.add(cardsofelementshower1)
                     else:
                         interface.add(cardsofelementshower2)
@@ -401,11 +403,7 @@ class Event_handler():
                     elif item.element == 'death':
                         cards_of_element_shower_element = "death"
                 elif item.type == 'completethecoursebutton':
-                    cards_of_element_shower = 0
-                    if current_player == 1:
-                        current_player = 2
-                    else:
-                        current_player = 1
+                    finish_turn()
             elif event.button == 3:
                 point.draw(event.pos)
                 collided = pygame.sprite.spritecollide(point,cards_in_deck,0)
@@ -471,7 +469,7 @@ while 1:
         event_handler.event(event)
     panels.update()
     interface.update()
-    if current_player == 1:
+    if player.id == 1:
         ccards_1.update(0,1)
         cards_in_deck.update(cardsofelementshower1,0)
     else:
@@ -481,4 +479,5 @@ while 1:
     screen.blit(background,(0,0))
     background.fill((0,0,0))
     pygame.display.flip()
-    clock.tick(10)
+    print player.water_mana,player.fire_mana,player.air_mana,player.earth_mana,player.life_mana,player.death_mana
+    clock.tick(8)
