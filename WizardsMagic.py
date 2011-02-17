@@ -304,7 +304,7 @@ class HealthWindow(pygame.sprite.Sprite):
         self.font = pygame.font.Font(None, 22)
     def draw(self):
         self.image = self.surface_backup.copy()
-        if self.player == 1:
+        if self.player.id == 1:
             text = self.font.render(str(player1.health),True,(255,255,255))
         else:
             text = self.font.render(str(player2.health),True,(255,255,255))
@@ -320,6 +320,11 @@ class Cardbox(pygame.sprite.Sprite):
         self.player = player #первый или второй
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
+        #if self.player.id == 1:
+         #   self.enemy_player = player2
+        #else:
+          #  self.enemy_player = player1
+        #self.card = self.enemy_player
         self.card = self.player
         panels.add(self)
     def draw(self):

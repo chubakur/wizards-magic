@@ -29,17 +29,19 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 self.cardboxes[attack_position].card.damage(self.power)
             else:
                 attack_position = self.parent.position-5
+                self.cardboxes[attack_position].card.damage(self.power)
+            print self.cardboxes[attack_position].player.id
     def cast(self):
         pass
     def damage(self,damage):
-        pass
+        self.health-=damage
     def turn(self):
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
     def update(self,cards_of_element_shower,field): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = font.render(str(self.level),True,(255,255,255))
         text_power = font.render(str(self.power),True,(255,255,255))
         text_health = font.render(str(self.health),True,(255,255,255))
-        #self.image = self.surface_backup.copy()
+        self.image = self.surface_backup.copy()
         #print text_power
         self.image.blit(text_level,(130,10))
         self.image.blit(text_power,(10,230))
