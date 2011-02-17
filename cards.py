@@ -23,6 +23,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.font = pygame.font.Font(None,19)
         self.type = "card"
         self.moves_alive = 0 #Сколько ходов прожила карта
+        self.max_health = self.health #Максимальное кол-во жизней
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             if self.parent.position<5:
@@ -259,8 +260,8 @@ class Phoenix(Prototype):
         if self.health<=0:
             if enemy.element == "fire": #Если стихия врага - огонь
                 if not self.recovered: #если не восстанавливалась
-                    exec("self = "+self.name+"()") #восстанавливаемся
-                    self.recovered = 1
+                    self.health = self.max_health
+                    self.recovered = True
                 else:
                     self.die()
             else:

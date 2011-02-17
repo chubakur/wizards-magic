@@ -399,7 +399,6 @@ class Event_handler():
                 if item.player.id!=player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс
-                    print selected_card
                     if selected_card: #если выбрана карта
                         if not player.action_points: #если уже ходил
                             return
