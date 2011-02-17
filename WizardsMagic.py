@@ -123,16 +123,22 @@ def finish_turn():
         player = player2
         player.action_points = True
         for card in ccards_1: #Атакуем
-            if card:
-                card.attack()
-                card.moves_alive+=1
+            card.attack()
+            #card.used_cast = False # Даем возможность кастовать
+            card.moves_alive+=1
+        for card in ccards_2:
+            card.used_cast = False
+            card.turn()
     else:
         player = player1
         player.action_points = True
         for card in ccards_2: #Атакуем
-            if card:
-                card.attack()
-                card.moves_alive+=1
+            card.attack()
+            card.used_cast = False
+            card.moves_alive+=1
+        for card in ccards_1:
+            card.used_cast = False
+            card.turn()
     #Добавляем ману
     player.water_mana+=1
     player.fire_mana+=1
@@ -391,14 +397,17 @@ class Event_handler():
                 if not collided:
                     return
                 item = collided[len(collided)-1]
-                if item.type == "card":
-                    #selected_card = item
+                if item.type == "warrior_card": #Карта в колоде! Карта на поле в cardbox
                     exec('selected_card_0 = cards.'+item.name+'()') #Переменной selected_card_0 присваиваем новый объект
                     selected_card = selected_card_0 # из локальной в глобальную
                     return
                 if item.player.id!=player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс
+                    if item.card.name != "player" : #Если в этом блоке есть карта
+                        if item.card.cast: #если есть каст
+                            if not item.card.used_cast: # если еще не кастовали
+                                item.card.cast_action()
                     if selected_card: #если выбрана карта
                         if not player.action_points: #если уже ходил
                             return
@@ -408,6 +417,8 @@ class Event_handler():
                         item.card = selected_card
                         item.card.parent = item
                         item.card.cardboxes = cardboxes
+                        item.card.playerscards = playerscards
+                        item.card.field = True
                         player.action_points = False
                         exec('player.'+selected_card.element+'_mana -= '+str(selected_card.level)) #Отнимаем ману
                         interface.remove(cardsofelementshower1) #Закрываем окна выбора карты
@@ -470,6 +481,7 @@ cardbox7 = Cardbox((320,301),player2,7) #7 место на поле
 cardbox8 = Cardbox((480,301),player2,8) #8 место на поле
 cardbox9 = Cardbox((640,301),player2,9) #9 место на поле
 cardboxes = [cardbox0,cardbox1,cardbox2,cardbox3,cardbox4,cardbox5,cardbox6,cardbox7,cardbox8,cardbox8] #Ссылки на объекты
+playerscards = [ccards_1,ccards_2] #Ссылки
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
@@ -506,11 +518,11 @@ while 1:
     panels.update()
     interface.update()
     if player.id == 1:
-        ccards_1.update(0,1)
-        cards_in_deck.update(cardsofelementshower1,0)
+        ccards_1.update(0)
+        cards_in_deck.update(cardsofelementshower1)
     else:
-        ccards_2.update(0,1)
-        cards_in_deck.update(cardsofelementshower2,0)
+        ccards_2.update(0)
+        cards_in_deck.update(cardsofelementshower2)
     #interface_up_layer.update()
     screen.blit(background,(0,0))
     background.fill((0,0,0))

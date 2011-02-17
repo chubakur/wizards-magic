@@ -21,9 +21,14 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None,19)
-        self.type = "card"
+        self.type = "warrior_card"
         self.moves_alive = 0 #Сколько ходов прожила карта
         self.max_health = self.health #Максимальное кол-во жизней
+        self.field = False
+        self.used_cast = False #Использовал cast
+        #self.cast_button = pygame.Surface((30,20))
+        #self.cast_button = self.cast_button.convert()
+        #self.cast_button.fill((0,0,255))
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             if self.parent.position<5:
@@ -34,7 +39,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 self.cardboxes[attack_position].card.damage(self.power,self)
         else:
             return
-    def cast(self):
+    def cast_action(self):
         pass
     def damage(self,damage,enemy): #Функция, срабатываемая при получении урона.
         self.health-=damage
@@ -46,16 +51,23 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.kill() #Выкидываем карту из всех групп
     def turn(self):
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
-    def update(self,cards_of_element_shower,field): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+    def update(self,cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = font.render(str(self.level),True,(255,255,255))
         text_power = font.render(str(self.power),True,(255,255,255))
         text_health = font.render(str(self.health),True,(255,255,255))
         self.image = self.surface_backup.copy()
+        if self.cast:
+            if not self.used_cast:
+                text_cast = font.render("Cast",True,(0,0,255))
+                self.image.blit(text_cast,(50,100))
+            else:
+                text_cast = font.render("Cast",True,(0,0,0))
+                self.image.blit(text_cast,(50,100))
         #print text_power
         self.image.blit(text_level,(130,10))
         self.image.blit(text_power,(10,230))
         self.image.blit(text_health,(130,230))
-        if not field: #Рисование в колоде
+        if not self.field: #Рисование в колоде
             self.parent = cards_of_element_shower
             xshift = self.parent.shift*(self.parent.cards+1)+self.parent.cards*160
             self.parent.image.blit(self.image,(xshift,0))
@@ -72,8 +84,32 @@ class Nixie(Prototype):
         self.level = 4
         self.power = 3
         self.health = 10
+        self.cast = True
         self.image = pygame.image.load('misc/cards/water/nixie.gif')
         Prototype.__init__(self)
+    def attack(self):
+        if self.moves_alive:
+            if self.parent.position<5:
+                self.attack_position = self.parent.position+5 #Id - блока, куда атаковать
+            else:
+                self.attack_position = self.parent.position-5
+            if self.cardboxes[self.attack_position].card.name!="player": #если есть карта
+                if self.cardboxes[self.attack_position].card.element == "fire": #если стихия карты - огонь
+                    self.cardboxes[self.attack_position].card.damage(self.power*2,self)
+                else:
+                    self.cardboxes[self.attack_position].card.damage(self.power,self)
+            else:
+                self.cardboxes[self.attack_position].card.damage(self.power,self)
+        else:
+            return
+    def cast_action(self):
+        print "Nixie Cast"
+        if self.parent.player.fire_mana:
+            self.parent.player.fire_mana-=1
+            self.parent.player.water_mana+=1
+            self.used_cast = True
+        #Наносит картам элемента огня урон 200%
+        #КАСТ:уменьшает ману огня на 1, увеличивает ману воды на 1
 class Hydra(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -81,6 +117,7 @@ class Hydra(Prototype):
         self.element = "water"
         self.level = 13
         self.power = 5
+        self.cast = False
         self.health = 29
         self.image = pygame.image.load('misc/cards/water/hydra.gif')
         Prototype.__init__(self)
@@ -91,6 +128,7 @@ class Waterfall(Prototype):
         self.element = "water"
         self.level = 9
         self.power = 1
+        self.cast = False
         self.health = 33
         self.image = pygame.image.load('misc/cards/water/waterfall.gif')
         Prototype.__init__(self)
@@ -101,16 +139,18 @@ class Leviathan(Prototype):
         self.element = "water"
         self.level = 11
         self.power = 6
+        self.cast = False
         self.health = 37
         self.image = pygame.image.load('misc/cards/water/leviathan.gif')
         Prototype.__init__(self)
 class IceGuard(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Ice Guard" 
+        self.name = "IceGuard" 
         self.element = "water"
         self.level = 5
         self.power = 4
+        self.cast = False
         self.health = 19
         self.image = pygame.image.load('misc/cards/water/ice_guard.gif')
         Prototype.__init__(self)
@@ -121,16 +161,18 @@ class Poseidon(Prototype):
         self.element = "water"
         self.level = 8
         self.power = 3
+        self.cast = False
         self.health = 25
         self.image = pygame.image.load('misc/cards/water/poseidon.gif')
         Prototype.__init__(self)
 class IceWizard(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Ice Wizard"        
+        self.name = "IceWizard"        
         self.element = "water"
         self.level = 10
         self.power = 4
+        self.cast = False
         self.health = 22
         self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
         Prototype.__init__(self)
@@ -141,6 +183,7 @@ class Testw(Prototype):
         self.element = "water"
         self.level = 1
         self.power = 1
+        self.cast = False
         self.health = 1
         self.image = pygame.image.load('misc/cards/water/testw.gif')
         Prototype.__init__(self)
@@ -151,6 +194,7 @@ class Demon(Prototype):
         self.element = "fire"
         self.level = 5
         self.power = 2
+        self.cast = False
         self.health = 12
         self.image = pygame.image.load('misc/cards/fire/demon.gif')
         Prototype.__init__(self)
@@ -161,16 +205,18 @@ class Devil(Prototype):
         self.element = "fire"
         self.level = 6
         self.power = 4
+        self.cast = False
         self.health = 27
         self.image = pygame.image.load('misc/cards/fire/devil.gif')
         Prototype.__init__(self)
 class RedDrake(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Red Drake"        
+        self.name = "RedDrake"        
         self.element = "fire"
         self.level = 7
         self.power = 5
+        self.cast = False
         self.health = 16
         self.image = pygame.image.load('misc/cards/fire/red_drake.gif')
         Prototype.__init__(self)
@@ -181,6 +227,7 @@ class Firelord(Prototype):
         self.element = "fire"
         self.level = 11
         self.power = 7
+        self.cast = False
         self.health = 21
         self.image = pygame.image.load('misc/cards/fire/firelord.gif')
         Prototype.__init__(self)
@@ -191,6 +238,7 @@ class Salamander(Prototype):
         self.element = "fire"
         self.level = 8
         self.power = 3
+        self.cast = False
         self.health = 15
         self.image = pygame.image.load('misc/cards/fire/salamander.gif')
         Prototype.__init__(self)
@@ -201,6 +249,7 @@ class Efreet(Prototype):
         self.element = "fire"
         self.level = 10
         self.power = 6
+        self.cast = False
         self.health = 33
         self.image = pygame.image.load('misc/cards/fire/efreet.gif')
         Prototype.__init__(self)
@@ -211,6 +260,7 @@ class Vulcan(Prototype):
         self.element = "fire"
         self.level = 12
         self.power = 1
+        self.cast = False
         self.health = 27
         self.image = pygame.image.load('misc/cards/fire/vulcan.gif')
         Prototype.__init__(self)
@@ -221,6 +271,7 @@ class Cerberus(Prototype):
         self.element = "fire"
         self.level = 4
         self.power = 4
+        self.cast = False
         self.health = 6
         self.image = pygame.image.load('misc/cards/fire/cerberus.gif')
         Prototype.__init__(self)
@@ -231,9 +282,13 @@ class Nymph(Prototype):
         self.element = "air"
         self.level = 3
         self.power = 1
+        self.cast = False
         self.health = 12
         self.image = pygame.image.load('misc/cards/air/nymph.gif')
         Prototype.__init__(self)
+    def turn(self):
+        self.parent.player.air_mana+=1
+        #Каждый ход владелец получает дополнительно 1 воздух
 class Fairy(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -241,9 +296,12 @@ class Fairy(Prototype):
         self.element = "air"
         self.level = 3
         self.power = 3
+        self.cast = False
         self.health = 7
         self.image = pygame.image.load('misc/cards/air/fairy.gif')
         Prototype.__init__(self)
+        #Атака увеличивается на 1 за каждого убитого
+        #КАСТ. Сильнейшая карта врага атакует своего героя. 1 воздух.
 class Phoenix(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -251,6 +309,7 @@ class Phoenix(Prototype):
         self.element = "air"
         self.level = 6
         self.power = 4
+        self.cast = False
         self.health = 20
         self.recovered = 0 #Восстанавливалась ли карта
         self.image = pygame.image.load('misc/cards/air/phoenix.gif')
@@ -274,6 +333,7 @@ class Zeus(Prototype):
         self.element = "air"
         self.level = 9
         self.power = 3
+        self.cast = False
         self.health = 24
         self.image = pygame.image.load('misc/cards/air/zeus.gif')
         Prototype.__init__(self)
@@ -284,6 +344,7 @@ class Gargoyle(Prototype):
         self.element = "air"
         self.level = 5
         self.power = 4
+        self.cast = False
         self.health = 15
         self.image = pygame.image.load('misc/cards/air/gargoyle.gif')
         Prototype.__init__(self)
@@ -294,6 +355,7 @@ class Manticore(Prototype):
         self.element = "air"
         self.level = 7
         self.power = 5
+        self.cast = False
         self.health = 19
         self.image = pygame.image.load('misc/cards/air/manticore.gif')
         Prototype.__init__(self)
@@ -304,6 +366,7 @@ class Titan(Prototype):
         self.element = "air"
         self.level = 11
         self.power = 7
+        self.cast = False
         self.health = 28
         self.image = pygame.image.load('misc/cards/air/titan.gif')
         Prototype.__init__(self)
@@ -314,6 +377,7 @@ class Testa(Prototype):
         self.element = "air"
         self.level = 1
         self.power = 1
+        self.cast = False
         self.health = 1
         self.image = pygame.image.load('misc/cards/air/testa.gif')
         Prototype.__init__(self)
@@ -324,6 +388,7 @@ class Satyr(Prototype):
         self.element = "earth"
         self.level = 2
         self.power = 3
+        self.cast = False
         self.health = 10
         self.image = pygame.image.load('misc/cards/earth/satyr.gif')
         Prototype.__init__(self)
@@ -334,6 +399,7 @@ class Golem(Prototype):
         self.element = "earth"
         self.level = 5
         self.power = 4
+        self.cast = False
         self.health = 15
         self.image = pygame.image.load('misc/cards/earth/golem.gif')
         Prototype.__init__(self)
@@ -344,20 +410,22 @@ class Dryad(Prototype):
         self.element = "earth"
         self.level = 4
         self.power = 4
+        self.cast = False
         self.health = 12
         self.image = pygame.image.load('misc/cards/earth/dryad.gif')
         Prototype.__init__(self)
 class ForestSpirit(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Forest Spirit"        
+        self.name = "ForestSpirit"        
         self.element = "earth"
         self.level = 3
         self.power = 2
+        self.cast = False
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
-    def damage(self,damage):
+    def damage(self,damage,enemy):
         self.health-=1
         if self.health<=0:
             self.die()
@@ -368,6 +436,7 @@ class Centaur(Prototype):
         self.element = "earth"
         self.level = 6
         self.power = 5
+        self.cast = False
         self.health = 14
         self.image = pygame.image.load('misc/cards/earth/centaur.gif')
         Prototype.__init__(self)
@@ -378,6 +447,7 @@ class Elemental(Prototype):
         self.element = "earth"        
         self.level = 13
         self.power = 1
+        self.cast = False
         self.health = 45
         self.image = pygame.image.load('misc/cards/earth/elemental.gif')
         Prototype.__init__(self)
@@ -388,6 +458,7 @@ class Ent(Prototype):
         self.element = "earth"        
         self.level = 7
         self.power = 3
+        self.cast = False
         self.health = 22
         self.image = pygame.image.load('misc/cards/earth/ent.gif')
         Prototype.__init__(self)
@@ -398,6 +469,7 @@ class Echidna(Prototype):
         self.element = "earth"        
         self.level = 10
         self.power = 7
+        self.cast = False
         self.health = 26
         self.image = pygame.image.load('misc/cards/earth/echidna.gif')
         Prototype.__init__(self)
@@ -407,6 +479,7 @@ class Priest(Prototype):
         self.name = "Priest"        
         self.element = "life"
         self.level = 4
+        self.cast = False
         self.power = 1
         self.health = 9
         self.image = pygame.image.load('misc/cards/life/priest.gif')
@@ -415,7 +488,8 @@ class Paladin(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = "Paladin"
-        self.element = "life"        
+        self.element = "life"
+        self.cast = False
         self.level = 8
         self.power = 4
         self.health = 20
@@ -429,6 +503,7 @@ class Pegasus(Prototype):
         self.level = 6
         self.power = 6
         self.health = 15
+        self.cast = False
         self.image = pygame.image.load('misc/cards/life/pegasus.gif')
         Prototype.__init__(self)
 class Unicorn(Prototype):
@@ -438,6 +513,7 @@ class Unicorn(Prototype):
         self.element = "life"        
         self.level = 9
         self.power = 8
+        self.cast = False
         self.health = 25
         self.image = pygame.image.load('misc/cards/life/unicorn.gif')
         Prototype.__init__(self)
@@ -447,6 +523,7 @@ class Apostate(Prototype):
         self.name = "Apostate"
         self.element = "life"        
         self.level = 5
+        self.cast = False
         self.power = 4
         self.health = 14
         self.image = pygame.image.load('misc/cards/life/apostate.gif')
@@ -454,10 +531,11 @@ class Apostate(Prototype):
 class MagicHealer(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Magic Healer"
+        self.name = "MagicHealer"
         self.element = "life"        
         self.level = 3
         self.power = 2
+        self.cast = False
         self.health = 10
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
@@ -468,6 +546,7 @@ class Chimera(Prototype):
         self.element = "life"        
         self.level = 11
         self.power = 11
+        self.cast = False
         self.health = 30
         self.image = pygame.image.load('misc/cards/life/chimera.gif')
         Prototype.__init__(self)
@@ -478,6 +557,7 @@ class Testl(Prototype):
         self.element = "life"        
         self.level = 1
         self.power = 1
+        self.cast = False
         self.health = 1
         self.image = pygame.image.load('misc/cards/life/testl.gif')
         Prototype.__init__(self)
@@ -489,6 +569,7 @@ class Zombie(Prototype):
         self.level = 4
         self.power = 3
         self.health = 11
+        self.cast = False
         self.image = pygame.image.load('misc/cards/death/zombie.gif')
         Prototype.__init__(self)
 class Ghost(Prototype):
@@ -497,6 +578,7 @@ class Ghost(Prototype):
         self.name = "Ghost"
         self.element = "death"        
         self.level = 3
+        self.cast = False
         self.power = 3
         self.health = 13
         self.image = pygame.image.load('misc/cards/death/ghost.gif')
@@ -509,12 +591,14 @@ class Vampire(Prototype):
         self.level = 9
         self.power = 6
         self.health = 22
+        self.cast = False
         self.image = pygame.image.load('misc/cards/death/vampire.gif')
         Prototype.__init__(self)
 class Werewolf(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.name = "Werewolf"        
+        self.name = "Werewolf"
+        self.cast = False
         self.element = "death"
         self.level = 6
         self.power = 6
@@ -527,6 +611,7 @@ class Banshee(Prototype):
         self.name = "Banshee"        
         self.element = "death"
         self.level = 7
+        self.cast = False
         self.power = 5
         self.health = 12
         self.image = pygame.image.load('misc/cards/death/banshee.gif')
@@ -534,10 +619,11 @@ class Banshee(Prototype):
 class GrimReaper(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)        
-        self.name = "Grim Reaper"
+        self.name = "GrimReaper"
         self.element = "death"
         self.level = 12
         self.power = 8
+        self.cast = False
         self.health = 22
         self.image = pygame.image.load('misc/cards/death/grim_reaper.gif')
         Prototype.__init__(self)
@@ -548,6 +634,7 @@ class Darklord(Prototype):
         self.element = "death"        
         self.level = 8
         self.power = 4
+        self.cast = False
         self.health = 14
         self.image = pygame.image.load('misc/cards/death/darklord.gif')
         Prototype.__init__(self)
@@ -557,7 +644,42 @@ class Lich(Prototype):
         self.name = "Lich"
         self.element = "death"        
         self.level = 10
+        self.cast = False
         self.power = 7
         self.health = 18
         self.image = pygame.image.load('misc/cards/death/lich.gif')
         Prototype.__init__(self)
+#МАГИЯ
+#**************************************************************************************************************
+#--------------------------------------------------------------------------------------------------------------
+#1728378w7dsfhdshuifedhsghfgfhdsghjsdgfhdsgdfyugdhsghfgdhsghjlfdsghgsdujhadhujgghsdgfs
+#_____________________________________________________________________________________________________________
+class Magic(pygame.sprite.Sprite):
+    def __init__(self):
+        self.type = "magic_card"
+        self.magic = True
+        #self.image = ""
+        self.image = self.image.convert_alpha()
+        self.surface_backup = self.image.copy()
+        self.font = pygame.font.Font(None,19)
+    def cast(self):
+        pass
+class Poison(Magic):
+    def __init__(self):
+        self.element = "water"
+        self.name = "Poison"
+        self.level = 3
+        #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
+class SeaJustice(Magic):
+    def __init__(self):
+        self.element = "water"
+        self.name = "Sea Justice"
+        self.level = 3
+        #Атакует каждую карту противника с силой равной силе карты-1
+class Paralyze(Magic):
+    def __init__(self):
+        self.element = "water"
+        self.name = "Paralyze"
+        self.level = 10
+        #противник пропускает ход
+        
