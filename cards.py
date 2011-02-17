@@ -16,13 +16,14 @@ pygame.font.init()
 font = pygame.font.Font(None,25)
 class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def __init__(self):
+        #self.group = group #Группа, в которой лежит эта карта
         self.parent = 0
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None,19)
         self.type = "card"
         self.moves_alive = 0 #Сколько ходов прожила карта
-    def attack(self):
+    def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             if self.parent.position<5:
                 attack_position = self.parent.position+5 #Id - блока, куда атаковать
@@ -30,11 +31,18 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             else:
                 attack_position = self.parent.position-5
                 self.cardboxes[attack_position].card.damage(self.power)
-            print self.cardboxes[attack_position].player.id
+        else:
+            return
     def cast(self):
         pass
-    def damage(self,damage):
+    def damage(self,damage): #Функция, срабатываемая при получении урона.
         self.health-=damage
+        if self.health<=0:
+            self.die()
+    def die(self): #Смерть персонажа
+            self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
+            self.parent.image.blit(self.parent.surface_backup,(0,0)) #Рисуем объект-родитель поверх карты
+            self.kill() #Выкидываем карту из всех групп
     def turn(self):
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
     def update(self,cards_of_element_shower,field): #Field - True если рисовать на поле, false - если рисовать в таблице выбора

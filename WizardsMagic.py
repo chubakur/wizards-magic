@@ -49,9 +49,15 @@ font.set_bold(0)
 #game_params = GameParams()
 class Player(): #Прототип игрока
     def __init__(self):
-        pass
+        self.health = 50
+        self.name = "player"
+        self.action_points = True #Ходил игрок, или нет
+        self.get_cards()
+        self.get_mana()
     def damage(self,damage):
         self.health-=damage
+        if self.health<=0:
+            print "Game Over"
     def recovery(self, health):
         self.health+=health
     def get_mana(self):
@@ -101,16 +107,12 @@ class Player(): #Прототип игрока
              cards.death_cards.remove(cards.death_cards[randnum])
 class Player1(Player):
     def __init__(self):
-        self.health = 50
         self.id = 1
-        self.get_cards()
-        self.get_mana()
+        Player.__init__(self)
 class Player2(Player):
     def __init__(self):
-        self.health = 50
         self.id = 2
-        self.get_cards()
-        self.get_mana()
+        Player.__init__(self)
 player1 = Player1()
 player2 = Player2()
 player = player1
@@ -119,12 +121,14 @@ def finish_turn():
     #Меняем игрока
     if player.id == 1:
         player = player2
+        player.action_points = True
         for card in ccards_1: #Атакуем
             if card:
                 card.attack()
                 card.moves_alive+=1
     else:
         player = player1
+        player.action_points = True
         for card in ccards_2: #Атакуем
             if card:
                 card.attack()
@@ -318,16 +322,13 @@ class Cardbox(pygame.sprite.Sprite):
         self.type = 'cardbox'
         self.position = position
         self.player = player #первый или второй
-        self.image = pygame.image.load('misc/cardbox_bg.gif').convert()
+        self.image = pygame.image.load('misc/cardbox_bg.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
-        #if self.player.id == 1:
-         #   self.enemy_player = player2
-        #else:
-          #  self.enemy_player = player1
-        #self.card = self.enemy_player
         self.card = self.player
         panels.add(self)
     def draw(self):
+        #self.image = self.surface_backup.copy()
         background.blit(self.image,self.rect)
     def update(self):
         self.draw()
@@ -351,13 +352,13 @@ class Actionpanel(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.type = 'actionpanel'
         self.player = player
-        self.image = pygame.image.load('misc/actionpanel_bg.gif').convert()
-        #self.surface_backup = self.image.copy()
+        self.image = pygame.image.load('misc/actionpanel_bg.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
         panels.add(self)
     def draw(self):
-        #self.image = self.surface_backup.copy()
         background.blit(self.image,self.rect)
+        self.image = self.surface_backup.copy()
     def update(self):
         self.draw()
 class Point(pygame.sprite.Sprite):
@@ -395,18 +396,21 @@ class Event_handler():
                     return
                 if item.player.id!=player.id:
                     return
-                if item.type == "cardbox":
-                    if selected_card:
+                if item.type == "cardbox": #Если клик на карточный бокс
+                    if selected_card: #если выбрана карта
+                        if not player.action_points: #если уже ходил
+                            return
                         exec('available_mana = player.'+selected_card.element+'_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
                         if available_mana<selected_card.level:
                             return
                         item.card = selected_card
                         item.card.parent = item
                         item.card.cardboxes = cardboxes
-                        exec('player.'+selected_card.element+'_mana -= '+str(selected_card.level))
-                        interface.remove(cardsofelementshower1)
-                        interface.remove(cardsofelementshower2)
-                        cards_in_deck.empty()
+                        player.action_points = False
+                        exec('player.'+selected_card.element+'_mana -= '+str(selected_card.level)) #Отнимаем ману
+                        interface.remove(cardsofelementshower1) #Закрываем окна выбора карты
+                        interface.remove(cardsofelementshower2) #Закр. окна выбора карты
+                        cards_in_deck.empty() #очищаем группу карты в колоде
                         if item.player.id == 1:
                             ccards_1.add(item.card)
                         else:
