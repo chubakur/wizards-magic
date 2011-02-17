@@ -27,15 +27,15 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.moves_alive:
             if self.parent.position<5:
                 attack_position = self.parent.position+5 #Id - блока, куда атаковать
-                self.cardboxes[attack_position].card.damage(self.power)
+                self.cardboxes[attack_position].card.damage(self.power,self)
             else:
                 attack_position = self.parent.position-5
-                self.cardboxes[attack_position].card.damage(self.power)
+                self.cardboxes[attack_position].card.damage(self.power,self)
         else:
             return
     def cast(self):
         pass
-    def damage(self,damage): #Функция, срабатываемая при получении урона.
+    def damage(self,damage,enemy): #Функция, срабатываемая при получении урона.
         self.health-=damage
         if self.health<=0:
             self.die()
@@ -251,8 +251,21 @@ class Phoenix(Prototype):
         self.level = 6
         self.power = 4
         self.health = 20
+        self.recovered = 0 #Восстанавливалась ли карта
         self.image = pygame.image.load('misc/cards/air/phoenix.gif')
         Prototype.__init__(self)
+    def damage(self,damage,enemy):
+        self.health-=damage
+        if self.health<=0:
+            if enemy.element == "fire": #Если стихия врага - огонь
+                if not self.recovered: #если не восстанавливалась
+                    exec("self = "+self.name+"()") #восстанавливаемся
+                    self.recovered = 1
+                else:
+                    self.die()
+            else:
+                self.die()
+            #self.die()
 class Zeus(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -343,6 +356,10 @@ class ForestSpirit(Prototype):
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
+    def damage(self,damage):
+        self.health-=1
+        if self.health<=0:
+            self.die()
 class Centaur(Prototype):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)

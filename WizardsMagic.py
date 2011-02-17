@@ -54,7 +54,7 @@ class Player(): #Прототип игрока
         self.action_points = True #Ходил игрок, или нет
         self.get_cards()
         self.get_mana()
-    def damage(self,damage):
+    def damage(self,damage,enemy):
         self.health-=damage
         if self.health<=0:
             print "Game Over"
@@ -392,11 +392,14 @@ class Event_handler():
                     return
                 item = collided[len(collided)-1]
                 if item.type == "card":
-                    selected_card = item
+                    #selected_card = item
+                    exec('selected_card_0 = cards.'+item.name+'()') #Переменной selected_card_0 присваиваем новый объект
+                    selected_card = selected_card_0 # из локальной в глобальную
                     return
                 if item.player.id!=player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс
+                    print selected_card
                     if selected_card: #если выбрана карта
                         if not player.action_points: #если уже ходил
                             return
