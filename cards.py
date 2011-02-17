@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame.sprite
+#from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 __author__="chubakur"
@@ -11,26 +12,38 @@ earth_cards = ["Satyr","Golem","Dryad","Centaur","Elemental","Ent","Echidna","Fo
 life_cards = ["Priest","Paladin","Pegasus","Unicorn","Apostate","MagicHealer","Chimera","Testl"]
 death_cards = ["Zombie","Vampire","GrimReaper","Ghost","Werewolf","Banshee","Darklord","Lich"]
 import pygame
-class Prototype(pygame.sprite.Sprite):
+pygame.font.init()
+font = pygame.font.Font(None,25)
+class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def __init__(self):
         self.parent = 0
+        self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None,19)
         self.type = "card"
+        self.moves_alive = 0 #Сколько ходов прожила карта
     def attack(self):
-        pass
+        if self.moves_alive:
+            if self.parent.position<5:
+                attack_position = self.parent.position+5 #Id - блока, куда атаковать
+                self.cardboxes[attack_position].card.damage(self.power)
+            else:
+                attack_position = self.parent.position-5
     def cast(self):
+        pass
+    def damage(self,damage):
         pass
     def turn(self):
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
-    def update(self,cards_of_element_shower,field,font): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        textpower = font.render("ASD",True,(0,255,0))
-        #text_health = font.render(str(self.health),True,(0,255,0))
+    def update(self,cards_of_element_shower,field): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+        text_level = font.render(str(self.level),True,(255,255,255))
+        text_power = font.render(str(self.power),True,(255,255,255))
+        text_health = font.render(str(self.health),True,(255,255,255))
         #self.image = self.surface_backup.copy()
         #print text_power
-        self.image.blit(textpower,(10,230))
-        #self.image.blit(text_health,(150,230))
-        #Рендеринг шрифтов косячит!
+        self.image.blit(text_level,(130,10))
+        self.image.blit(text_power,(10,230))
+        self.image.blit(text_health,(130,230))
         if not field: #Рисование в колоде
             self.parent = cards_of_element_shower
             xshift = self.parent.shift*(self.parent.cards+1)+self.parent.cards*160

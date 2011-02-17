@@ -50,6 +50,10 @@ font.set_bold(0)
 class Player(): #Прототип игрока
     def __init__(self):
         pass
+    def damage(self,damage):
+        self.health-=damage
+    def recovery(self, health):
+        self.health+=health
     def get_mana(self):
         self.water_mana = random.randint(1,6)
         self.fire_mana = random.randint(1,6)
@@ -115,8 +119,16 @@ def finish_turn():
     #Меняем игрока
     if player.id == 1:
         player = player2
+        for card in ccards_1: #Атакуем
+            if card:
+                card.attack()
+                card.moves_alive+=1
     else:
         player = player1
+        for card in ccards_2: #Атакуем
+            if card:
+                card.attack()
+                card.moves_alive+=1
     #Добавляем ману
     player.water_mana+=1
     player.fire_mana+=1
@@ -137,10 +149,10 @@ class CardsOfElementShower(pygame.sprite.Sprite):
     def draw(self):
         background.blit(self.image,self.rect)
     def update(self):
-        if self.player != player.id:
+        if self.player.id != player.id:
             return
         self.cards = 0
-        if self.player == 1:
+        if self.player.id == 1:
             if cards_of_element_shower_element == "water":
                 for card in player1.water_cards:
                     exec( "cards_in_deck.add(player1."+card.lower()+")")
@@ -190,7 +202,7 @@ class CompleteTheCourseButton(pygame.sprite.Sprite):
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
     def draw(self):
-        if not self.player == player.id:
+        if not self.player.id == player.id:
             return
         self.panel.image.blit(self.image,self.relative_rect)
     def update(self):
@@ -201,7 +213,7 @@ class ElementButton(pygame.sprite.Sprite):
         pass
     def draw(self):
         self.image = self.surface_backup.copy()
-        exec("text = font.render(str(player"+str(self.player)+"."+self.element+"_mana),True,(255,255,255))")
+        exec("text = font.render(str(player"+str(self.player.id)+"."+self.element+"_mana),True,(255,255,255))")
         self.image.blit(text,(5,16))
         self.panel.image.blit(self.image,self.relative_rect)
     def update(self):
@@ -285,17 +297,19 @@ class HealthWindow(pygame.sprite.Sprite):
         self.type = 'healthwindow'
         self.player = panel.player
         self.image = pygame.image.load('misc/health_window.gif').convert_alpha()
+        self.surface_backup = self.image.copy()
         self.relative_rect = self.image.get_rect().move((rect[0],rect[1]))
         self.rect = self.relative_rect.move(self.panel.rect[0],self.panel.rect[1])
         interface.add(self)
         self.font = pygame.font.Font(None, 22)
     def draw(self):
-        self.panel.image.blit(self.image,self.relative_rect)
+        self.image = self.surface_backup.copy()
         if self.player == 1:
             text = self.font.render(str(player1.health),True,(255,255,255))
         else:
             text = self.font.render(str(player2.health),True,(255,255,255))
         self.image.blit(text, (25,5))
+        self.panel.image.blit(self.image,self.relative_rect)
     def update(self):
         self.draw()
 class Cardbox(pygame.sprite.Sprite):
@@ -306,7 +320,7 @@ class Cardbox(pygame.sprite.Sprite):
         self.player = player #первый или второй
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
-        self.card = 0
+        self.card = self.player
         panels.add(self)
     def draw(self):
         background.blit(self.image,self.rect)
@@ -332,13 +346,12 @@ class Actionpanel(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.type = 'actionpanel'
         self.player = player
-        #self.image = pygame.Surface((screen.get_size()[0],screen.get_size()[1]/20))
         self.image = pygame.image.load('misc/actionpanel_bg.gif').convert()
-        #self.image.convert()
-        #self.image.fill((0,255,0))
+        #self.surface_backup = self.image.copy()
         self.rect = self.image.get_rect().move((rect[0],rect[1]))
         panels.add(self)
     def draw(self):
+        #self.image = self.surface_backup.copy()
         background.blit(self.image,self.rect)
     def update(self):
         self.draw()
@@ -372,6 +385,11 @@ class Event_handler():
                 if not collided:
                     return
                 item = collided[len(collided)-1]
+                if item.type == "card":
+                    selected_card = item
+                    return
+                if item.player.id!=player.id:
+                    return
                 if item.type == "cardbox":
                     if selected_card:
                         exec('available_mana = player.'+selected_card.element+'_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
@@ -379,20 +397,16 @@ class Event_handler():
                             return
                         item.card = selected_card
                         item.card.parent = item
+                        item.card.cardboxes = cardboxes
                         exec('player.'+selected_card.element+'_mana -= '+str(selected_card.level))
                         interface.remove(cardsofelementshower1)
                         interface.remove(cardsofelementshower2)
                         cards_in_deck.empty()
-                        if item.player == 1:
+                        if item.player.id == 1:
                             ccards_1.add(item.card)
                         else:
                             ccards_2.add(item.card)
                         selected_card = 0
-                if item.type == "card":
-                    selected_card = item
-                    return
-                if item.player!=player.id:
-                    return
                 if item.type == 'elementbutton':
                     global cards_of_element_shower_element
                     cards_in_deck.empty()
@@ -428,22 +442,23 @@ class Event_handler():
                     cards_in_deck.empty()
 #################################################################################################3
 event_handler = Event_handler()
-infopanel1 = Infopanel((0,0),1) #Инициализация панели верхнего игрока
-infopanel2 = Infopanel((0,545),2) #Инициализация панели нижнего игрока
-actionpanel1 = Actionpanel((0,25),1) #Панель с кнопками верхнего игрока
-actionpanel2 = Actionpanel((0,570),2) #Панель с кнопками нижнего игрока
+infopanel1 = Infopanel((0,0),player1) #Инициализация панели верхнего игрока
+infopanel2 = Infopanel((0,545),player2) #Инициализация панели нижнего игрока
+actionpanel1 = Actionpanel((0,25),player1) #Панель с кнопками верхнего игрока
+actionpanel2 = Actionpanel((0,570),player2) #Панель с кнопками нижнего игрока
 # 0 1 2 3 4   //Расположение
 # 5 6 7 8 9
-cardbox0 = Cardbox((0,55),1,0) #0 место на поле
-cardbox1 = Cardbox((160,55),1,1) #1 место на поле
-cardbox2 = Cardbox((320,55),1,2) #2 место на поле
-cardbox3 = Cardbox((480,55),1,3) #3 место на поле
-cardbox4 = Cardbox((640,55),1,4) #4 место на поле
-cardbox5 = Cardbox((0,301),2,5) #5 место на поле
-cardbox6 = Cardbox((160,301),2,6) #6 место на поле
-cardbox7 = Cardbox((320,301),2,7) #7 место на поле
-cardbox8 = Cardbox((480,301),2,8) #8 место на поле
-cardbox9 = Cardbox((640,301),2,9) #9 место на поле
+cardbox0 = Cardbox((0,55),player1,0) #0 место на поле
+cardbox1 = Cardbox((160,55),player1,1) #1 место на поле
+cardbox2 = Cardbox((320,55),player1,2) #2 место на поле
+cardbox3 = Cardbox((480,55),player1,3) #3 место на поле
+cardbox4 = Cardbox((640,55),player1,4) #4 место на поле
+cardbox5 = Cardbox((0,301),player2,5) #5 место на поле
+cardbox6 = Cardbox((160,301),player2,6) #6 место на поле
+cardbox7 = Cardbox((320,301),player2,7) #7 место на поле
+cardbox8 = Cardbox((480,301),player2,8) #8 место на поле
+cardbox9 = Cardbox((640,301),player2,9) #9 место на поле
+cardboxes = [cardbox0,cardbox1,cardbox2,cardbox3,cardbox4,cardbox5,cardbox6,cardbox7,cardbox8,cardbox8] #Ссылки на объекты
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
@@ -467,8 +482,8 @@ DeathElementButton((155,0),actionpanel2)
 CompleteTheCourseButton((760,0),actionpanel1)
 CompleteTheCourseButton((760,0),actionpanel2)
 #Окна выбора карты стихии
-cardsofelementshower1 = CardsOfElementShower((0,301),1)
-cardsofelementshower2 = CardsOfElementShower((0,55),2)
+cardsofelementshower1 = CardsOfElementShower((0,301),player1)
+cardsofelementshower2 = CardsOfElementShower((0,55),player2)
 #********************************************************************************
 screen.blit(background,(0,0))
 panels.update()
@@ -480,11 +495,11 @@ while 1:
     panels.update()
     interface.update()
     if player.id == 1:
-        ccards_1.update(0,1,font)
-        cards_in_deck.update(cardsofelementshower1,0,font)
+        ccards_1.update(0,1)
+        cards_in_deck.update(cardsofelementshower1,0)
     else:
-        ccards_2.update(0,1,font)
-        cards_in_deck.update(cardsofelementshower2,0,font)
+        ccards_2.update(0,1)
+        cards_in_deck.update(cardsofelementshower2,0)
     #interface_up_layer.update()
     screen.blit(background,(0,0))
     background.fill((0,0,0))
