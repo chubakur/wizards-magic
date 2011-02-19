@@ -156,7 +156,7 @@ class CardInfo(pygame.sprite.Sprite):
         self.rect = (screen.get_size()[0] / 2-self.image.get_size()[0] / 2, screen.get_size()[1] / 2-self.image.get_size()[1] / 2)
         self.show = False
         self.text = ""
-        self.symbol_size = 8 #Размер символа по Х. Нужно для расчета переноса строк
+        self.symbol_size = 7 #Размер символа по Х. Нужно для расчета переноса строк
         self.distance_between_rows = 20 #расстояние между строками
         self.symbols_in_row = int(self.image.get_size()[0] / self.symbol_size)
     def draw(self):
@@ -165,7 +165,7 @@ class CardInfo(pygame.sprite.Sprite):
         if len(self.text) % self.symbols_in_row:
             rows += 1
         for row in xrange(0, rows):
-            text = font.render(self.text[row * self.symbols_in_row:self.symbols_in_row + row * self.symbols_in_row], True, (255, 255, 255))
+            text = font.render(self.text[row * self.symbols_in_row:self.symbols_in_row + row * self.symbols_in_row]+"-", True, (255, 255, 255))
             self.image.blit(text, (0, self.distance_between_rows * row))
         background.blit(self.image, self.rect)
     def update(self):
