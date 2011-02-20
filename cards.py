@@ -30,15 +30,16 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.cast_button = pygame.Surface((30,20))
         #self.cast_button = self.cast_button.convert()
         #self.cast_button.fill((0,0,255))
-    def attack(self): #Функция , срабатываемая при атаке персонажа
-        if self.moves_alive:
+    def get_attack_position(self):
             if self.parent.position<5:
                 attack_position = self.parent.position+5 #Id - блока, куда атаковать
             else:
                 attack_position = self.parent.position-5
+            return attack_position
+    def attack(self): #Функция , срабатываемая при атаке персонажа
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
             kill = self.cardboxes[attack_position].card.damage(self.power,self)
-            if kill:
-                print "Убил"
         else:
             return
     def cast_action(self):
@@ -101,17 +102,14 @@ class Nixie(Prototype):
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
-            if self.parent.position<5:
-                self.attack_position = self.parent.position+5 #Id - блока, куда атаковать
-            else:
-                self.attack_position = self.parent.position-5
-            if self.cardboxes[self.attack_position].card.name!="player": #если есть карта
-                if self.cardboxes[self.attack_position].card.element == "fire": #если стихия карты - огонь
-                    self.cardboxes[self.attack_position].card.damage(self.power*2,self)
+            attack_position = self.get_attack_position()
+            if self.cardboxes[attack_position].card.name!="player": #если есть карта
+                if self.cardboxes[attack_position].card.element == "fire": #если стихия карты - огонь
+                    self.cardboxes[attack_position].card.damage(self.power*2,self)
                 else:
-                    self.cardboxes[self.attack_position].card.damage(self.power,self)
+                    self.cardboxes[attack_position].card.damage(self.power,self)
             else:
-                self.cardboxes[self.attack_position].card.damage(self.power,self)
+                self.cardboxes[attack_position].card.damage(self.power,self)
         else:
             return
     def cast_action(self):
@@ -135,10 +133,7 @@ class Hydra(Prototype):
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
-            if self.parent.position<5:
-                attack_position = self.parent.position+5 #Id - блока, куда атаковать
-            else:
-                attack_position = self.parent.position-5
+            attack_position = self.get_attack_position()
             self.cardboxes[attack_position].card.damage(self.power,self)
             if attack_position<5:
                 if attack_position>0:
@@ -330,10 +325,7 @@ class Cerberus(Prototype):
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
-            if self.parent.position<5:
-                attack_position = self.parent.position+5 #Id - блока, куда атаковать
-            else:
-                attack_position = self.parent.position-5
+            attack_position = self.get_attack_position()
             self.cardboxes[attack_position].card.damage(self.power,self)
             if attack_position>0:
                 if self.cardboxes[attack_position-1].card.name != "player":
@@ -417,6 +409,14 @@ class Zeus(Prototype):
         self.info = "Owner receives 1 air element for each enemy creature, killed by Zeus. CAST: Strikes Lighting into choosen creature. Costs 1 Air and inflicts 8 damage. Cannot strike creatures of level 7 and highter."
         self.image = pygame.image.load('misc/cards/air/zeus.gif')
         Prototype.__init__(self)
+    def attack(self):
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
+            kill = self.cardboxes[attack_position].card.damage(self.power,self)
+            if kill:
+                self.parent.player.air_mana+=1
+        else:
+            return
 class Gargoyle(Prototype):
     def __init__(self):        
         self.name = "Gargoyle"        
