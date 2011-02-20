@@ -3,17 +3,18 @@ import pygame.sprite
 #from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
-__author__="chubakur"
-__date__ ="$13.02.2011 18:46:32$"
-water_cards = ["Nixie","Hydra","Waterfall","Leviathan","IceGuard","Poseidon","IceWizard","Testw"]
-fire_cards = ["Demon","Devil","Firelord","RedDrake","Efreet","Salamander","Vulcan","Cerberus"]
-air_cards = ["Phoenix","Zeus","Fairy","Nymph","Gargoyle","Manticore","Titan","Testa"]
-earth_cards = ["Satyr","Golem","Dryad","Centaur","Elemental","Ent","Echidna","ForestSpirit"]
-life_cards = ["Priest","Paladin","Pegasus","Unicorn","Apostate","MagicHealer","Chimera","Testl"]
-death_cards = ["Zombie","Vampire","GrimReaper","Ghost","Werewolf","Banshee","Darklord","Lich"]
+__author__ = "chubakur"
+__date__ = "$13.02.2011 18:46:32$"
+water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Testw"]
+fire_cards = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus"]
+air_cards = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Testa"]
+earth_cards = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit"]
+life_cards = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHealer", "Chimera", "Testl"]
+death_cards = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich"]
 import pygame
+from math import *
 pygame.font.init()
-font = pygame.font.Font(None,25)
+font = pygame.font.Font(None, 25)
 class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def __init__(self):
         #self.group = group #Группа, в которой лежит эта карта
@@ -21,7 +22,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.parent = 0
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
-        self.font = pygame.font.Font(None,19)
+        self.font = pygame.font.Font(None, 19)
         self.type = "warrior_card"
         self.moves_alive = 0 #Сколько ходов прожила карта
         self.max_health = self.health #Максимальное кол-во жизней
@@ -31,64 +32,81 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.cast_button = self.cast_button.convert()
         #self.cast_button.fill((0,0,255))
     def get_attack_position(self):
-            if self.parent.position<5:
-                attack_position = self.parent.position+5 #Id - блока, куда атаковать
-            else:
-                attack_position = self.parent.position-5
-            return attack_position
+        if self.parent.position < 5:
+            attack_position = self.parent.position + 5 #Id - блока, куда атаковать
+        else:
+            attack_position = self.parent.position-5
+        return attack_position
+    def get_attack_adjacent_position(self, attack_position):
+        adjacent_position = []
+        if attack_position < 5:
+            if attack_position > 0:
+                if self.cardboxes[attack_position-1].card.name != "player":
+                    adjacent_position.append(attack_position-1)
+            if attack_position < 4:
+                if self.cardboxes[attack_position + 1].card.name != "player":
+                    adjacent_position.append(attack_position + 1)
+        else:
+            if attack_position > 5:
+                if self.cardboxes[attack_position-1].card.name != "player":
+                    adjacent_position.append(attack_position-1)
+            if attack_position < 9:
+                if self.cardboxes[attack_position + 1].card.name != "player":
+                    adjacent_position.append(attack_position + 1)
+        return adjacent_position
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            kill = self.cardboxes[attack_position].card.damage(self.power,self)
+            kill = self.cardboxes[attack_position].card.damage(self.power, self)
         else:
             return
     def cast_action(self):
         pass
     def summon(self): # когда призывают
         pass
-    def damage(self,damage,enemy): #Функция, срабатываемая при получении урона.
-        self.health-=damage
+    def damage(self, damage, enemy): #Функция, срабатываемая при получении урона.
+        self.health -= damage
         self.update(0)
-        if self.health<=0:
+        if self.health <= 0:
             self.die()
             return 1
         return 0
     def die(self): #Смерть персонажа
-            self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
-            self.parent.image.blit(self.parent.surface_backup,(0,0)) #Рисуем объект-родитель поверх карты
-            self.kill() #Выкидываем карту из всех групп
+        self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
+        self.parent.image.blit(self.parent.surface_backup, (0, 0)) #Рисуем объект-родитель поверх карты
+        self.kill() #Выкидываем карту из всех групп
     def turn(self):
         self.used_cast = False
-        self.moves_alive+=1
+        self.moves_alive += 1
         self.update(None)
         #print 1
         #print self.playerscards[self.parent.player.id-1].sprites()
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
-    def update(self,cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        text_level = font.render(str(self.level),True,(255,255,255))
-        text_power = font.render(str(self.power),True,(255,255,255))
-        text_health = font.render(str(self.health),True,(255,255,255))
+    def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+        text_level = font.render(str(self.level), True, (255, 255, 255))
+        text_power = font.render(str(self.power), True, (255, 255, 255))
+        text_health = font.render(str(self.health), True, (255, 255, 255))
         self.image = self.surface_backup.copy()
         if self.cast:
             if not self.used_cast:
-                text_cast = font.render("Cast",True,(0,0,255))
-                self.image.blit(text_cast,(50,100))
+                text_cast = font.render("Cast", True, (0, 0, 255))
+                self.image.blit(text_cast, (50, 100))
             else:
-                text_cast = font.render("Cast",True,(0,0,0))
-                self.image.blit(text_cast,(50,100))
+                text_cast = font.render("Cast", True, (0, 0, 0))
+                self.image.blit(text_cast, (50, 100))
         #print text_power
-        self.image.blit(text_level,(130,10))
-        self.image.blit(text_power,(10,230))
-        self.image.blit(text_health,(130,230))
+        self.image.blit(text_level, (130, 10))
+        self.image.blit(text_power, (10, 230))
+        self.image.blit(text_health, (130, 230))
         if not self.field: #Рисование в колоде
             self.parent = cards_of_element_shower
-            xshift = self.parent.shift*(self.parent.cards+1)+self.parent.cards*160
-            self.parent.image.blit(self.image,(xshift,0))
-            self.rect = self.image.get_rect().move((self.parent.rect[0],self.parent.rect[1]))
-            self.rect = self.rect.move(xshift,0)
-            self.parent.cards+=1
+            xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
+            self.parent.image.blit(self.image, (xshift, 0))
+            self.rect = self.image.get_rect().move((self.parent.rect[0], self.parent.rect[1]))
+            self.rect = self.rect.move(xshift, 0)
+            self.parent.cards += 1
         else:
-            self.parent.image.blit(self.image,(0,0))
+            self.parent.image.blit(self.image, (0, 0))
 class Nixie(Prototype):
     def __init__(self):        
         self.name = "Nixie"
@@ -103,20 +121,20 @@ class Nixie(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            if self.cardboxes[attack_position].card.name!="player": #если есть карта
+            if self.cardboxes[attack_position].card.name != "player": #если есть карта
                 if self.cardboxes[attack_position].card.element == "fire": #если стихия карты - огонь
-                    self.cardboxes[attack_position].card.damage(self.power*2,self)
+                    self.cardboxes[attack_position].card.damage(self.power * 2, self)
                 else:
-                    self.cardboxes[attack_position].card.damage(self.power,self)
+                    self.cardboxes[attack_position].card.damage(self.power, self)
             else:
-                self.cardboxes[attack_position].card.damage(self.power,self)
+                self.cardboxes[attack_position].card.damage(self.power, self)
         else:
             return
     def cast_action(self):
         print "Nixie Cast"
         if self.parent.player.fire_mana:
-            self.parent.player.fire_mana-=1
-            self.parent.player.water_mana+=1
+            self.parent.player.fire_mana -= 1
+            self.parent.player.water_mana += 1
             self.used_cast = True
         #Наносит картам элемента огня урон 200%
         #КАСТ:уменьшает ману огня на 1, увеличивает ману воды на 1
@@ -134,26 +152,15 @@ class Hydra(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            self.cardboxes[attack_position].card.damage(self.power,self)
-            if attack_position<5:
-                if attack_position>0:
-                    if self.cardboxes[attack_position-1].card.name != "player":
-                        self.cardboxes[attack_position-1].card.damage(self.power,self)
-                if attack_position<4:
-                    if self.cardboxes[attack_position+1].card.name != "player":
-                        self.cardboxes[attack_position+1].card.damage(self.power,self)
-            else:
-                if attack_position>5:
-                    if self.cardboxes[attack_position-1].card.name != "player":
-                        self.cardboxes[attack_position-1].card.damage(self.power,self)
-                if attack_position<9:
-                    if self.cardboxes[attack_position+1].card.name != "player":
-                        self.cardboxes[attack_position+1].card.damage(self.power,self)
+            self.cardboxes[attack_position].card.damage(self.power, self)
+            adjacent_positions = self.get_attack_adjacent_position(attack_position)
+            for adjacent_position in adjacent_positions:
+                self.cardboxes[adjacent_position].card.damage(self.power, self)
         else:
             return
     def turn(self):
-        self.parent.player.water_mana-=2
-        if self.parent.player.water_mana<0:
+        self.parent.player.water_mana -= 2
+        if self.parent.player.water_mana < 0:
             self.parent.player.water_mana = 0
         Prototype.turn(self)
 class Waterfall(Prototype):
@@ -241,8 +248,8 @@ class Demon(Prototype):
     def cast_action(self):
         print 'Demon cast'
         if self.parent.player.earth_mana:
-            self.parent.player.earth_mana-=1
-            self.parent.player.fire_mana+=2
+            self.parent.player.earth_mana -= 1
+            self.parent.player.fire_mana += 2
             self.used_cast = True
         #Не получает повреждения от заклинаний огня и земли
         #cast: владелец теряет один элемент земли и получает 2 огня
@@ -326,19 +333,13 @@ class Cerberus(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            self.cardboxes[attack_position].card.damage(self.power,self)
-            if attack_position>0:
-                if self.cardboxes[attack_position-1].card.name != "player":
-                    self.cardboxes[attack_position-1].card.damage(self.cardboxes[attack_position-1].card.power/2,self)
-            if attack_position<4:
-                if self.cardboxes[attack_position+1].card.name != "player":
-                    self.cardboxes[attack_position+1].card.damage(self.cardboxes[attack_position+1].card.power/2,self)
-            if attack_position>5:
-                if self.cardboxes[attack_position-1].card.name != "player":
-                    self.cardboxes[attack_position-1].card.damage(self.cardboxes[attack_position-1].card.power/2,self)
-            if attack_position<9:
-                if self.cardboxes[attack_position+1].card.name != "player":
-                    self.cardboxes[attack_position+1].card.damage(self.cardboxes[attack_position+1].card.power/2,self)
+            self.cardboxes[attack_position].card.damage(self.power, self)
+            adjacent_positions = self.get_attack_adjacent_position(attack_position)
+            for adjacent_position in adjacent_positions:
+                if not self.cardboxes[adjacent_position].card.power/2:
+                    self.cardboxes[adjacent_position].card.damage(1, self)
+                else:
+                    self.cardboxes[adjacent_position].card.damage(int(ceil(float(self.cardboxes[adjacent_position].card.power)/2)), self)
         else:
             return
 class Nymph(Prototype):
@@ -353,7 +354,7 @@ class Nymph(Prototype):
         self.image = pygame.image.load('misc/cards/air/nymph.gif')
         Prototype.__init__(self)
     def turn(self):
-        self.parent.player.air_mana+=1
+        self.parent.player.air_mana += 1
         Prototype.turn(self)
         #Каждый ход владелец получает дополнительно 1 воздух
 class Fairy(Prototype):
@@ -381,9 +382,9 @@ class Phoenix(Prototype):
         self.recovered = 0 #Восстанавливалась ли карта
         self.image = pygame.image.load('misc/cards/air/phoenix.gif')
         Prototype.__init__(self)
-    def damage(self,damage,enemy):
-        self.health-=damage
-        if self.health<=0:
+    def damage(self, damage, enemy):
+        self.health -= damage
+        if self.health <= 0:
             if enemy.element == "fire": #Если стихия врага - огонь
                 if not self.recovered: #если не восстанавливалась
                     self.health = self.max_health
@@ -412,9 +413,9 @@ class Zeus(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            kill = self.cardboxes[attack_position].card.damage(self.power,self)
+            kill = self.cardboxes[attack_position].card.damage(self.power, self)
             if kill:
-                self.parent.player.air_mana+=1
+                self.parent.player.air_mana += 1
         else:
             return
 class Gargoyle(Prototype):
@@ -451,8 +452,8 @@ class Titan(Prototype):
         self.image = pygame.image.load('misc/cards/air/titan.gif')
         Prototype.__init__(self)
     def summon(self):
-        self.parent.player.enemy.air_mana-=3
-        if self.parent.player.enemy.air_mana<0:
+        self.parent.player.enemy.air_mana -= 3
+        if self.parent.player.enemy.air_mana < 0:
             self.parent.player.enemy.air_mana = 0
 class Testa(Prototype):
     def __init__(self):        
@@ -477,14 +478,14 @@ class Satyr(Prototype):
         self.image = pygame.image.load('misc/cards/earth/satyr.gif')
         Prototype.__init__(self)
     def turn(self):
-        self.parent.player.earth_mana+=1
+        self.parent.player.earth_mana += 1
         Prototype.turn(self)
     def cast_action(self):
-        if self.parent.position<5:
-            attack_position = self.parent.position+5 #Id - блока, куда атаковать
+        if self.parent.position < 5:
+            attack_position = self.parent.position + 5 #Id - блока, куда атаковать
         else:
             attack_position = self.parent.position-5
-        self.cardboxes[attack_position].card.damage(5,self)
+        self.cardboxes[attack_position].card.damage(5, self)
         self.die()
 class Golem(Prototype):
     def __init__(self):        
@@ -519,9 +520,9 @@ class ForestSpirit(Prototype):
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
-    def damage(self,damage,enemy):
-        self.health-=1
-        if self.health<=0:
+    def damage(self, damage, enemy):
+        self.health -= 1
+        if self.health <= 0:
             self.die()
             return 1
         return 0
@@ -758,7 +759,7 @@ class Magic(pygame.sprite.Sprite):
         #self.image = ""
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
-        self.font = pygame.font.Font(None,19)
+        self.font = pygame.font.Font(None, 19)
     def cast(self):
         pass
     def update(self):
