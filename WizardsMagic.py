@@ -116,19 +116,25 @@ class Player2(Player):
         Player.__init__(self)
 player1 = Player1()
 player2 = Player2()
+player1.enemy = player2
+player2.enemy = player1
 player = player1
 def finish_turn():
     global player
+    #Добавляем ману другому игроку. 
+    player.enemy.water_mana += 1
+    player.enemy.fire_mana += 1
+    player.enemy.air_mana += 1
+    player.enemy.earth_mana += 1
+    player.enemy.life_mana += 1
+    player.enemy.death_mana += 1
     #Меняем игрока
     if player.id == 1:
         player = player2
         player.action_points = True
         for card in ccards_1: #Атакуем
             card.attack()
-            #card.used_cast = False # Даем возможность кастовать
-            #card.moves_alive+=1
         for card in ccards_2:
-            #
             card.turn()
     else:
         player = player1
@@ -138,13 +144,6 @@ def finish_turn():
             card.used_cast = False
         for card in ccards_1:
             card.turn()
-    #Добавляем ману
-    player.water_mana += 1
-    player.fire_mana += 1
-    player.air_mana += 1
-    player.earth_mana += 1
-    player.life_mana += 1
-    player.death_mana += 1
 class CardInfo(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -444,6 +443,7 @@ class Event_handler():
                         item.card.cardboxes = cardboxes
                         item.card.playerscards = playerscards
                         item.card.field = True
+                        item.card.summon() #функция которая хранит описание действий при выводе карты
                         player.action_points = False
                         exec('player.' + selected_card.element + '_mana -= ' + str(selected_card.level)) #Отнимаем ману
                         interface.remove(cardsofelementshower1) #Закрываем окна выбора карты
@@ -559,10 +559,10 @@ while 1:
     panels.update()
     interface.update()
     if player.id == 1:
-        ccards_1.update(0)
+        ccards_1.update(None)
         cards_in_deck.update(cardsofelementshower1)
     else:
-        ccards_2.update(0)
+        ccards_2.update(None)
         cards_in_deck.update(cardsofelementshower2)
     card_info_group.update()
     #interface_up_layer.update()

@@ -34,18 +34,24 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.moves_alive:
             if self.parent.position<5:
                 attack_position = self.parent.position+5 #Id - блока, куда атаковать
-                self.cardboxes[attack_position].card.damage(self.power,self)
             else:
                 attack_position = self.parent.position-5
-                self.cardboxes[attack_position].card.damage(self.power,self)
+            kill = self.cardboxes[attack_position].card.damage(self.power,self)
+            if kill:
+                print "Убил"
         else:
             return
     def cast_action(self):
         pass
+    def summon(self): # когда призывают
+        pass
     def damage(self,damage,enemy): #Функция, срабатываемая при получении урона.
         self.health-=damage
+        self.update(0)
         if self.health<=0:
             self.die()
+            return 1
+        return 0
     def die(self): #Смерть персонажа
             self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
             self.parent.image.blit(self.parent.surface_backup,(0,0)) #Рисуем объект-родитель поверх карты
@@ -53,6 +59,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def turn(self):
         self.used_cast = False
         self.moves_alive+=1
+        self.update(None)
         #print 1
         #print self.playerscards[self.parent.player.id-1].sprites()
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
@@ -126,6 +133,34 @@ class Hydra(Prototype):
         self.info = "Attacks both adjacent slots. Reduces owner`s Water by 2 every turn. CAST: Consumes friendly unit, receiving up to 50% of his health."
         self.image = pygame.image.load('misc/cards/water/hydra.gif')
         Prototype.__init__(self)
+    def attack(self):
+        if self.moves_alive:
+            if self.parent.position<5:
+                attack_position = self.parent.position+5 #Id - блока, куда атаковать
+            else:
+                attack_position = self.parent.position-5
+            self.cardboxes[attack_position].card.damage(self.power,self)
+            if attack_position<5:
+                if attack_position>0:
+                    if self.cardboxes[attack_position-1].card.name != "player":
+                        self.cardboxes[attack_position-1].card.damage(self.power,self)
+                if attack_position<4:
+                    if self.cardboxes[attack_position+1].card.name != "player":
+                        self.cardboxes[attack_position+1].card.damage(self.power,self)
+            else:
+                if attack_position>5:
+                    if self.cardboxes[attack_position-1].card.name != "player":
+                        self.cardboxes[attack_position-1].card.damage(self.power,self)
+                if attack_position<9:
+                    if self.cardboxes[attack_position+1].card.name != "player":
+                        self.cardboxes[attack_position+1].card.damage(self.power,self)
+        else:
+            return
+    def turn(self):
+        self.parent.player.water_mana-=2
+        if self.parent.player.water_mana<0:
+            self.parent.player.water_mana = 0
+        Prototype.turn(self)
 class Waterfall(Prototype):
     def __init__(self):        
         self.name = "Waterfall"
@@ -137,6 +172,11 @@ class Waterfall(Prototype):
         self.image = pygame.image.load('misc/cards/water/waterfall.gif')
         self.info = "One of the toughest Elementals. Health itself for 3 whenever any player casts water spell of summons water creature. Attack equal to owner`s Water."
         Prototype.__init__(self)
+    def turn(self):
+        self.power = self.parent.player.water_mana
+        if not self.power:
+            self.power = 1
+        Prototype.turn(self)
 class Leviathan(Prototype):
     def __init__(self):        
         self.name = "Leviathan"
@@ -198,11 +238,17 @@ class Demon(Prototype):
         self.element = "fire"
         self.level = 5
         self.power = 2
-        self.info = "Doesn`t suffer from Fire and Earth spells. CAST: Whenewer Demon cassts Fire Bleed owner loses 1 Earth and receives 2 Fire elements."
-        self.cast = False
+        self.info = "Doesn`t suffer from Fire and Earth spells. CAST: Whenever Demon casts Fire Bleed owner loses 1 Earth and receives 2 Fire elements."
+        self.cast = True
         self.health = 12
         self.image = pygame.image.load('misc/cards/fire/demon.gif')
         Prototype.__init__(self)
+    def cast_action(self):
+        print 'Demon cast'
+        if self.parent.player.earth_mana:
+            self.parent.player.earth_mana-=1
+            self.parent.player.fire_mana+=2
+            self.used_cast = True
         #Не получает повреждения от заклинаний огня и земли
         #cast: владелец теряет один элемент земли и получает 2 огня
 class Devil(Prototype):
@@ -282,6 +328,27 @@ class Cerberus(Prototype):
         self.health = 6
         self.image = pygame.image.load('misc/cards/fire/cerberus.gif')
         Prototype.__init__(self)
+    def attack(self):
+        if self.moves_alive:
+            if self.parent.position<5:
+                attack_position = self.parent.position+5 #Id - блока, куда атаковать
+            else:
+                attack_position = self.parent.position-5
+            self.cardboxes[attack_position].card.damage(self.power,self)
+            if attack_position>0:
+                if self.cardboxes[attack_position-1].card.name != "player":
+                    self.cardboxes[attack_position-1].card.damage(self.cardboxes[attack_position-1].card.power/2,self)
+            if attack_position<4:
+                if self.cardboxes[attack_position+1].card.name != "player":
+                    self.cardboxes[attack_position+1].card.damage(self.cardboxes[attack_position+1].card.power/2,self)
+            if attack_position>5:
+                if self.cardboxes[attack_position-1].card.name != "player":
+                    self.cardboxes[attack_position-1].card.damage(self.cardboxes[attack_position-1].card.power/2,self)
+            if attack_position<9:
+                if self.cardboxes[attack_position+1].card.name != "player":
+                    self.cardboxes[attack_position+1].card.damage(self.cardboxes[attack_position+1].card.power/2,self)
+        else:
+            return
 class Nymph(Prototype):
     def __init__(self):        
         self.name = "Nymph"        
@@ -295,6 +362,7 @@ class Nymph(Prototype):
         Prototype.__init__(self)
     def turn(self):
         self.parent.player.air_mana+=1
+        Prototype.turn(self)
         #Каждый ход владелец получает дополнительно 1 воздух
 class Fairy(Prototype):
     def __init__(self):        
@@ -328,10 +396,15 @@ class Phoenix(Prototype):
                 if not self.recovered: #если не восстанавливалась
                     self.health = self.max_health
                     self.recovered = True
+                    return 0
                 else:
                     self.die()
+                    return 1
             else:
                 self.die()
+                return 1
+            return 0
+        return 0
             #self.die()
 class Zeus(Prototype):
     def __init__(self):        
@@ -377,6 +450,10 @@ class Titan(Prototype):
         self.health = 28
         self.image = pygame.image.load('misc/cards/air/titan.gif')
         Prototype.__init__(self)
+    def summon(self):
+        self.parent.player.enemy.air_mana-=3
+        if self.parent.player.enemy.air_mana<0:
+            self.parent.player.enemy.air_mana = 0
 class Testa(Prototype):
     def __init__(self):        
         self.name = "Testa"        
@@ -394,11 +471,21 @@ class Satyr(Prototype):
         self.element = "earth"
         self.level = 2
         self.power = 3
-        self.cast = False
+        self.cast = True
         self.info = "Increases Earth by 1 every turn. CAST: Once Satyr casts Dissolve, it dies and creature in the opposed slot suffers 5 damage. If there`s no creature, damage dealt to enemy player."
         self.health = 10
         self.image = pygame.image.load('misc/cards/earth/satyr.gif')
         Prototype.__init__(self)
+    def turn(self):
+        self.parent.player.earth_mana+=1
+        Prototype.turn(self)
+    def cast_action(self):
+        if self.parent.position<5:
+            attack_position = self.parent.position+5 #Id - блока, куда атаковать
+        else:
+            attack_position = self.parent.position-5
+        self.cardboxes[attack_position].card.damage(5,self)
+        self.die()
 class Golem(Prototype):
     def __init__(self):        
         self.name = "Golem"        
@@ -436,6 +523,8 @@ class ForestSpirit(Prototype):
         self.health-=1
         if self.health<=0:
             self.die()
+            return 1
+        return 0
 class Centaur(Prototype):
     def __init__(self):        
         self.name = "Centaur"        
