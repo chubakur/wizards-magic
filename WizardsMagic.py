@@ -19,7 +19,7 @@ import pygame.sprite
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 #import pygame.sprite
-#Внимание!! Для того, чтобы слои не наслаивались, я использую объект surface_backup , который является копией изображения. После этого они заменяются
+#Внимание!! Для того, чтоsбы слои не наслаивались, я использую объект surface_backup , который является копией изображения. После этого они заменяются
 __author__ = "chubakur"
 __date__ = "$12.02.2011 12:11:42$"
 import pygame
