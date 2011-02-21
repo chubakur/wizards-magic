@@ -13,6 +13,7 @@ life_cards = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHeale
 death_cards = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich"]
 import pygame
 from math import *
+import globals
 pygame.font.init()
 font = pygame.font.Font(None, 25)
 class Prototype(pygame.sprite.Sprite): #Прототип карты воина
@@ -41,23 +42,23 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         adjacent_position = []
         if attack_position < 5:
             if attack_position > 0:
-                if self.cardboxes[attack_position-1].card.name != "player":
+                if globals.cardboxes[attack_position-1].card.name != "player":
                     adjacent_position.append(attack_position-1)
             if attack_position < 4:
-                if self.cardboxes[attack_position + 1].card.name != "player":
+                if globals.cardboxes[attack_position + 1].card.name != "player":
                     adjacent_position.append(attack_position + 1)
         else:
             if attack_position > 5:
-                if self.cardboxes[attack_position-1].card.name != "player":
+                if globals.cardboxes[attack_position-1].card.name != "player":
                     adjacent_position.append(attack_position-1)
             if attack_position < 9:
-                if self.cardboxes[attack_position + 1].card.name != "player":
+                if globals.cardboxes[attack_position + 1].card.name != "player":
                     adjacent_position.append(attack_position + 1)
         return adjacent_position
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            kill = self.cardboxes[attack_position].card.damage(self.power, self)
+            kill = globals.cardboxes[attack_position].card.damage(self.power, self)
         else:
             return
     def cast_action(self):
@@ -121,13 +122,13 @@ class Nixie(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            if self.cardboxes[attack_position].card.name != "player": #если есть карта
-                if self.cardboxes[attack_position].card.element == "fire": #если стихия карты - огонь
-                    self.cardboxes[attack_position].card.damage(self.power * 2, self)
+            if globals.cardboxes[attack_position].card.name != "player": #если есть карта
+                if globals.cardboxes[attack_position].card.element == "fire": #если стихия карты - огонь
+                    globals.cardboxes[attack_position].card.damage(self.power * 2, self)
                 else:
-                    self.cardboxes[attack_position].card.damage(self.power, self)
+                    globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
-                self.cardboxes[attack_position].card.damage(self.power, self)
+                globals.cardboxes[attack_position].card.damage(self.power, self)
         else:
             return
     def cast_action(self):
@@ -152,10 +153,10 @@ class Hydra(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            self.cardboxes[attack_position].card.damage(self.power, self)
+            globals.cardboxes[attack_position].card.damage(self.power, self)
             adjacent_positions = self.get_attack_adjacent_position(attack_position)
             for adjacent_position in adjacent_positions:
-                self.cardboxes[adjacent_position].card.damage(self.power, self)
+                globals.cardboxes[adjacent_position].card.damage(self.power, self)
         else:
             return
     def turn(self):
@@ -333,13 +334,13 @@ class Cerberus(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            self.cardboxes[attack_position].card.damage(self.power, self)
+            globals.cardboxes[attack_position].card.damage(self.power, self)
             adjacent_positions = self.get_attack_adjacent_position(attack_position)
             for adjacent_position in adjacent_positions:
-                if not self.cardboxes[adjacent_position].card.power/2:
-                    self.cardboxes[adjacent_position].card.damage(1, self)
+                if not globals.cardboxes[adjacent_position].card.power/2:
+                    globals.cardboxes[adjacent_position].card.damage(1, self)
                 else:
-                    self.cardboxes[adjacent_position].card.damage(int(ceil(float(self.cardboxes[adjacent_position].card.power)/2)), self)
+                    globals.cardboxes[adjacent_position].card.damage(int(ceil(float(globals.cardboxes[adjacent_position].card.power)/2)), self)
         else:
             return
 class Nymph(Prototype):
@@ -413,7 +414,7 @@ class Zeus(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            kill = self.cardboxes[attack_position].card.damage(self.power, self)
+            kill = globals.cardboxes[attack_position].card.damage(self.power, self)
             if kill:
                 self.parent.player.air_mana += 1
         else:
@@ -485,7 +486,7 @@ class Satyr(Prototype):
             attack_position = self.parent.position + 5 #Id - блока, куда атаковать
         else:
             attack_position = self.parent.position-5
-        self.cardboxes[attack_position].card.damage(5, self)
+        globals.cardboxes[attack_position].card.damage(5, self)
         self.die()
 class Golem(Prototype):
     def __init__(self):        
