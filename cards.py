@@ -700,9 +700,8 @@ class Vampire(Prototype):
         attack_position = self.get_attack_position()
         globals.cardboxes[attack_position].card.damage(self.power, self)
         if globals.cardboxes[attack_position].card.type != "player":
-            return
-        if globals.cardboxes[attack_position].card.element != "death":
-            self.health(ceil(float(self.power / 2)),30)
+            if globals.cardboxes[attack_position].card.element != "death":
+                self.health(ceil(float(self.power / 2)),30)
 class Werewolf(Prototype):
     def __init__(self):        
         self.name = "Werewolf"
