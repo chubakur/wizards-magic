@@ -83,6 +83,10 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #print 1
         #print self.playerscards[self.parent.player.id-1].sprites()
         pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
+    def heal(self, health, max_health):
+        self.health += health
+        if self.health > max_health:
+            self.health = max_health
     def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = font.render(str(self.level), True, (255, 255, 255))
         text_power = font.render(str(self.power), True, (255, 255, 255))
@@ -337,10 +341,10 @@ class Cerberus(Prototype):
             globals.cardboxes[attack_position].card.damage(self.power, self)
             adjacent_positions = self.get_attack_adjacent_position(attack_position)
             for adjacent_position in adjacent_positions:
-                if not globals.cardboxes[adjacent_position].card.power/2:
+                if not globals.cardboxes[adjacent_position].card.power / 2:
                     globals.cardboxes[adjacent_position].card.damage(1, self)
                 else:
-                    globals.cardboxes[adjacent_position].card.damage(int(ceil(float(globals.cardboxes[adjacent_position].card.power)/2)), self)
+                    globals.cardboxes[adjacent_position].card.damage(int(ceil(float(globals.cardboxes[adjacent_position].card.power) / 2)), self)
         else:
             return
 class Nymph(Prototype):
@@ -692,6 +696,13 @@ class Vampire(Prototype):
         self.info = "When attacks living creature, restores health equal to 50% of damage dealt. Maximum 30 health."
         self.image = pygame.image.load('misc/cards/death/vampire.gif')
         Prototype.__init__(self)
+    def attack(self):
+        attack_position = self.get_attack_position()
+        globals.cardboxes[attack_position].card.damage(self.power, self)
+        if globals.cardboxes[attack_position].card.type != "player":
+            return
+        if globals.cardboxes[attack_position].card.element != "death":
+            self.health(ceil(float(self.power / 2)),30)
 class Werewolf(Prototype):
     def __init__(self):        
         self.name = "Werewolf"
@@ -747,6 +758,20 @@ class Lich(Prototype):
         self.health = 18
         self.image = pygame.image.load('misc/cards/death/lich.gif')
         Prototype.__init__(self)
+    def summon(self):
+        attack_position = self.get_attack_position()
+        globals.cardboxes[attack_position].card.damage(10, self)
+        for adjacent_pos in self.get_attack_adjacent_position(attack_position):
+            globals.cardboxes[adjacent_pos].card.damage(10, self)
+    def attack(self):
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
+            if globals.cardboxes[attack_position].card.element == "life":
+                globals.cardboxes[attack_position].card.damage(self.power + 5, self)
+            else:
+                globals.cardboxes[attack_position].card.damage(self.power, self)
+        else:
+            return
 #МАГИЯ
 #**************************************************************************************************************
 #--------------------------------------------------------------------------------------------------------------
