@@ -59,8 +59,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.moves_alive:
             attack_position = self.get_attack_position()
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
+            return kill
         else:
-            return
+            return 0
     def cast_action(self):
         pass
     def summon(self): # когда призывают
@@ -81,12 +82,12 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.moves_alive += 1
         self.update(None)
         #print 1
-        #print self.playerscards[self.parent.player.id-1].sprites()
-        pass # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
+        #print self.playerscards[self.parent.player.id-1].sprites() # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
     def heal(self, health, max_health):
         self.health += health
         if self.health > max_health:
             self.health = max_health
+        self.update(None)
     def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = font.render(str(self.level), True, (255, 255, 255))
         text_power = font.render(str(self.power), True, (255, 255, 255))
@@ -698,10 +699,10 @@ class Vampire(Prototype):
         Prototype.__init__(self)
     def attack(self):
         attack_position = self.get_attack_position()
-        globals.cardboxes[attack_position].card.damage(self.power, self)
-        if globals.cardboxes[attack_position].card.type != "player":
+        if globals.cardboxes[attack_position].card.name != "player":
             if globals.cardboxes[attack_position].card.element != "death":
                 self.health(ceil(float(self.power / 2)),30)
+        globals.cardboxes[attack_position].card.damage(self.power, self)
 class Werewolf(Prototype):
     def __init__(self):        
         self.name = "Werewolf"
