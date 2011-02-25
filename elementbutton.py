@@ -9,7 +9,7 @@ class ElementButton(pygame.sprite.Sprite):
         self.image = self.surface_backup.copy()
         #exec("text = globals.font.render(str(globals.player" + str(self.player.id) + "." + self.element + "_mana),True,(255,255,255))")
         exec("text = globals.font.render(str(self.player" + "." + self.element + "_mana),True,(255,255,255))")
-        self.image.blit(text, (5, 16))
+        self.image.blit(text, (2, 9))
         self.panel.image.blit(self.image, self.relative_rect)
     def update(self):
         self.draw()

@@ -89,9 +89,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.health = max_health
         self.update(None)
     def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        text_level = font.render(str(self.level), True, (255, 255, 255))
-        text_power = font.render(str(self.power), True, (255, 255, 255))
-        text_health = font.render(str(self.health), True, (255, 255, 255))
+        text_level = globals.font.render(str(self.level), True, (255, 255, 255))
+        text_power = globals.font.render(str(self.power), True, (255, 255, 255))
+        text_health = globals.font.render(str(self.health), True, (255, 255, 255))
         self.image = self.surface_backup.copy()
         if self.cast:
             if not self.used_cast:
@@ -101,9 +101,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 text_cast = font.render("Cast", True, (0, 0, 0))
                 self.image.blit(text_cast, (50, 100))
         #print text_power
-        self.image.blit(text_level, (130, 10))
-        self.image.blit(text_power, (10, 230))
-        self.image.blit(text_health, (130, 230))
+        self.image.blit(text_level, (130, 0))
+        self.image.blit(text_power, (10, 220))
+        self.image.blit(text_health, (130, 220))
         if not self.field: #Рисование в колоде
             self.parent = cards_of_element_shower
             xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160

@@ -9,7 +9,8 @@ ccards_2 = pygame.sprite.Group() # Карты, которые вывел вто�
 cards_of_element_shower_element = "" #какой элемент показывать
 selected_card = False #Выбранная карта
 card_info_group = pygame.sprite.Group() #  Группа, которая содержит спрайт, содержащий панель вывода информации о карте
-font = pygame.font.Font(None, 20)
+font = pygame.font.Font("misc/Domestic_Manners.ttf", 15)
+#print pygame.font.match_font('Arial')
 screen = None
 player = None
 player1 = None
