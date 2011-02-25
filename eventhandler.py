@@ -35,6 +35,15 @@ class Event_handler():
                 if item.type == "warrior_card": #Карта в колоде! Карта на поле в cardbox
                     exec('selected_card_0 = cards.' + item.name + '()') #Переменной selected_card_0 присваиваем новый объект
                     globals.selected_card = selected_card_0 # из локальной в глобальную
+                    if globals.player.id == 1:
+                        for cardbox in globals.cardboxes[0:5]:
+                            if globals.player.action_points:
+                                if cardbox.card.name == "player": #если карты нет
+                                    cardbox.light = True
+                    else:
+                        for cardbox in globals.cardboxes[5:10]:
+                            if cardbox.card.name == "player":
+                                cardbox.light = True
                     return
                 if item.player.id != globals.player.id:
                     return
@@ -46,6 +55,10 @@ class Event_handler():
                     if globals.selected_card: #если выбрана карта
                         if not globals.player.action_points: #если уже ходил
                             return
+                        #отключаем подсветку
+                        for cardbox in globals.cardboxes:
+                            cardbox.light = False
+                        #Выводим карту
                         exec('available_mana = globals.player.' + globals.selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
                         if available_mana < globals.selected_card.level:
                             return

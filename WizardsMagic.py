@@ -72,7 +72,7 @@ globals.cardbox6 = cardbox.Cardbox((160, 301), globals.player2, 6) #6 место
 globals.cardbox7 = cardbox.Cardbox((320, 301), globals.player2, 7) #7 место на поле
 globals.cardbox8 = cardbox.Cardbox((480, 301), globals.player2, 8) #8 место на поле
 globals.cardbox9 = cardbox.Cardbox((640, 301), globals.player2, 9) #9 место на поле
-globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox8] #Ссылки на объекты
+globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
 #playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
