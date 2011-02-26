@@ -15,3 +15,7 @@ screen = None
 player = None
 player1 = None
 player2 = None
+#Каст с выбором цели
+cast_focus = False #включен ли режим
+cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
+#cast_focus_filter = None

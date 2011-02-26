@@ -30,6 +30,18 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.max_health = self.health #Максимальное кол-во жизней
         self.field = False
         self.used_cast = False #Использовал cast
+        try:
+            self.focus_cast
+        except AttributeError:
+            self.focus_cast = False
+        try:
+            self.cast
+        except AttributeError:
+            self.cast = False
+        try:
+            self.info
+        except AttributeError:
+            self.info = ""
         #self.cast_button = pygame.Surface((30,20))
         #self.cast_button = self.cast_button.convert()
         #self.cast_button.fill((0,0,255))
@@ -86,6 +98,10 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         else:
             return 0
     def cast_action(self):
+        if self.focus_cast: #тут буду пробовать организовывать фокусированный каст
+            globals.cast_focus = True #говорим программе, что будет использоваться фокусированный каст
+            globals.cast_focus_wizard = self #создаем ссылку на себя
+    def focus_cast_action(self, target):
         pass
     def summon(self): # когда призывают
         pass
@@ -629,12 +645,30 @@ class Paladin(Prototype):
         self.name = "Paladin"
         self.element = "life"
         self.info = "Brings 300% of damage to undead creatures. CAST: Casts Exorcism. Destroys any undead, but suffers 10 damage himself. Owner also loses 2 Life as a cost of this holy casting."
-        self.cast = False
-        self.level = 8
+        self.cast = True
+        self.focus_cast = True
+        #self.level = 8
+        self.level = 1
         self.power = 4
         self.health = 20
         self.image = pygame.image.load('misc/cards/life/paladin.gif')
         Prototype.__init__(self)
+    def cast_action(self):
+        if self.parent.player.life_mana>=2: #если хватает маны, то активируем фокус
+            Prototype.cast_action(self)
+    def focus_cast_action(self, target):
+        if target.name != "player": #если это реальная карта
+            if target.element == "death":
+                #действие
+                self.used_cast = True
+                globals.cast_focus = False
+                target.die()
+                self.damage(10, self)
+                self.parent.player.life_mana -= 2
+            else:
+                return #Если паладин не может подействовать на эту карту
+        else:
+            return #если тут вообще нет карты
 class Pegasus(Prototype):
     def __init__(self):        
         self.name = "Pegasus"

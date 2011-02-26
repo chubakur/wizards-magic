@@ -45,6 +45,11 @@ class Event_handler():
                             if cardbox.card.name == "player":
                                 cardbox.light = True
                     return
+                if globals.cast_focus: #выбор цели для каста
+                    try:
+                        globals.cast_focus_wizard.focus_cast_action(item.card)
+                    except AttributeError:
+                        return
                 if item.player.id != globals.player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс
@@ -100,6 +105,9 @@ class Event_handler():
                 elif item.type == 'completethecoursebutton':
                     player.finish_turn()
             elif event.button == 3: #ПРАВАЯ КНОПКА МЫШИ
+                if globals.cast_focus:
+                    globals.cast_focus = False
+                    return
                 globals.point.draw(event.pos)
                 collided = pygame.sprite.spritecollide(globals.point, globals.cards_in_deck, 0)
                 if not collided:
