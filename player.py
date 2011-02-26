@@ -82,14 +82,19 @@ def finish_turn():
         globals.player = globals.player2
         globals.player.action_points = True
         for card in globals.ccards_1: #Атакуем
-            card.attack()
+            kill = card.attack()
+            if kill:
+                card.enemy_die()
+            card.used_cast = False
         for card in globals.ccards_2:
             card.turn()
     else:
         globals.player = globals.player1
         globals.player.action_points = True
         for card in globals.ccards_2: #Атакуем
-            card.attack()
+            kill = card.attack()
+            if kill:
+                card.enemy_die()
             card.used_cast = False
         for card in globals.ccards_1:
             card.turn()

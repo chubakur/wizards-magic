@@ -25,6 +25,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
         self.type = "warrior_card"
+        self.killed = 0
         self.moves_alive = 0 #Сколько ходов прожила карта
         self.max_health = self.health #Максимальное кол-во жизней
         self.field = False
@@ -38,6 +39,28 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         else:
             attack_position = self.parent.position-5
         return attack_position
+    def get_self_cards(self):
+        cards = []
+        if self.parent.position < 5:
+            for cardbox in globals.cardboxes[0:5]:
+                if cardbox.card.name != "player": #если есть карта
+                    cards.append(cardbox.card)
+        else:
+            for cardbox in globals.cardboxes[5:10]:
+                if cardbox.card.name != "player":
+                    cards.append(cardbox.card)
+        return cards
+    def get_enemy_cards(self):
+        cards = []
+        if self.parent.position < 5:
+            for cardbox in globals.cardboxes[5:10]:
+                if cardbox.card.name != "player": #если есть карта
+                    cards.append(cardbox.card)
+        else:
+            for cardbox in globals.cardboxes[0:5]:
+                if cardbox.card.name != "player":
+                    cards.append(cardbox.card)
+        return cards
     def get_attack_adjacent_position(self, attack_position):
         adjacent_position = []
         if attack_position < 5:
@@ -77,6 +100,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
         self.parent.image.blit(self.parent.surface_backup, (0, 0)) #Рисуем объект-родитель поверх карты
         self.kill() #Выкидываем карту из всех групп
+    def enemy_die(self): #когда карта убивает противолежащего юнита
+        self.killed += 1
     def turn(self):
         self.used_cast = False
         self.moves_alive += 1
@@ -235,7 +260,7 @@ class Testw(Prototype):
         self.element = "water"
         self.level = 1
         self.power = 1
-        self.info = ""
+        self.info = "Тестюлька"
         self.cast = False
         self.health = 1
         self.image = pygame.image.load('misc/cards/water/testw.gif')
@@ -390,6 +415,7 @@ class Phoenix(Prototype):
         Prototype.__init__(self)
     def damage(self, damage, enemy):
         self.health -= damage
+        self.update(0)
         if self.health <= 0:
             if enemy.element == "fire": #Если стихия врага - огонь
                 if not self.recovered: #если не восстанавливалась
@@ -452,7 +478,7 @@ class Titan(Prototype):
         self.element = "air"
         self.level = 11
         self.power = 7
-        self.cast = False
+        self.cast = True
         self.info = "When summoned, enemy loses 3 Air. Titan`s attack is increased by 1 for each Air creature in play. CAST: Casts Thunder Fist. All enemy Earth creatures suffer 3 damage. Owner loses 1 Air."
         self.health = 28
         self.image = pygame.image.load('misc/cards/air/titan.gif')
@@ -461,12 +487,22 @@ class Titan(Prototype):
         self.parent.player.enemy.air_mana -= 3
         if self.parent.player.enemy.air_mana < 0:
             self.parent.player.enemy.air_mana = 0
+    def cast_action(self):
+        if self.parent.player.air_mana:
+            self.parent.player.air_mana -= 1
+            for enemy_card in self.get_enemy_cards():
+                if enemy_card.element == "earth":
+                    enemy_card.damage(3, self)
+#    def enemy_die(self): #Перепутал способность
+#        Prototype.enemy_die(self)
+#        self.power+=1
+#        self.update(None)
 class Testa(Prototype):
     def __init__(self):        
         self.name = "Testa"        
         self.element = "air"
         self.level = 1
-        self.info = ""
+        self.info = "Еще один не игровой юнит - лох"
         self.power = 1
         self.cast = False
         self.health = 1
@@ -528,6 +564,7 @@ class ForestSpirit(Prototype):
         Prototype.__init__(self)
     def damage(self, damage, enemy):
         self.health -= 1
+        self.update(0)
         if self.health <= 0:
             self.die()
             return 1
@@ -660,7 +697,7 @@ class Testl(Prototype):
         self.level = 1
         self.power = 1
         self.cast = False
-        self.info = ""
+        self.info = "Тестовый монстирло"
         self.health = 1
         self.image = pygame.image.load('misc/cards/life/testl.gif')
         Prototype.__init__(self)
@@ -701,7 +738,7 @@ class Vampire(Prototype):
         attack_position = self.get_attack_position()
         if globals.cardboxes[attack_position].card.name != "player":
             if globals.cardboxes[attack_position].card.element != "death":
-                self.health(ceil(float(self.power / 2)),30)
+                self.health(ceil(float(self.power / 2)), 30)
         globals.cardboxes[attack_position].card.damage(self.power, self)
 class Werewolf(Prototype):
     def __init__(self):        
