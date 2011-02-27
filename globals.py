@@ -19,3 +19,4 @@ player2 = None
 cast_focus = False #включен ли режим
 cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
 #cast_focus_filter = None
+information_group = pygame.sprite.Group() #Группа, содержащая панель вывода игровой информации

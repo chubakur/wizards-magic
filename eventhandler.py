@@ -57,8 +57,12 @@ class Event_handler():
                         if item.card.cast: #если есть каст
                             if not item.card.used_cast: # если еще не кастовали
                                 item.card.cast_action()
+                            else:
+                                globals.gameinformationpanel.display("You've already cast.")
+                                return
                     if globals.selected_card: #если выбрана карта
                         if not globals.player.action_points: #если уже ходил
+                            globals.gameinformationpanel.display("You've already made a move.")
                             return
                         #отключаем подсветку
                         for cardbox in globals.cardboxes:
@@ -66,6 +70,7 @@ class Event_handler():
                         #Выводим карту
                         exec('available_mana = globals.player.' + globals.selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
                         if available_mana < globals.selected_card.level:
+                            globals.gameinformationpanel.display("Not enough mana.")
                             return
                         item.card = globals.selected_card
                         item.card.parent = item

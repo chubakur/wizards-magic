@@ -13,7 +13,7 @@ class Player(): #Прототип игрока
     def damage(self, damage, enemy):
         self.health -= damage
         if self.health <= 0:
-            print "Game Over"
+            globals.gameinformationpanel.display("Game Over!")
     def recovery(self, health):
         self.health += health
     def get_mana(self):
