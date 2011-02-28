@@ -21,7 +21,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.group = group #Группа, в которой лежит эта карта
         pygame.sprite.Sprite.__init__(self)
         self.parent = 0
+        self.light = False
         self.image = self.image.convert_alpha()
+        self.light_image = pygame.image.load('misc/light.gif').convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
         self.type = "warrior_card"
@@ -45,6 +47,12 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.cast_button = pygame.Surface((30,20))
         #self.cast_button = self.cast_button.convert()
         #self.cast_button.fill((0,0,255))
+    def light_switch(self, on):
+        if on:
+            self.light = True
+        else:
+            self.light = False
+        self.update(None)
     def get_attack_position(self):
         if self.parent.position < 5:
             attack_position = self.parent.position + 5 #Id - блока, куда атаковать
@@ -145,6 +153,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.image.blit(text_level, (130, 0))
         self.image.blit(text_power, (10, 220))
         self.image.blit(text_health, (130, 220))
+        if self.light:
+            self.image.blit(self.light_image,(10,50))
         if not self.field: #Рисование в колоде
             self.parent = cards_of_element_shower
             xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
@@ -656,17 +666,23 @@ class Paladin(Prototype):
     def cast_action(self):
         if self.parent.player.life_mana>=2: #если хватает маны, то активируем фокус
             Prototype.cast_action(self)
+            for card in self.get_enemy_cards():
+                if card.element == "death":
+                    card.light_switch(True)
     def focus_cast_action(self, target):
         if target.name != "player": #если это реальная карта
-            if target.element == "death":
-                #действие
-                self.used_cast = True
-                globals.cast_focus = False
-                target.die()
-                self.damage(10, self)
-                self.parent.player.life_mana -= 2
+            if target.parent.player.id != self.parent.player.id: #если это чужая карта
+                if target.element == "death":
+                    #действие
+                    self.used_cast = True
+                    globals.cast_focus = False
+                    target.die()
+                    self.damage(10, self)
+                    self.parent.player.life_mana -= 2
+                else:
+                    return #Если паладин не может подействовать на эту карту
             else:
-                return #Если паладин не может подействовать на эту карту
+                return #если своя карта
         else:
             return #если тут вообще нет карты
 class Pegasus(Prototype):

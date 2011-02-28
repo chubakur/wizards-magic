@@ -112,6 +112,8 @@ class Event_handler():
             elif event.button == 3: #ПРАВАЯ КНОПКА МЫШИ
                 if globals.cast_focus:
                     globals.cast_focus = False
+                    for card in globals.ccards_1.sprites()+globals.ccards_2.sprites():
+                        card.light_switch(False)
                     return
                 globals.point.draw(event.pos)
                 collided = pygame.sprite.spritecollide(globals.point, globals.cards_in_deck, 0)
