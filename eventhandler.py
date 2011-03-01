@@ -141,7 +141,7 @@ class Event_handler():
                 if not collided:
                     return
                 item = collided[len(collided)-1]
-                if item.type == "warrior_card": #по боевой карте
+                if item.type == "warrior_card" or item.type == "magic_card" : #по боевой карте
                     globals.card_info_group.add(globals.cardinfo)
                     globals.cardinfo.text = item.info
                     globals.cardinfo.show = True

@@ -28,6 +28,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.font = pygame.font.Font(None, 19)
         self.type = "warrior_card"
         self.killed = 0
+        self.spells = []
         self.moves_alive = 0 #Сколько ходов прожила карта
         self.max_health = self.health #Максимальное кол-во жизней
         self.field = False
@@ -121,6 +122,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             return 1
         return 0
     def die(self): #Смерть персонажа
+        for spell in self.spells:
+            spell.update_card_list(self)
         self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
         self.parent.image.blit(self.parent.surface_backup, (0, 0)) #Рисуем объект-родитель поверх карты
         self.kill() #Выкидываем карту из всех групп
@@ -874,11 +877,17 @@ class Magic(pygame.sprite.Sprite):
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
+        try:
+            self.info
+        except AttributeError:
+            self.info = ""
     def cast(self):
+        pass
+    def update_card_list(self, card):
         pass
     def get_enemy_cards(self):
         cards = []
-        if self.parent.position < 5:
+        if self.player.id == 1:
             for cardbox in globals.cardboxes[5:10]:
                 if cardbox.card.name != "player": #если есть карта
                     cards.append(cardbox.card)
@@ -908,37 +917,47 @@ class Poison(Magic):
         self.name = "Poison"
         self.level = 3
         self.image = pygame.image.load('misc/cards/water/poison.gif')
+        self.info = "Magic poison. Test information."
         Magic.__init__(self)
         #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
     def cast(self):
         self.enemy_cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
+        for card in self.enemy_cards:
+            card.spell.append(self) #говорим карте чтобы она начала креститься
         globals.magic_cards.add(self) #добавляем периодизацию
+    def update_card_list(self, card):
+        self.enemy_cards.remove(card)
     def periodical_cast(self):
         if self.enemy_cards: #если еще остались карты, на которые надо действовать
             if self.player.id != globals.player.id: #если начался вражеский ход
                 for card in self.enemy_cards:
-                    kill = card.damage(1, self) #раним карту
-                    if kill: #если карта умерла
-                        self.enemy_cards.remove(card) #выкидываем её нафиг
+                    card.damage(1, self) #раним карту
         else: #если кпд магии будет 0
             self.kill() #прекращаем действие магии
         #P.S. неувязочка в алгоритме таки. Карта выкидывается из группы, только если карта её убьет. Если карту убьет другая карта, то эта карта останется в памяти магии , что заставит её работать с КПД 0
-        #Возможное решение:
+        #Возможное решение: {{Вроде FIXED}}
         #Прописать в прототип боевой карты массив, в котором будут храниться спеллы, наложенные на карту. После своей смерти, карта разошлет магическим обработчикам сообщения о своей смерти и они смогут очиститься.
 class SeaJustice(Magic):
     def __init__(self):
         self.element = "water"
         self.name = "SeaJustice"
         self.level = 3
+        self.info = "It`s magic card called SeaJustice. Try It!"
         self.image = pygame.image.load('misc/cards/water/sea_justice.gif')
         Magic.__init__(self)
         #Атакует каждую карту противника с силой равной силе карты-1
+    def cast(self):
+        #работает единожды, поэтому нет нужды добавлять в группу и создавать ф-ию периодического каста.
+        enemy_cards = self.get_enemy_cards() #берем список вражеских карт
+        for card in enemy_cards:
+            card.damage(card.power, self)
 class Paralyze(Magic):
     def __init__(self):
         self.element = "water"
         self.name = "Paralyze"
         self.level = 10
         self.image = pygame.image.load('misc/cards/water/paralyze.gif')
+        self.info = "Vasya nakakal v shtani!"
         Magic.__init__(self)
         #противник пропускает ход
         
