@@ -5,7 +5,7 @@ import pygame.sprite
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Testw"]
+water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Testw", "Poison", "SeaJustice", "Paralyze"]
 fire_cards = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus"]
 air_cards = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Testa"]
 earth_cards = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit"]
@@ -154,7 +154,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.image.blit(text_power, (10, 220))
         self.image.blit(text_health, (130, 220))
         if self.light:
-            self.image.blit(self.light_image,(10,50))
+            self.image.blit(self.light_image, (10, 50))
         if not self.field: #Рисование в колоде
             self.parent = cards_of_element_shower
             xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
@@ -664,7 +664,7 @@ class Paladin(Prototype):
         self.image = pygame.image.load('misc/cards/life/paladin.gif')
         Prototype.__init__(self)
     def cast_action(self):
-        if self.parent.player.life_mana>=2: #если хватает маны, то активируем фокус
+        if self.parent.player.life_mana >= 2: #если хватает маны, то активируем фокус
             Prototype.cast_action(self)
             for card in self.get_enemy_cards():
                 if card.element == "death":
@@ -870,13 +870,38 @@ class Magic(pygame.sprite.Sprite):
         self.type = "magic_card"
         self.magic = True
         #self.image = ""
+        self.field = False
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
     def cast(self):
         pass
-    def update(self):
+    def get_enemy_cards(self):
+        cards = []
+        if self.parent.position < 5:
+            for cardbox in globals.cardboxes[5:10]:
+                if cardbox.card.name != "player": #если есть карта
+                    cards.append(cardbox.card)
+        else:
+            for cardbox in globals.cardboxes[0:5]:
+                if cardbox.card.name != "player":
+                    cards.append(cardbox.card)
+        return cards
+    def periodical_cast(self):
         pass
+    def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+        text_level = globals.font.render(str(self.level), True, (255, 255, 255))
+        self.image = self.surface_backup.copy()
+        self.image.blit(text_level, (130, 0))
+        if not self.field: #Рисование в колоде
+            self.parent = cards_of_element_shower
+            xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
+            self.parent.image.blit(self.image, (xshift, 0))
+            self.rect = self.image.get_rect().move((self.parent.rect[0], self.parent.rect[1]))
+            self.rect = self.rect.move(xshift, 0)
+            self.parent.cards += 1
+        else:
+            self.parent.image.blit(self.image, (0, 0))
 class Poison(Magic):
     def __init__(self):
         self.element = "water"
@@ -885,10 +910,25 @@ class Poison(Magic):
         self.image = pygame.image.load('misc/cards/water/poison.gif')
         Magic.__init__(self)
         #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
+    def cast(self):
+        self.enemy_cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
+        globals.magic_cards.add(self) #добавляем периодизацию
+    def periodical_cast(self):
+        if self.enemy_cards: #если еще остались карты, на которые надо действовать
+            if self.player.id != globals.player.id: #если начался вражеский ход
+                for card in self.enemy_cards:
+                    kill = card.damage(1, self) #раним карту
+                    if kill: #если карта умерла
+                        self.enemy_cards.remove(card) #выкидываем её нафиг
+        else: #если кпд магии будет 0
+            self.kill() #прекращаем действие магии
+        #P.S. неувязочка в алгоритме таки. Карта выкидывается из группы, только если карта её убьет. Если карту убьет другая карта, то эта карта останется в памяти магии , что заставит её работать с КПД 0
+        #Возможное решение:
+        #Прописать в прототип боевой карты массив, в котором будут храниться спеллы, наложенные на карту. После своей смерти, карта разошлет магическим обработчикам сообщения о своей смерти и они смогут очиститься.
 class SeaJustice(Magic):
     def __init__(self):
         self.element = "water"
-        self.name = "Sea Justice"
+        self.name = "SeaJustice"
         self.level = 3
         self.image = pygame.image.load('misc/cards/water/sea_justice.gif')
         Magic.__init__(self)

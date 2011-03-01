@@ -45,6 +45,23 @@ class Event_handler():
                             if cardbox.card.name == "player":
                                 cardbox.light = True
                     return
+                if item.type == "magic_card": #карта магии в колоде
+                    exec('selected_card = cards.' + item.name + '()') #в переменную selected_card засовываем одну такую карту
+                    exec('available_mana = globals.player.' + selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                    if available_mana >= selected_card.level:
+                        exec('globals.player.' + selected_card.element + '_mana -= ' + str(selected_card.level)) #Отнимаем ману
+                        globals.player.action_points = False #ставим запись, что ход сделан
+                        selected_card.player = globals.player
+                        selected_card.cast() #вызываем магию, периодизация делается уже внутри класса, путем добавления в группу globals.magic_cards
+                        #Закрываем колоду
+                        globals.interface.remove(globals.cardsofelementshower1)
+                        globals.interface.remove(globals.cardsofelementshower2)
+                        globals.cards_in_deck.empty()
+                        for cardbox in globals.cardboxes:
+                            cardbox.light = False
+                    else:
+                        globals.gameinformationpanel.display('Not enough mana.')
+                    return
                 if globals.cast_focus: #выбор цели для каста
                     try:
                         globals.cast_focus_wizard.focus_cast_action(item.card)
