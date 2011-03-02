@@ -5,7 +5,7 @@ import pygame.sprite
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Testw", "Poison", "SeaJustice", "Paralyze"]
+water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Testw", "Poison", "SeaJustice", "Paralyze", "AcidStorm","IceBolt"]
 fire_cards = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus"]
 air_cards = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Testa"]
 earth_cards = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit"]
@@ -14,6 +14,7 @@ death_cards = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee"
 import pygame
 from math import *
 import globals
+import player
 pygame.font.init()
 font = pygame.font.Font(None, 25)
 class Prototype(pygame.sprite.Sprite): #Прототип карты воина
@@ -917,7 +918,7 @@ class Poison(Magic):
         self.name = "Poison"
         self.level = 3
         self.image = pygame.image.load('misc/cards/water/poison.gif')
-        self.info = "Magic poison. Test information."
+        self.info = "Poisons all enemy units so that they lose health every turn, also hits them with 1 damage. Posion doesn`t affect undead."
         Magic.__init__(self)
         #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
     def cast(self):
@@ -960,4 +961,68 @@ class Paralyze(Magic):
         self.info = "Vasya nakakal v shtani!"
         Magic.__init__(self)
         #противник пропускает ход
-        
+    def cast(self):
+        globals.magic_cards.add(self) #добавляем периодизацию
+    def periodical_cast(self):
+        if self.player.id != globals.player.id:
+            player.finish_turn()
+            self.kill()
+class AcidStorm(Magic):
+    def __init__(self):
+        self.element = "water"
+        self.name = "AcidStorm"
+        self.level = 9
+        self.image = pygame.image.load('misc/cards/water/acid_storm.gif')
+        self.info = "Each creature suffers up to 16 points of damage. If a player has Poseidon on a field, his creatures left unaffected. Amazingly poisonous magic storm, has no mercy to both friends and foes."
+        Magic.__init__(self)
+        #предварительный перевод
+        #каждое существо на поле получает 16 повреждения. Если игрок(какой ? ) имеет посейдона на поле, то его карты остаются нетронутыми.
+class IceBolt(Magic):
+    def __init__(self):
+        self.element = "water"
+        self.name = "IceBolt"
+        self.level = 7
+        self.image = pygame.image.load('misc/cards/water/ice_bolt.gif')
+        self.info = "Inflicts 10 + Water/2 damage to enemy player. Caster suffers 6 damage as a side effect. Large bolt of Ice, fired at a great speed. Superior efficiency"
+        Magic.__init__(self)
+        #наносится урон 10+Water/2 вражескому игроку . Игроку, кто кастовал урон 6.
+class Armageddon(Magic):
+    def __init__(self):
+        self.element = "fire"
+        self.name = "Armageddon"
+        self.level = 11
+        self.image = pygame.image.load('misc/cards/fire/armageddon.gif')
+        self.info = "All units on a field suffer 25 damage. Each player suffers 25 damage. The ultimate spell of the game. The strongest and most harmful. Beware, it's far too powerful!"
+        Magic.__init__(self)
+class Fireball(Magic):
+    def __init__(self):
+        self.element = "fire"
+        self.name = "Fireball"
+        self.level = 8
+        self.image = pygame.image.load('misc/cards/fire/fireball.gif')
+        self.info = "Each enemy creature suffers damage equal to owner's Fire + 3. As easy as it is - a ball of burning fire."
+        Magic.__init__(self)
+class FireSpikes(Magic):
+    def __init__(self):
+        self.element = "fire"
+        self.name = "FireSpikes"
+        self.level = 3
+        self.image = pygame.image.load('misc/cards/fire/fire_spikes.gif')
+        self.info = "Deals 3 damage to each enemy creature. Cheap and still good. Pure Fire."
+        Magic.__init__(self)
+class FlamingArrow(Magic):
+    def __init__(self):
+        self.element = "fire"
+        self.name = "FlamingArrow"
+        self.level = 4
+        self.image = pygame.image.load('misc/cards/fire/flaming_arrow.gif')
+        self.info = "If enemy has less Fire than owner does, enemy suffers damage, equal to this difference, multiplied by 2. Otherwise enemy suffers 1 damage. Now this is a smart one - a magic arrow made of pure Fire, never misses your foe."
+        Magic.__init__(self)
+class RitualFlame(Magic):
+    def __init__(self):
+        self.element = "fire"
+        self.name = "RitualFlame"
+        self.level = 5
+        self.image = pygame.image.load('misc/cards/fire/ritual_flame.gif')
+        self.info = "Destroys all spell effects from all creatures, both owner's and enemy's. Heals all Fire creatures for 3."
+        Magic.__init__(self)
