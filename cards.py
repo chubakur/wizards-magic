@@ -5,12 +5,12 @@ import pygame.sprite
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Testw", "Poison", "SeaJustice", "Paralyze", "AcidStorm","IceBolt"]
-fire_cards = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus"]
-air_cards = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Testa"]
-earth_cards = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit"]
-life_cards = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHealer", "Chimera", "Testl"]
-death_cards = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich"]
+water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard",  "Poison", "SeaJustice", "Paralyze", "AcidStorm","IceBolt"]
+fire_cards = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus", "Armageddon","Fireball","FireSpikes","FlamingArrow","RitualFlame"]
+air_cards = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan",  "Plague", "Spellbreaker", "BlackWind", "ChainLightning"]
+earth_cards = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit","AbsoluteDefence","Earthquake","Quicksands","Restructure","Revival"]
+life_cards = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHealer", "Chimera" ,"Bless","GodsWrath","LifeSacrifice","Purify","Rejuvenation"]
+death_cards = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich","ChaosVortex","CoverOfDarkness","Curse","StealLife","TotalWeakness"]
 import pygame
 from math import *
 import globals
@@ -1025,4 +1025,156 @@ class RitualFlame(Magic):
         self.level = 5
         self.image = pygame.image.load('misc/cards/fire/ritual_flame.gif')
         self.info = "Destroys all spell effects from all creatures, both owner's and enemy's. Heals all Fire creatures for 3."
+        Magic.__init__(self)
+class BlackWind(Magic):
+    def __init__(self):
+        self.element = "air"
+        self.name = "BlackWind"
+        self.level = 8
+        self.image = pygame.image.load('misc/cards/air/black_wind.gif')
+        self.info = "Winds away strongest enemy creature. Perfect against high-level enemy creatures. One of the most useful spells."
+        Magic.__init__(self)
+class ChainLightning(Magic):
+    def __init__(self):
+        self.element = "air"
+        self.name = "ChainLightning"
+        self.level = 9
+        self.image = pygame.image.load('misc/cards/air/chain_lightning.gif')
+        self.info = "First enemy creature suffers damage equal to owner's Air+2. Lightning travels forth and hits each enemy creature, losing 2 damage each time it hits. For example, if owner has 10 Air and enemy has all 5 creatures, they suffer this damage (left to right): 12-10-8-6-4"
+        Magic.__init__(self)
+class Plague(Magic):
+    def __init__(self):
+        self.element = "air"
+        self.name = "Plague"
+        self.level = 12
+        self.image = pygame.image.load('misc/cards/air/plague.gif')
+        self.info = "Every creature on a field plagued - loses all hit points except one. Ignores all defences and modifiers. None shall escape the Plague! Great lands burnt to dust where the plague passed."
+        Magic.__init__(self)
+class Spellbreaker(Magic):
+    def __init__(self):
+        self.element = "air"
+        self.name = "Spellbreaker"
+        self.level = 7
+        self.image = pygame.image.load('misc/cards/air/spellbreaker.gif')
+        self.info = "Owner's creatures become permanently immune to all damaging spells, spell effects, and poison. Remember that your creatures can no longer be affected by Bless, Restructure and other good spell effects."
+        Magic.__init__(self)
+class AbsoluteDefence(Magic): 
+    def __init__(self):
+        self.element = "earth"
+        self.name = "AbsoluteDefence"
+        self.level = 7
+        self.image = pygame.image.load('misc/cards/earth/absolute_defence.gif')
+        self.info = "Owner's creatures gain protection from all attacks. This defence only lasts one turn and lasts till next owner's turn. It's just like an unpenetrable wall has suddenly appeared. Anyone under your command will survive anything!"
+        Magic.__init__(self)
+class Earthquake(Magic):
+    def __init__(self):
+        self.element = "earth"
+        self.name = "Earthquake"
+        self.level = 10
+        self.image = pygame.image.load('misc/cards/earth/earthquake.gif')
+        self.info = "Hits each creature for 15 damage. Doesn't affect owner's creatures, if onwer's Earth > 12. Even the earth itself is a powerful weapon."
+        Magic.__init__(self)
+class Quicksands(Magic):
+    def __init__(self):
+        self.element = "earth"
+        self.name = "Quicksands"
+        self.level = 6
+        self.image = pygame.image.load('misc/cards/earth/quicksands.gif')
+        self.info = "Kills all enemy creatures of level less than 5. Only the skilled one can survive the swamp's most dangerous weapon."
+        Magic.__init__(self)
+class Restructure(Magic):
+    def __init__(self):
+        self.element = "earth"
+        self.name = "Restructure"
+        self.level = 6
+        self.image = pygame.image.load('misc/cards/earth/restructure.gif')
+        self.info = "All onwer's creatures gain +3 health to their maximum, healing for 6 in the same time. Scatter to pieces, connect once again. Now you are stronger, none shall remain!"
+        Magic.__init__(self)
+class Revival(Magic):
+    def __init__(self):
+        self.element = "earth"
+        self.name = "Revival"
+        self.level = 5
+        self.image = pygame.image.load('misc/cards/earth/revival.gif')
+        self.info = "Heals all friendly creatures for 4. Gives owner 2 health for each of his creatures on a field. Heal me! Heal me!"
+        Magic.__init__(self)
+class Bless(Magic): 
+    def __init__(self):
+        self.element = "life"
+        self.name = "Bless"
+        self.level = 5
+        self.image = pygame.image.load('misc/cards/life/bless.gif')
+        self.info = "All owner's creatures Blessed: receive +1 to attack, restore 1 point of health every time they are hit. Undead creatures cannot be blessed and suffer 10 damage instead. Your army's now under God's protection, and your enemy is doomed forever!"
+        Magic.__init__(self)
+class GodsWrath(Magic):
+    def __init__(self):
+        self.element = "life"
+        self.name = "GodsWrath"
+        self.level = 10
+        self.image = pygame.image.load('misc/cards/life/gods_wrath.gif')
+        self.info = "All undead on a field are destroyed. Owner receives 3 Life and 1 health for each destroyed creature. The great day of $The Lord ^is near and coming quickly. That day will be a day of $Wrath, ^a day of distress and anguish."
+        Magic.__init__(self)
+class LifeSacrifice(Magic):
+    def __init__(self):
+        self.element = "life"
+        self.name = "LifeSacrifice"
+        self.level = 8
+        self.image = pygame.image.load('misc/cards/life/life_sacrifice.gif')
+        self.info = "Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
+        Magic.__init__(self)
+class Purify(Magic):
+    def __init__(self):
+        self.element = "life"
+        self.name = "Purify"
+        self.level = 7
+        self.image = pygame.image.load('misc/cards/life/purify.gif')
+        self.info = "If owner has Life creatures in play, heals owner for 5 and steals 4 health from each enemy creature, giving them to opposed owner's creature. Only pure souls can use God's blessings."
+        Magic.__init__(self)
+class Rejuvenation(Magic):
+    def __init__(self):
+        self.element = "life"
+        self.name = "Rejuvenation"
+        self.level = 6
+        self.image = pygame.image.load('misc/cards/life/rejuvenation.gif')
+        self.info = "Heals owner equal to his Life*3. Owner loses all Life elements. Blessed creatures heal for 3. Now you live again, mortal. Life is the most precious, be careful next time!"
+        Magic.__init__(self)
+class ChaosVortex(Magic):
+    def __init__(self):
+        self.element = "death"
+        self.name = "ChaosVortex"
+        self.level = 13
+        self.image = pygame.image.load('misc/cards/death/chaos_vortex.gif')
+        self.info = "Banishes each creature into hell. Each banished creature gives caster 1 Death. Whenever one unfolds Chaos, no mortal can stand its fearful ugly nature."
+        Magic.__init__(self)
+class CoverOfDarkness(Magic):
+    def __init__(self):
+        self.element = "death"
+        self.name = "CoverOfDarkness"
+        self.level = 11
+        self.image = pygame.image.load('misc/cards/death/cover_of_darkness.gif')
+        self.info = "All living creatures suffer 13 damage. All undead creatures heal for 5. The Lord of Chaos most useful tool. Your army of darkness shall reign forever."
+        Magic.__init__(self)
+class Curse(Magic): 
+    def __init__(self):
+        self.element = "death"
+        self.name = "Curse"
+        self.level = 4
+        self.image = pygame.image.load('misc/cards/death/curse.gif')
+        self.info = "Reduces all enemy elements by 1. Curse and Doom are now your enemy's only guests."
+        Magic.__init__(self)
+class StealLife(Magic):
+    def __init__(self):
+        self.element = "death"
+        self.name = "StealLife"
+        self.level = 6
+        self.image = pygame.image.load('misc/cards/death/steal_life.gif')
+        self.info = "If owner's Death less than 8, steals 5 health from enemy player. Otherwise steals Death + 5. Death's cold vampiric touch. So painful and surreal.."
+        Magic.__init__(self)
+class TotalWeakness(Magic):
+    def __init__(self):
+        self.element = "death"
+        self.name = "TotalWeakness"
+        self.level = 8
+        self.image = pygame.image.load('misc/cards/death/total_weakness.gif')
+        self.info = " Every enemy creature suffers effect of Weakness: its attack decreased by 50% (rounded down). Make the strongest the weakest, and then assasinate him."
         Magic.__init__(self)
