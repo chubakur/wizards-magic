@@ -55,6 +55,14 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         else:
             self.light = False
         self.update(None)
+    def play_cast_sound(self):
+        #pygame.mixer.music.load('misc/sounds/card_cast.wav')
+        #pygame.mixer.music.play()
+        return
+    def play_summon_sound(self):
+        #pygame.mixer.music.load('misc/sounds/card_summon.wav')
+        #pygame.mixer.music.play()
+        return
     def get_attack_position(self):
         if self.parent.position < 5:
             attack_position = self.parent.position + 5 #Id - блока, куда атаковать
@@ -114,7 +122,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def focus_cast_action(self, target):
         pass
     def summon(self): # когда призывают
-        pass
+        self.play_summon_sound()
     def damage(self, damage, enemy): #Функция, срабатываемая при получении урона.
         self.health -= damage
         self.update(0)
@@ -124,10 +132,12 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         return 0
     def die(self): #Смерть персонажа
         for spell in self.spells:
-            spell.update_card_list(self)
+            spell.unset(self)
         self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
         self.parent.image.blit(self.parent.surface_backup, (0, 0)) #Рисуем объект-родитель поверх карты
         self.kill() #Выкидываем карту из всех групп
+        #pygame.mixer.music.load('misc/sounds/card_die.wav')
+        #pygame.mixer.music.play()
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
     def turn(self):
@@ -192,7 +202,7 @@ class Nixie(Prototype):
         else:
             return
     def cast_action(self):
-        print "Nixie Cast"
+        self.play_cast_sound()
         if self.parent.player.fire_mana:
             self.parent.player.fire_mana -= 1
             self.parent.player.water_mana += 1
@@ -307,7 +317,7 @@ class Demon(Prototype):
         self.image = pygame.image.load('misc/cards/fire/demon.gif')
         Prototype.__init__(self)
     def cast_action(self):
-        print 'Demon cast'
+        self.play_cast_sound()
         if self.parent.player.earth_mana:
             self.parent.player.earth_mana -= 1
             self.parent.player.fire_mana += 2
@@ -514,10 +524,12 @@ class Titan(Prototype):
         self.image = pygame.image.load('misc/cards/air/titan.gif')
         Prototype.__init__(self)
     def summon(self):
+        self.play_summon_sound()
         self.parent.player.enemy.air_mana -= 3
         if self.parent.player.enemy.air_mana < 0:
             self.parent.player.enemy.air_mana = 0
     def cast_action(self):
+        self.play_cast_sound()
         if self.parent.player.air_mana:
             self.parent.player.air_mana -= 1
             for enemy_card in self.get_enemy_cards():
@@ -553,6 +565,7 @@ class Satyr(Prototype):
         self.parent.player.earth_mana += 1
         Prototype.turn(self)
     def cast_action(self):
+        self.play_cast_sound()
         if self.parent.position < 5:
             attack_position = self.parent.position + 5 #Id - блока, куда атаковать
         else:
@@ -683,6 +696,7 @@ class Paladin(Prototype):
                     target.die()
                     self.damage(10, self)
                     self.parent.player.life_mana -= 2
+                    self.play_cast_sound()
                 else:
                     return #Если паладин не может подействовать на эту карту
             else:
@@ -850,6 +864,7 @@ class Lich(Prototype):
         self.image = pygame.image.load('misc/cards/death/lich.gif')
         Prototype.__init__(self)
     def summon(self):
+        self.play_summon_sound()
         attack_position = self.get_attack_position()
         globals.cardboxes[attack_position].card.damage(10, self)
         for adjacent_pos in self.get_attack_adjacent_position(attack_position):
@@ -878,14 +893,15 @@ class Magic(pygame.sprite.Sprite):
         self.image = self.image.convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
+        self.cards = []
         try:
             self.info
         except AttributeError:
             self.info = ""
     def cast(self):
         pass
-    def update_card_list(self, card):
-        pass
+    def unset(self, card):
+        self.enemy_cards.remove(card)
     def get_enemy_cards(self):
         cards = []
         if self.player.id == 1:
@@ -894,6 +910,17 @@ class Magic(pygame.sprite.Sprite):
                     cards.append(cardbox.card)
         else:
             for cardbox in globals.cardboxes[0:5]:
+                if cardbox.card.name != "player":
+                    cards.append(cardbox.card)
+        return cards
+    def get_self_cards(self):
+        cards = []
+        if self.player.id == 1:
+            for cardbox in globals.cardboxes[0:5]:
+                if cardbox.card.name != "player": #если есть карта
+                    cards.append(cardbox.card)
+        else:
+            for cardbox in globals.cardboxes[5:10]:
                 if cardbox.card.name != "player":
                     cards.append(cardbox.card)
         return cards
@@ -922,12 +949,10 @@ class Poison(Magic):
         Magic.__init__(self)
         #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
     def cast(self):
-        self.enemy_cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
+        self.cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
         for card in self.enemy_cards:
             card.spell.append(self) #говорим карте чтобы она начала креститься
-        globals.magic_cards.add(self) #добавляем периодизацию
-    def update_card_list(self, card):
-        self.enemy_cards.remove(card)
+        globals.magic_cards.add(self) #добавляем периодизацию        
     def periodical_cast(self):
         if self.enemy_cards: #если еще остались карты, на которые надо действовать
             if self.player.id != globals.player.id: #если начался вражеский ход
@@ -985,6 +1010,10 @@ class IceBolt(Magic):
         self.image = pygame.image.load('misc/cards/water/ice_bolt.gif')
         self.info = "Inflicts 10 + Water/2 damage to enemy player. Caster suffers 6 damage as a side effect. Large bolt of Ice, fired at a great speed. Superior efficiency"
         Magic.__init__(self)
+    def cast(self):
+        self.player.enemy.damage((self.player.water_mana+self.level)/2, self)
+        self.player.damage(6, self)
+        self.player.water_mana = 0
         #наносится урон 10+Water/2 вражескому игроку . Игроку, кто кастовал урон 6.
 class Armageddon(Magic):
     def __init__(self):
@@ -994,6 +1023,13 @@ class Armageddon(Magic):
         self.image = pygame.image.load('misc/cards/fire/armageddon.gif')
         self.info = "All units on a field suffer 25 damage. Each player suffers 25 damage. The ultimate spell of the game. The strongest and most harmful. Beware, it's far too powerful!"
         Magic.__init__(self)
+    def cast(self):
+        enemy_cards = self.get_enemy_cards()
+        self_cards = self.get_self_cards()
+        for card in enemy_cards + self_cards:
+            card.damage(25, self)
+        self.player.damage(25, self)
+        self.player.enemy.damage(25, self)
 class Fireball(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1002,6 +1038,10 @@ class Fireball(Magic):
         self.image = pygame.image.load('misc/cards/fire/fireball.gif')
         self.info = "Each enemy creature suffers damage equal to owner's Fire + 3. As easy as it is - a ball of burning fire."
         Magic.__init__(self)
+    def cast(self):
+        enemy_cards = self.get_enemy_cards()
+        for card in enemy_cards:
+            card.damage(self.player.fire_mana+self.level+3, self)
 class FireSpikes(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1018,6 +1058,12 @@ class FlamingArrow(Magic):
         self.image = pygame.image.load('misc/cards/fire/flaming_arrow.gif')
         self.info = "If enemy has less Fire than owner does, enemy suffers damage, equal to this difference, multiplied by 2. Otherwise enemy suffers 1 damage. Now this is a smart one - a magic arrow made of pure Fire, never misses your foe."
         Magic.__init__(self)
+    def cast(self):
+        diff = self.player.fire_mana+self.level - self.player.enemy.fire_mana
+        if diff > 0:
+            self.player.enemy.damage(diff*2, self)
+        else:
+            self.player.enemy.damage(1, self)
 class RitualFlame(Magic):
     def __init__(self):
         self.element = "fire"

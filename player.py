@@ -3,6 +3,7 @@
 import cards
 import random
 import globals
+import pygame
 class Player(): #Прототип игрока
     def __init__(self):
         self.health = 50
