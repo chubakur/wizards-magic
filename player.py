@@ -15,9 +15,10 @@ class Player(): #Прототип игрока
         self.health -= damage
         if self.health <= 0:
             globals.gameinformationpanel.display("Game Over!")
-    def recovery(self, health):
+    def heal(self, health):
         self.health += health
     def get_mana(self):
+        #маны должно быть 25 в сумме!!
         self.water_mana = random.randint(1, 6)
         self.fire_mana = random.randint(1, 6)
         self.air_mana = random.randint(1, 6)
