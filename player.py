@@ -19,12 +19,16 @@ class Player(): #Прототип игрока
         self.health += health
     def get_mana(self):
         #маны должно быть 25 в сумме!!
-        self.water_mana = random.randint(1, 6)
-        self.fire_mana = random.randint(1, 6)
-        self.air_mana = random.randint(1, 6)
-        self.earth_mana = random.randint(1, 6)
-        self.life_mana = random.randint(1, 6)
-        self.death_mana = random.randint(1, 6)
+        manas = ["self.water_mana","self.fire_mana","self.air_mana","self.earth_mana","self.life_mana","self.death_mana"]
+        random.shuffle(manas) #раскидываем массив рендомно
+        sum = 0
+        for mana_id in xrange(0, len(manas)):
+            if mana_id != len(manas) - 1:
+                rand = random.randint(2,5)
+                sum+=rand
+                exec(manas[mana_id]+"=rand")
+            else:
+                exec(manas[mana_id]+"=25-sum")
     def get_cards(self):
         self.water_cards = []
         self.fire_cards = []
