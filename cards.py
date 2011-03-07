@@ -49,6 +49,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.cast_button = pygame.Surface((30,20))
         #self.cast_button = self.cast_button.convert()
         #self.cast_button.fill((0,0,255))
+    def set_health(self, health):
+        self.health = health
     def light_switch(self, on):
         if on:
             self.light = True
@@ -780,6 +782,10 @@ class Zombie(Prototype):
         self.cast = False
         self.image = pygame.image.load('misc/cards/death/zombie.gif')
         Prototype.__init__(self)
+    def enemy_die(self):
+        self.max_health += 3
+        self.health = self.max_health
+        self.update(None)
 class Ghost(Prototype):
     def __init__(self):        
         self.name = "Ghost"
@@ -1096,6 +1102,10 @@ class Plague(Magic):
         self.image = pygame.image.load('misc/cards/air/plague.gif')
         self.info = "Every creature on a field plagued - loses all hit points except one. Ignores all defences and modifiers. None shall escape the Plague! Great lands burnt to dust where the plague passed."
         Magic.__init__(self)
+    def cast(self):
+        cards = self.get_enemy_cards() + self.get_self_cards()
+        for card in cards:
+            card.set_health(1)
 class Spellbreaker(Magic):
     def __init__(self):
         self.element = "air"
@@ -1144,7 +1154,7 @@ class Restructure(Magic):
         Magic.__init__(self)
     def cast(self):
         for card in self.get_self_cards():
-            card.max_health+=3
+            card.max_health += 3
             card.heal(6, card.max_health)
 class Revival(Magic):
     def __init__(self):
@@ -1178,6 +1188,10 @@ class LifeSacrifice(Magic):
         self.image = pygame.image.load('misc/cards/life/life_sacrifice.gif')
         self.info = "Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
         Magic.__init__(self)
+    def cast(self):
+        power = self.player.life_mana + self.level
+        self.player.damage(power, self)
+        self.player.enemy.damage(power * 2, self)
 class Purify(Magic):
     def __init__(self):
         self.element = "life"
