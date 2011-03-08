@@ -51,6 +51,10 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.cast_button.fill((0,0,255))
     def set_health(self, health):
         self.health = health
+        self.update(None)
+    def set_power(self, power):
+        self.power = power
+        self.update(None)
     def light_switch(self, on):
         if on:
             self.light = True
@@ -957,7 +961,7 @@ class Poison(Magic):
     def cast(self):
         self.cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
         for card in self.cards:
-            card.spell.append(self) #говорим карте чтобы она начала креститься
+            card.spells.append(self) #говорим карте чтобы она начала креститься
         globals.magic_cards.add(self) #добавляем периодизацию        
     def periodical_cast(self):
         if self.cards: #если еще остались карты, на которые надо действовать
@@ -1180,6 +1184,13 @@ class GodsWrath(Magic):
         self.image = pygame.image.load('misc/cards/life/gods_wrath.gif')
         self.info = "All undead on a field are destroyed. Owner receives 3 Life and 1 health for each destroyed creature. The great day of $The Lord ^is near and coming quickly. That day will be a day of $Wrath, ^a day of distress and anguish."
         Magic.__init__(self)
+    def cast(self):
+        cards = self.get_enemy_cards() + self.get_self_cards()
+        for card in cards:
+            if card.element == "death":
+                card.die()
+                self.player.life_mana+=3
+                self.player.heal(1)
 class LifeSacrifice(Magic):
     def __init__(self):
         self.element = "life"
@@ -1282,3 +1293,7 @@ class TotalWeakness(Magic):
         self.image = pygame.image.load('misc/cards/death/total_weakness.gif')
         self.info = " Every enemy creature suffers effect of Weakness: its attack decreased by 50% (rounded down). Make the strongest the weakest, and then assasinate him."
         Magic.__init__(self)
+    def cast(self):
+        cards = self.get_enemy_cards()
+        for card in cards:
+            card.set_power(int(floor(card.power/2.0)))
