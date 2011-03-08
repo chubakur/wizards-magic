@@ -32,6 +32,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.spells = []
         self.moves_alive = 0 #Сколько ходов прожила карта
         self.max_health = self.health #Максимальное кол-во жизней
+        self.default_power = self.power
         self.field = False
         self.used_cast = False #Использовал cast
         try:
@@ -1168,6 +1169,10 @@ class Revival(Magic):
         self.image = pygame.image.load('misc/cards/earth/revival.gif')
         self.info = "Heals all friendly creatures for 4. Gives owner 2 health for each of his creatures on a field. Heal me! Heal me!"
         Magic.__init__(self)
+    def cast(self):
+        for card in self.get_self_cards():
+            card.heal(4, card.max_health)
+            self.player.heal(2)
 class Bless(Magic): 
     def __init__(self):
         self.element = "life"
