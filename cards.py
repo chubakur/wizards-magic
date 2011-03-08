@@ -704,6 +704,8 @@ class Paladin(Prototype):
                     self.damage(10, self)
                     self.parent.player.life_mana -= 2
                     self.play_cast_sound()
+                    for card in self.get_enemy_cards(): #отключаем подсветку
+                        card.light_switch(False)
                 else:
                     return #Если паладин не может подействовать на эту карту
             else:
@@ -718,9 +720,36 @@ class Pegasus(Prototype):
         self.power = 6
         self.health = 15
         self.info = "When summoned, each owner`s creature is healed for 3. Also, it destroys harmful spell effects from each of them. CAST: Holy Strike deals 5 damage to a target creature. If it is undead creature, Pegasus also suffer 3 damage homself. Costs 2 Life."
-        self.cast = False
+        self.cast = True
+        self.focus_cast = True
         self.image = pygame.image.load('misc/cards/life/pegasus.gif')
         Prototype.__init__(self)
+    def summon(self):
+        for card in self.get_self_cards():
+            card.heal(3, card.max_health)
+    def cast_action(self):
+        if self.parent.player.life_mana >= 2: # если хватает маны
+            Prototype.cast_action(self) #включаем фокус-каст
+            for card in self.get_enemy_cards(): #включаем подсветку
+                card.light_switch(True)
+    def focus_cast_action(self, target):
+        if target.name != "player": #если мы кликнули по карте, а не пустому боксу
+            if target.parent.player.id != self.parent.player.id: #если карта чужая( Убивать своих не хорошо)
+                if target.element == "death": #если стихия карты - смерть
+                    target.damage(5, self) #наносим урон ей
+                    self.damage(3, self) # и себе
+                else: #если любой другой стихии
+                    target.damage(5, self) #наносим урон ей
+                self.used_cast = True #отмечаем, что заклинание уже использовано
+                globals.cast_focus = False #отключаем фокус-каст
+                self.parent.player.life_mana -= 2 # отнимаем ману
+                self.play_cast_sound() #играем звук
+                for card in self.get_enemy_cards(): #отключаем подсветку
+                    card.light_switch(False)
+            else:
+                return
+        else:
+            return
 class Unicorn(Prototype):
     def __init__(self):        
         self.name = "Unicorn"
