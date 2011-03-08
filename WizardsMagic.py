@@ -124,4 +124,4 @@ while 1:
     globals.screen.blit(globals.background, (0, 0))
     globals.background.fill((0, 0, 0))
     pygame.display.flip()
-    clock.tick(8)
+    clock.tick(10)

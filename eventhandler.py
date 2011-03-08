@@ -152,12 +152,14 @@ class Event_handler():
                 item = collided[len(collided)-1]
                 if item.type == "warrior_card" or item.type == "magic_card" : #по боевой карте
                     globals.card_info_group.add(globals.cardinfo)
-                    globals.cardinfo.text = item.info
+                    #globals.cardinfo.text = item.info
+                    globals.cardinfo.card = item
                     globals.cardinfo.show = True
                 if item.type == "cardbox":
                     if item.card.name != "player":
                         globals.card_info_group.add(globals.cardinfo)
-                        globals.cardinfo.text = item.card.info
+                        #globals.cardinfo.text = item.card.info
+                        globals.cardinfo.card = item.card
                         globals.cardinfo.show = True
                 if item.type == 'cardsofelementshower':
                     play_bookclose_sound()
