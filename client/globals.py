@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#Client
 import pygame
 pygame.font.init()
 panels = pygame.sprite.Group() #Нижний уровень
@@ -14,8 +15,9 @@ font = pygame.font.Font("misc/Domestic_Manners.ttf", 15)
 #print pygame.font.match_font('Arial')
 screen = None
 player = None
-player1 = None
-player2 = None
+#player1 = None
+#player2 = None
+players = []
 #Каст с выбором цели
 cast_focus = False #включен ли режим
 cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )

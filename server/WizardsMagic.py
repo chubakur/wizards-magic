@@ -1,5 +1,5 @@
-import json
 # -*- coding: utf-8 -*-
+import json
 #import pygame.sprite
 #Wizards Magic Server
 #Copyright (C) 2011  сhubakur
@@ -37,17 +37,18 @@ import globals
 import socket
 import json
 import threading
-host = "localhost"
+host = "192.168.1.100"
 port = 7712
+sockets = []
 class Connect(threading.Thread):
     def __init__(self, sock, addr):
         self.sock = sock
         self.addr = addr
-        global players
+        global connections
         if players>=2:
-            self.sock.send(json.dumps({"answ":100}))
+            self.sock.send(json.dumps({"answ":100, "petuh":len(connections)}))
             return
-        players+=1
+        sockets.append(self.sock)
         threading.Thread.__init__(self)
     def query(self, query):
         query = json.dumps(query)
@@ -57,12 +58,17 @@ class Connect(threading.Thread):
             data = self.sock.recv(1024)
             query = json.loads(data)
             if query['action'] == "join":
+                global players
+                players+=1
                 globals.players.append(player.Player())
-                globals.players[len(globals.players) - 1].id = players
+                id = len(globals.players) - 1
+                globals.players[id].id = players
                 #массив игроки. Элемент 0 - 1 игрок , элемент 1 - второй игрок
-                #self.query({"answ":players})
-                #exec("globals.player"+str(players)+"=player.Player"+str(players)+"()")
-                self.query({"answ":200, "id":globals.players[len(globals.players) - 1].id, "manas":[]})
+                #Отправляем сообщение , что все прошло Гуд, id игрока
+                self.query({"answ":200, "id":globals.players[id].id})
+                if players == 2:
+                    for socket in sockets:
+                        socket.send(json.dumps({"asd":"fuck"}))
             else:
                 self.query({"answ":300})
         self.sock.close()
@@ -74,101 +80,3 @@ players = 0
 while True:
     sock, addr = s.accept()
     Connect(sock, addr).start()
-    # @type else
-
-#import cardinfo
-#import cardsofelementshower
-#import completethecoursebutton
-#import healthwindow
-#import cardbox
-#import infopanel
-#import actionpanel
-#import eventhandler
-#import gameinformation
-#pygame.init()
-#globals.screen = pygame.display.set_mode((800, 600))
-#pygame.display.set_caption('Wizards Magic')
-#clock = pygame.time.Clock()
-#globals.background = pygame.Surface(globals.screen.get_size())
-#globals.background = globals.background.convert()
-#globals.background.fill((0, 0, 0))
-#font.set_bold(0)
-#globals.player1 = player.Player1()
-#globals.player2 = player.Player2()
-#globals.player1.enemy = globals.player2
-#globals.player2.enemy = globals.player1
-#globals.player = globals.player1
-#globals.point = eventhandler.Point()
-#globals.cardinfo = cardinfo.CardInfo()
-###############################################################################################################
-#ACTIONS
-#################################################################################################3
-#globals.event_handler = eventhandler.Event_handler()
-#globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока
-#globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока
-#globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока
-#globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока
-# 0 1 2 3 4   //Расположение
-# 5 6 7 8 9
-#globals.cardbox0 = cardbox.Cardbox((0, 55), globals.player1, 0) #0 место на поле
-#globals.cardbox1 = cardbox.Cardbox((160, 55), globals.player1, 1) #1 место на поле
-#globals.cardbox2 = cardbox.Cardbox((320, 55), globals.player1, 2) #2 место на поле
-#globals.cardbox3 = cardbox.Cardbox((480, 55), globals.player1, 3) #3 место на поле
-#globals.cardbox4 = cardbox.Cardbox((640, 55), globals.player1, 4) #4 место на поле
-#globals.cardbox5 = cardbox.Cardbox((0, 301), globals.player2, 5) #5 место на поле
-#globals.cardbox6 = cardbox.Cardbox((160, 301), globals.player2, 6) #6 место на поле
-#globals.cardbox7 = cardbox.Cardbox((320, 301), globals.player2, 7) #7 место на поле
-#globals.cardbox8 = cardbox.Cardbox((480, 301), globals.player2, 8) #8 место на поле
-#globals.cardbox9 = cardbox.Cardbox((640, 301), globals.player2, 9) #9 место на поле
-#globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
-#playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
-#exec('Cardbox((640,301),2)')
-#ElementsWindow((0,0),actionpanel1)
-#ElementsWindow((0,0),actionpanel2)
-#healthwindow.HealthWindow((0, 0), globals.infopanel1) #Окошко здоровья верхнего игрока
-#healthwindow.HealthWindow((0, 0), globals.infopanel2) #Окошко здоровья нижнего игрока
-# Кнопки колод стихий первого игрока
-#elementbutton.WaterElementButton((0, 0), globals.actionpanel1)
-#elementbutton.FireElementButton((31, 0), globals.actionpanel1)
-#elementbutton.AirElementButton((62, 0), globals.actionpanel1)
-#elementbutton.EarthElementButton((93, 0), globals.actionpanel1)
-#elementbutton.LifeElementButton((124, 0), globals.actionpanel1)
-#elementbutton.DeathElementButton((155, 0), globals.actionpanel1)
-# Кнопки колод стихий второго игрока
-#elementbutton.WaterElementButton((0, 0), globals.actionpanel2)
-#elementbutton.FireElementButton((31, 0), globals.actionpanel2)
-#elementbutton.AirElementButton((62, 0), globals.actionpanel2)
-#elementbutton.EarthElementButton((93, 0), globals.actionpanel2)
-#elementbutton.LifeElementButton((124, 0), globals.actionpanel2)
-#elementbutton.DeathElementButton((155, 0), globals.actionpanel2)
-#Кнопки завершения хода первого и второго игрока.
-#completethecoursebutton.CompleteTheCourseButton((760, 0), globals.actionpanel1)
-#completethecoursebutton.CompleteTheCourseButton((760, 0), globals.actionpanel2)
-#Окна выбора карты стихии
-#globals.cardsofelementshower1 = cardsofelementshower.CardsOfElementShower((0, 301), globals.player1)
-#globals.cardsofelementshower2 = cardsofelementshower.CardsOfElementShower((0, 55), globals.player2)
-#globals.gameinformationpanel = gameinformation.GameInformationPanel()
-#globals.gameinformationpanel.display('Battle started.')
-#********************************************************************************
-#globals.screen.blit(globals.background, (0, 0))
-#globals.panels.update()
-#globals.interface.update()
-#pygame.display.flip()
-#while 1:
-#    for event in pygame.event.get():
-#        globals.event_handler.event(event)
-#    globals.panels.update()
-#    globals.interface.update()
-#    if globals.player.id == 1:
-#        globals.ccards_1.update(None)
-#        globals.cards_in_deck.update(globals.cardsofelementshower1)
-#    else:
-#        globals.ccards_2.update(None)
-#        globals.cards_in_deck.update(globals.cardsofelementshower2)
-#    globals.card_info_group.update()
-#    globals.information_group.update()
-#    interface_up_layer.update()
-#    globals.screen.blit(globals.background, (0, 0))
-#    globals.background.fill((0, 0, 0))
-#    pygame.display.flip()
-#    clock.tick(10)

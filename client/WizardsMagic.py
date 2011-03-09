@@ -1,8 +1,9 @@
-import json
 # -*- coding: utf-8 -*-
+import threading
+import json
 import pygame.sprite
 #Wizards Magic Multi-Player Client
-#Copyright (C) 2011  сhubakur
+#Copyright (C) 2011 chubakur@gmail.com
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
 #as published by the Free Software Foundation; either version 2
@@ -109,15 +110,30 @@ globals.screen.blit(globals.background, (0, 0))
 globals.panels.update()
 globals.interface.update()
 pygame.display.flip()
-host = "localhost"
+host = "chubakur.dyndns.org"
 port = 7712
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((host, port))
 def query(query):
     query = json.dumps(query)
     sock.send(query)
-    return sock.recv(1024)
-print query({"action":"join"})
+    return json.loads(sock.recv(1024))
+res = query({"action":"join"})
+if res['answ'] == 100:
+    print res
+    print "Can not join to the game."
+    sys.exit() #Если пришло сообщение об ошибке
+elif res['answ'] == 300:
+    print "Ping"
+else:
+    print "Join to Game with Player_id "+str(res['id'])
+gi = json.loads(sock.recv(1024))
+print gi
+#def get_info():
+   # print 1
+    #timer = threading.Timer(2, get_info)
+    #timer.start()
+#get_info()
 while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)
