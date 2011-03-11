@@ -10,15 +10,13 @@ class Player(): #Прототип игрока
         self.health = 50
         self.name = "player"
         self.action_points = True #Ходил игрок, или нет
-#        self.get_cards()
-        self.get_mana()
     def damage(self, damage, enemy):
         self.health -= damage
         if self.health <= 0:
             globals.gameinformationpanel.display("Game Over!")
     def heal(self, health):
         self.health += health
-    def get_mana(self):
+    def get_mana(self): #Выдача маны!
         #маны должно быть 25 в сумме!!
         manas = ["self.water_mana","self.fire_mana","self.air_mana","self.earth_mana","self.life_mana","self.death_mana"]
         random.shuffle(manas) #раскидываем массив рендомно
@@ -30,6 +28,40 @@ class Player(): #Прототип игрока
                 exec(manas[mana_id]+"=rand")
             else:
                 exec(manas[mana_id]+"=25-sum")
+    def get_mana_count(self): #просмотр кол-ва маны
+        return [self.water_mana, self.fire_mana, self.air_mana, self.earth_mana, self.life_mana, self.death_mana]
+    def get_cards(self):
+        self.water_cards = []
+        self.fire_cards = []
+        self.air_cards = []
+        self.earth_cards = []
+        self.life_cards = []
+        self.death_cards = []
+        for i in xrange(0, 4):
+            #получаем карту элемента воды
+            randnum = random.randint(0, len(cards.water_cards)-1)
+            self.water_cards.append(cards.water_cards[randnum])
+            cards.water_cards.remove(cards.water_cards[randnum])
+            #огня
+            randnum = random.randint(0, len(cards.fire_cards)-1)
+            self.fire_cards.append(cards.fire_cards[randnum])
+            cards.fire_cards.remove(cards.fire_cards[randnum])
+            #воздух
+            randnum = random.randint(0, len(cards.air_cards)-1)
+            self.air_cards.append(cards.air_cards[randnum])
+            cards.air_cards.remove(cards.air_cards[randnum])
+            #земля
+            randnum = random.randint(0, len(cards.earth_cards)-1)
+            self.earth_cards.append(cards.earth_cards[randnum])
+            cards.earth_cards.remove(cards.earth_cards[randnum])
+            #жизнь
+            randnum = random.randint(0, len(cards.life_cards)-1)
+            self.life_cards.append(cards.life_cards[randnum])
+            cards.life_cards.remove(cards.life_cards[randnum])
+            #смерть
+            randnum = random.randint(0, len(cards.death_cards)-1)
+            self.death_cards.append(cards.death_cards[randnum])
+            cards.death_cards.remove(cards.death_cards[randnum])
 #    def get_cards(self):
 #        self.water_cards = []
 #        self.fire_cards = []

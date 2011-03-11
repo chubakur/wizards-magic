@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import threading
+import thread
 import json
 import pygame.sprite
 #Wizards Magic Multi-Player Client
@@ -114,26 +114,54 @@ host = "chubakur.dyndns.org"
 port = 7712
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((host, port))
+def get_package():
+    #print "SERVICE:"
+    #print service_package
+    MSGLEN, answ = int( sock.recv(8) ), ''
+    while len(answ)<MSGLEN: answ += sock.recv(MSGLEN - len(answ))
+        #return answ
+    print "GET_PACKAGE RETURN"
+    print answ
+    return json.loads(answ)
 def query(query):
     query = json.dumps(query)
     sock.send(query)
-    return json.loads(sock.recv(1024))
-res = query({"action":"join"})
-if res['answ'] == 100:
+    #print sock.recv(1)
+    #return
+    return get_package()
+res = query({"action":"join"}) #входим в игру
+if res['answ'] == 100: #Если пришло сообщение об ошибке
     print res
     print "Can not join to the game."
-    sys.exit() #Если пришло сообщение об ошибке
+    sys.exit() 
 elif res['answ'] == 300:
-    print "Ping"
+    print("Ping")
 else:
-    print "Join to Game with Player_id "+str(res['id'])
-gi = json.loads(sock.recv(1024))
-print gi
-#def get_info():
-   # print 1
-    #timer = threading.Timer(2, get_info)
-    #timer.start()
-#get_info()
+    print("Join to Game with Player_id "+str(res['id']))
+def get_data():
+    while True:
+        gi = get_package()
+        #si = sock.recv(256)
+        #print 'si'
+        #print si
+        #print "RETURN:"
+        #print get_package()
+        if gi['action'] == 'update':
+            #кидаем ману первому игроку
+            globals.player1.water_mana = gi['mana'][0][0]
+            globals.player1.fire_mana = gi['mana'][0][1]
+            globals.player1.air_mana = gi['mana'][0][2]
+            globals.player1.earth_mana = gi['mana'][0][3]
+            globals.player1.life_mana = gi['mana'][0][4]
+            globals.player1.death_mana = gi['mana'][0][5]
+            #кидаем ману второму игроку
+            globals.player2.water_mana = gi['mana'][1][0]
+            globals.player2.fire_mana = gi['mana'][1][1]
+            globals.player2.air_mana = gi['mana'][1][2]
+            globals.player2.earth_mana = gi['mana'][1][3]
+            globals.player2.life_mana = gi['mana'][1][4]
+            globals.player2.death_mana = gi['mana'][1][5]
+thread.start_new_thread(get_data, ())
 while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)

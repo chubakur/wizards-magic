@@ -28,7 +28,8 @@ import json
 #Коды answ
 #100 - NO
 #200 - OK
-#300 - ping package
+#300 - ping packag
+#400 - service message
 import sys
 import player
 import globals
@@ -46,16 +47,20 @@ class Connect(threading.Thread):
         self.addr = addr
         global connections
         if players>=2:
-            self.sock.send(json.dumps({"answ":100, "petuh":len(connections)}))
+            self.sock.send(json.dumps({"answ":100, "players":len(connections)}))
             return
         sockets.append(self.sock)
         threading.Thread.__init__(self)
-    def query(self, query):
-        query = json.dumps(query)
-        self.sock.send(query)
+    def send(self, sock, msg):
+        msg = json.dumps(msg)
+        service = '%08i'%len(msg)
+        #service = json.dumps(service)
+        sock.send(service)
+        sock.send(msg)
     def run(self):
         while True:
             data = self.sock.recv(1024)
+            print data
             query = json.loads(data)
             if query['action'] == "join":
                 global players
@@ -65,12 +70,20 @@ class Connect(threading.Thread):
                 globals.players[id].id = players
                 #массив игроки. Элемент 0 - 1 игрок , элемент 1 - второй игрок
                 #Отправляем сообщение , что все прошло Гуд, id игрока
-                self.query({"answ":200, "id":globals.players[id].id})
-                if players == 2:
+                self.send(self.sock, {"answ":200, "id":globals.players[id].id})
+                if players == 2: #когда заходит второй игрок. раздаем карты и ману.
+                    #p_id = 0
+                    for gamer in globals.players: #GAMER = PLAYER. просто почему-то питон неверно обрабатывает в таком случае сообщения
+                        gamer.get_mana()
+                        gamer.get_cards()
+                    deck_cards = []
+                    deck_cards.append({"water_cards": globals.players[0].water_cards,"fire_cards":globals.players[0].fire_cards, "air_cards":globals.players[0].air_cards,"earth_cards":globals.players[0].earth_cards, "life_cards":globals.players[0].life_cards, "death_cards":globals.players[0].death_cards})
+                    deck_cards.append({"water_cards": globals.players[1].water_cards,"fire_cards":globals.players[1].fire_cards, "air_cards":globals.players[1].air_cards,"earth_cards":globals.players[1].earth_cards, "life_cards":globals.players[1].life_cards, "death_cards":globals.players[1].death_cards})
                     for socket in sockets:
-                        socket.send(json.dumps({"asd":"fuck"}))
+                        #p_id += 1
+                        self.send(socket,{"answ":200, "action":"update","mana":[globals.players[0].get_mana_count(), globals.players[1].get_mana_count()], "deck_cards":deck_cards})
             else:
-                self.query({"answ":300})
+                self.send(socket, {"answ":300})
         self.sock.close()
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
