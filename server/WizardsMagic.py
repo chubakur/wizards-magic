@@ -38,7 +38,7 @@ import globals
 import socket
 import json
 import threading
-host = "192.168.1.100"
+host = "flareguner.zapto.org"
 port = 7712
 sockets = []
 class Connect(threading.Thread):
