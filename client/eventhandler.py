@@ -5,6 +5,7 @@ import player
 import cards
 import sys
 from pygame.locals import *
+#CLIENT@!
 def play_bookopen_sound():
     #pygame.mixer.music.load('misc/sounds/book_open.wav')
     #pygame.mixer.music.play()
@@ -75,6 +76,8 @@ class Event_handler():
                         globals.cast_focus_wizard.focus_cast_action(item.card)
                     except AttributeError:
                         return
+                if item.player.id != globals.player_id:
+                    return
                 if item.player.id != globals.player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс

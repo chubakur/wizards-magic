@@ -40,7 +40,7 @@ import infopanel
 import actionpanel
 import eventhandler
 import gameinformation
-import socket
+import sockets
 pygame.init()
 globals.screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Wizards Magic')
@@ -110,43 +110,19 @@ globals.screen.blit(globals.background, (0, 0))
 globals.panels.update()
 globals.interface.update()
 pygame.display.flip()
-host = "chubakur.dyndns.org"
-port = 7712
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((host, port))
-def get_package():
-    #print "SERVICE:"
-    #print service_package
-    MSGLEN, answ = int( sock.recv(8) ), ''
-    while len(answ)<MSGLEN: answ += sock.recv(MSGLEN - len(answ))
-        #return answ
-    print "GET_PACKAGE RETURN"
-    print answ
-    return json.loads(answ)
-def query(query):
-    query = json.dumps(query)
-    sock.send(query)
-    #print sock.recv(1)
-    #return
-    return get_package()
-res = query({"action":"join"}) #входим в игру
-if res['answ'] == 100: #Если пришло сообщение об ошибке
-    print res
-    print "Can not join to the game."
-    sys.exit() 
-elif res['answ'] == 300:
-    print("Ping")
-else:
-    print("Join to Game with Player_id "+str(res['id']))
-def get_data():
+sockets.query({"action":"join"}) #входим в игру
+def server_handler():
     while True:
-        gi = get_package()
+        gi = sockets.get_package()
         #si = sock.recv(256)
         #print 'si'
         #print si
         #print "RETURN:"
         #print get_package()
-        if gi['action'] == 'update':
+        if gi['action'] == 'join':
+            print("Join to Game with Player_id "+str(gi['id']))
+            globals.player_id = gi['id']
+        elif gi['action'] == 'update':
             #кидаем ману первому игроку
             globals.player1.water_mana = gi['mana'][0][0]
             globals.player1.fire_mana = gi['mana'][0][1]
@@ -161,7 +137,31 @@ def get_data():
             globals.player2.earth_mana = gi['mana'][1][3]
             globals.player2.life_mana = gi['mana'][1][4]
             globals.player2.death_mana = gi['mana'][1][5]
-thread.start_new_thread(get_data, ())
+            if globals.player2.cards_generated == 0 and globals.player1.cards_generated == 0:
+                print "Выдаем карты"
+                globals.player1.water_cards = gi['deck_cards'][0]['water_cards']
+                globals.player1.fire_cards = gi['deck_cards'][0]['fire_cards']
+                globals.player1.air_cards = gi['deck_cards'][0]['air_cards']
+                globals.player1.earth_cards = gi['deck_cards'][0]['earth_cards']
+                globals.player1.life_cards = gi['deck_cards'][0]['life_cards']
+                globals.player1.death_cards = gi['deck_cards'][0]['death_cards']
+                for card in globals.player1.water_cards + globals.player1.fire_cards + globals.player1.air_cards + globals.player1.earth_cards + globals.player1.life_cards + globals.player1.death_cards:
+                    exec("globals.player1."+card.lower()+"= cards."+card+"()")
+                globals.player1.cards_generated = True
+                #а теперь второму
+                globals.player2.water_cards = gi['deck_cards'][1]['water_cards']
+                globals.player2.fire_cards = gi['deck_cards'][1]['fire_cards']
+                globals.player2.air_cards = gi['deck_cards'][1]['air_cards']
+                globals.player2.earth_cards = gi['deck_cards'][1]['earth_cards']
+                globals.player2.life_cards = gi['deck_cards'][1]['life_cards']
+                globals.player2.death_cards = gi['deck_cards'][1]['death_cards']
+                for card in globals.player2.water_cards + globals.player2.fire_cards + globals.player2.air_cards + globals.player2.earth_cards + globals.player2.life_cards + globals.player2.death_cards:
+                    exec("globals.player2."+card.lower()+"= cards."+card+"()")
+                globals.player2.cards_generated = True
+        elif gi['action'] == 'switch_turn':
+            player.me_finish_turn()
+thread.start_new_thread(server_handler, ())
+a = 0
 while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)
@@ -179,5 +179,7 @@ while 1:
     globals.screen.blit(globals.background, (0, 0))
     globals.background.fill((0, 0, 0))
     pygame.display.flip()
+    a+=1
+    #print a
     clock.tick(10)
 sock.close()

@@ -49,6 +49,7 @@ class Connect(threading.Thread):
         if players>=2:
             self.sock.send(json.dumps({"answ":100, "players":len(connections)}))
             return
+        self.id = players
         sockets.append(self.sock)
         threading.Thread.__init__(self)
     def send(self, sock, msg):
@@ -70,7 +71,7 @@ class Connect(threading.Thread):
                 globals.players[id].id = players
                 #массив игроки. Элемент 0 - 1 игрок , элемент 1 - второй игрок
                 #Отправляем сообщение , что все прошло Гуд, id игрока
-                self.send(self.sock, {"answ":200, "id":globals.players[id].id})
+                self.send(self.sock, {"answ":200, "action":"join","id":globals.players[id].id})
                 if players == 2: #когда заходит второй игрок. раздаем карты и ману.
                     #p_id = 0
                     for gamer in globals.players: #GAMER = PLAYER. просто почему-то питон неверно обрабатывает в таком случае сообщения
@@ -82,6 +83,11 @@ class Connect(threading.Thread):
                     for socket in sockets:
                         #p_id += 1
                         self.send(socket,{"answ":200, "action":"update","mana":[globals.players[0].get_mana_count(), globals.players[1].get_mana_count()], "deck_cards":deck_cards})
+            elif query['action'] == "switch_turn":
+                if self.id:
+                    self.send(sockets[0],{"answ":200,"action":"switch_turn"})
+                else:
+                    self.send(sockets[1],{"answ":200,"action":"switch_turn"})
             else:
                 self.send(socket, {"answ":300})
         self.sock.close()
