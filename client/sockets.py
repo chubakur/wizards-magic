@@ -2,10 +2,11 @@
 # and open the template in the editor.
 import socket
 import json
-host = "flareguner.zapto.org"
+host = "chubakur.dyndns.org"
 port = 7712
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((host, port))
+print "CONNECTED"
 def get_package():
     #print "SERVICE:"
     #print service_package

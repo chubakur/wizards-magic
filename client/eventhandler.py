@@ -3,6 +3,7 @@ import globals
 import pygame
 import player
 import cards
+import sockets
 import sys
 from pygame.locals import *
 #CLIENT@!
@@ -102,6 +103,7 @@ class Event_handler():
                             return
                         item.card = globals.selected_card
                         item.card.parent = item
+                        sockets.query({"action":"card","card":item.card.name,"position":item.position})
                         #item.card.cardboxes = cardboxes
                         #item.card.playerscards = playerscards
                         item.card.field = True

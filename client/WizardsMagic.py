@@ -41,6 +41,10 @@ import actionpanel
 import eventhandler
 import gameinformation
 import sockets
+#host = "192.168.1.100"
+#port = 7712
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((host, port))
 pygame.init()
 globals.screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Wizards Magic')
@@ -160,6 +164,19 @@ def server_handler():
                 globals.player2.cards_generated = True
         elif gi['action'] == 'switch_turn':
             player.me_finish_turn()
+        elif gi['action'] == 'card':
+            #print gi
+            #if gi['position'] == 0:
+                #cardbox = globals.cardbox0
+            exec("tmp_card = cards."+gi['card']+"()")
+            exec("globals.cardbox"+str(gi['position'])+".card =  tmp_card")
+            exec("globals.cardbox"+str(gi['position'])+".card.parent = globals.cardbox"+str(gi['position']))
+            exec("globals.cardbox"+str(gi['position'])+".card.field = True")
+            exec("globals.cardbox"+str(gi['position'])+".card.summon()")
+            exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
+            exec("globals.ccards_"+str(globals.player.id)+".add(globals.cardbox"+str(gi['position'])+".card)")
+            #exec("globals.ccards_2.add(globals.cardbox"+str(gi['position'])+".card)")
+            print globals.player.id,tmp_card
 thread.start_new_thread(server_handler, ())
 a = 0
 while 1:

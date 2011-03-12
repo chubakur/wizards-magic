@@ -38,7 +38,7 @@ import globals
 import socket
 import json
 import threading
-host = "flareguner.zapto.org"
+host = "192.168.1.100"
 port = 7712
 sockets = []
 class Connect(threading.Thread):
@@ -88,6 +88,13 @@ class Connect(threading.Thread):
                     self.send(sockets[0],{"answ":200,"action":"switch_turn"})
                 else:
                     self.send(sockets[1],{"answ":200,"action":"switch_turn"})
+            elif query['action'] == "card":
+                #print query
+                if self.id:
+                    #self.send()
+                    self.send(sockets[0], {"answ":200,"action":"card","card":query['card'],"position":query['position']})
+                else:
+                    self.send(sockets[1], {"answ":200,"action":"card","card":query['card'],"position":query['position']})
             else:
                 self.send(socket, {"answ":300})
         self.sock.close()
