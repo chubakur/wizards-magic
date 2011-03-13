@@ -92,9 +92,22 @@ class Connect(threading.Thread):
                 #print query
                 if self.id:
                     #self.send()
-                    self.send(sockets[0], {"answ":200,"action":"card","card":query['card'],"position":query['position']})
+                    if query['type'] == 'warrior':
+                        self.send(sockets[0], {"answ":200,"action":"card","card":query['card'],"position":query['position'],"type":query['type']})
+                    else:
+                        self.send(sockets[0], {"answ":200,"action":"card","card":query['card'],"type":query['type']})
                 else:
-                    self.send(sockets[1], {"answ":200,"action":"card","card":query['card'],"position":query['position']})
+                    if query['type'] == 'warrior':
+                        self.send(sockets[1], {"answ":200,"action":"card","card":query['card'],"position":query['position'],"type":query['type']})
+                    else:
+                        self.send(sockets[1], {"answ":200,"action":"card","card":query['card'],"type":query['type']})
+            elif query['action'] == 'cast':
+                if self.id:
+                    if not query['focus']:
+                        self.send(sockets[0], {"answ":200,"action":"cast","position":query['position']})
+                else:
+                    if not query['focus']:
+                        self.send(sockets[1], {"answ":200,"action":"cast","position":query['position']})
             else:
                 self.send(socket, {"answ":300})
         self.sock.close()

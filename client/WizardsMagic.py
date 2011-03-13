@@ -165,18 +165,30 @@ def server_handler():
         elif gi['action'] == 'switch_turn':
             player.me_finish_turn()
         elif gi['action'] == 'card':
-            #print gi
+            print gi
             #if gi['position'] == 0:
                 #cardbox = globals.cardbox0
-            exec("tmp_card = cards."+gi['card']+"()")
-            exec("globals.cardbox"+str(gi['position'])+".card =  tmp_card")
-            exec("globals.cardbox"+str(gi['position'])+".card.parent = globals.cardbox"+str(gi['position']))
-            exec("globals.cardbox"+str(gi['position'])+".card.field = True")
-            exec("globals.cardbox"+str(gi['position'])+".card.summon()")
-            exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
-            exec("globals.ccards_"+str(globals.player.id)+".add(globals.cardbox"+str(gi['position'])+".card)")
-            #exec("globals.ccards_2.add(globals.cardbox"+str(gi['position'])+".card)")
-            print globals.player.id,tmp_card
+            if gi['type'] == 'warrior':
+                exec("tmp_card = cards."+gi['card']+"()")
+                exec("globals.cardbox"+str(gi['position'])+".card =  tmp_card")
+                exec("globals.cardbox"+str(gi['position'])+".card.parent = globals.cardbox"+str(gi['position']))
+                exec("globals.cardbox"+str(gi['position'])+".card.field = True")
+                exec("globals.cardbox"+str(gi['position'])+".card.summon()")
+                exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
+                exec("globals.ccards_"+str(globals.player.id)+".add(globals.cardbox"+str(gi['position'])+".card)")
+                #exec("globals.ccards_2.add(globals.cardbox"+str(gi['position'])+".card)")
+                #print globals.player.id,tmp_card
+            elif gi['type'] == 'magic':
+                exec("tmp_card = cards."+gi['card']+"()")
+                exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
+                globals.player.action_points = False #ставим запись, что ход сделан
+                tmp_card.player = globals.player
+                tmp_card.cast()
+                globals.gameinformationpanel.display('Enemy used '+gi['card'])
+        elif gi['action'] == 'cast':
+            exec('globals.cardbox'+str(gi['position'])+".card.cast_action()")
+                   # if not item.card.used_cast: # если еще не кастовали
+                             #  item.card.cast_action()
 thread.start_new_thread(server_handler, ())
 a = 0
 while 1:

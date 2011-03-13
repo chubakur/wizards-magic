@@ -542,6 +542,7 @@ class Titan(Prototype):
             for enemy_card in self.get_enemy_cards():
                 if enemy_card.element == "earth":
                     enemy_card.damage(3, self)
+        self.used_cast = True
 #    def enemy_die(self): #Перепутал способность
 #        Prototype.enemy_die(self)
 #        self.power+=1

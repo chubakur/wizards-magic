@@ -71,10 +71,8 @@ class Event_handler():
                         globals.gameinformationpanel.display('Not enough mana.')
                     return
                 if globals.cast_focus: #выбор цели для каста
-                    try:
+                    if item.type == 'cardbox':
                         globals.cast_focus_wizard.focus_cast_action(item.card)
-                    except AttributeError:
-                        return
                 if item.player.id != globals.player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс

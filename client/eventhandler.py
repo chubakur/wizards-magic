@@ -62,6 +62,7 @@ class Event_handler():
                         exec('globals.player.' + selected_card.element + '_mana -= ' + str(selected_card.level)) #Отнимаем ману
                         globals.player.action_points = False #ставим запись, что ход сделан
                         selected_card.player = globals.player
+                        sockets.query({"action":"card","card":selected_card.name,"type":"magic"})
                         selected_card.cast() #вызываем магию, периодизация делается уже внутри класса, путем добавления в группу globals.magic_cards
                         #Закрываем колоду
                         globals.interface.remove(globals.cardsofelementshower1)
@@ -73,10 +74,8 @@ class Event_handler():
                         globals.gameinformationpanel.display('Not enough mana.')
                     return
                 if globals.cast_focus: #выбор цели для каста
-                    try:
+                    if item.type == 'cardbox':
                         globals.cast_focus_wizard.focus_cast_action(item.card)
-                    except AttributeError:
-                        return
                 if item.player.id != globals.player_id:
                     return
                 if item.player.id != globals.player.id:
@@ -86,6 +85,7 @@ class Event_handler():
                         if item.card.cast: #если есть каст
                             if not item.card.used_cast: # если еще не кастовали
                                 item.card.cast_action()
+                                sockets.query({"action":"cast","position":item.position,"focus":False})
                             else:
                                 globals.gameinformationpanel.display("You've already cast.")
                                 return
@@ -103,7 +103,7 @@ class Event_handler():
                             return
                         item.card = globals.selected_card
                         item.card.parent = item
-                        sockets.query({"action":"card","card":item.card.name,"position":item.position})
+                        sockets.query({"action":"card","card":item.card.name,"position":item.position,"type":"warrior"})
                         #item.card.cardboxes = cardboxes
                         #item.card.playerscards = playerscards
                         item.card.field = True

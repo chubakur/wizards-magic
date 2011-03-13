@@ -24,10 +24,10 @@ class Player(): #Прототип игрока
         self.earth_mana = 0
         self.life_mana = 0
         self.death_mana = 0
-#    def damage(self, damage, enemy):
-#        self.health -= damage
-#        if self.health <= 0:
-#            globals.gameinformationpanel.display("Game Over!")
+    def damage(self, damage, enemy):
+        self.health -= damage
+        if self.health <= 0:
+            globals.gameinformationpanel.display("Game Over!")
     #def heal(self, health):
         #self.health += health
 class Player1(Player):
