@@ -32,7 +32,6 @@ class Event_handler():
             sys.exit(0)
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
-                #global player
                 globals.point.draw(event.pos)
                 collided = pygame.sprite.spritecollide(globals.point, globals.cards_in_deck, 0)
                 if not collided:
@@ -75,8 +74,6 @@ class Event_handler():
                             cardbox.light = False
                     else:
                         globals.gameinformationpanel.display('Not enough mana.')
-                    return
-                if globals.player.id != globals.player_id:
                     return
                 if item.player.id != globals.player_id:
                     return
