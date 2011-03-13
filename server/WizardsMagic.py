@@ -104,10 +104,14 @@ class Connect(threading.Thread):
             elif query['action'] == 'cast':
                 if self.id:
                     if not query['focus']:
-                        self.send(sockets[0], {"answ":200,"action":"cast","position":query['position']})
+                        self.send(sockets[0], {"answ":200,"action":"cast","position":query['position'],"focus":False})
+                    else:
+                        self.send(sockets[0], {"answ":200,"action":"cast","position":query['position'],"target":query['target'],"focus":True})
                 else:
                     if not query['focus']:
-                        self.send(sockets[1], {"answ":200,"action":"cast","position":query['position']})
+                        self.send(sockets[1], {"answ":200,"action":"cast","position":query['position'],"focus":False})
+                    else:
+                        self.send(sockets[1], {"answ":200,"action":"cast","position":query['position'],"target":query['target'],"focus":True})
             else:
                 self.send(socket, {"answ":300})
         self.sock.close()

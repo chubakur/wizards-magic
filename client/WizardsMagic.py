@@ -165,7 +165,7 @@ def server_handler():
         elif gi['action'] == 'switch_turn':
             player.me_finish_turn()
         elif gi['action'] == 'card':
-            print gi
+            #print gi
             #if gi['position'] == 0:
                 #cardbox = globals.cardbox0
             if gi['type'] == 'warrior':
@@ -186,7 +186,10 @@ def server_handler():
                 tmp_card.cast()
                 globals.gameinformationpanel.display('Enemy used '+gi['card'])
         elif gi['action'] == 'cast':
-            exec('globals.cardbox'+str(gi['position'])+".card.cast_action()")
+            if not gi['focus']:
+                exec('globals.cardbox'+str(gi['position'])+".card.cast_action()")
+            else:#фокус каст
+                exec('globals.cardbox'+str(gi['position'])+".card.focus_cast_action("+"globals.cardbox"+str(gi['target'])+".card)")
                    # if not item.card.used_cast: # если еще не кастовали
                              #  item.card.cast_action()
 thread.start_new_thread(server_handler, ())
