@@ -75,12 +75,13 @@ class Event_handler():
                     else:
                         globals.gameinformationpanel.display('Not enough mana.')
                     return
-                if item.player.id != globals.player_id:
-                    return
                 if globals.cast_focus: #выбор цели для каста
                     if item.type == 'cardbox':
                         globals.cast_focus_wizard.focus_cast_action(item.card)
+                        print 1
                         sockets.query({"action":"cast","position":globals.cast_focus_wizard.parent.position,"target":item.position,"focus":True})
+                if item.player.id != globals.player_id:
+                    return
                 if item.player.id != globals.player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс
@@ -88,7 +89,8 @@ class Event_handler():
                         if item.card.cast: #если есть каст
                             if not item.card.used_cast: # если еще не кастовали
                                 item.card.cast_action()
-                                sockets.query({"action":"cast","position":item.position,"focus":False})
+                                if not item.card.focus_cast:
+                                    sockets.query({"action":"cast","position":item.position,"focus":False})
                             else:
                                 globals.gameinformationpanel.display("You've already cast.")
                                 return
