@@ -76,6 +76,8 @@ class Event_handler():
                     else:
                         globals.gameinformationpanel.display('Not enough mana.')
                     return
+                if globals.player.id != globals.player_id:
+                    return
                 if item.player.id != globals.player_id:
                     return
                 if globals.cast_focus: #выбор цели для каста
