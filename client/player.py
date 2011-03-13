@@ -28,8 +28,8 @@ class Player(): #Прототип игрока
         self.health -= damage
         if self.health <= 0:
             globals.gameinformationpanel.display("Game Over!")
-    #def heal(self, health):
-        #self.health += health
+    def heal(self, health):
+        self.health += health
 class Player1(Player):
     def __init__(self):
         self.id = 1

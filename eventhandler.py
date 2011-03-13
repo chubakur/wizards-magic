@@ -54,6 +54,9 @@ class Event_handler():
                                 cardbox.light = True
                     return
                 if item.type == "magic_card": #карта магии в колоде
+                    if not globals.player.action_points: #если уже ходил
+                        globals.gameinformationpanel.display("You've already made a move.")
+                        return
                     exec('selected_card = cards.' + item.name + '()') #в переменную selected_card засовываем одну такую карту
                     exec('available_mana = globals.player.' + selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
                     if available_mana >= selected_card.level:

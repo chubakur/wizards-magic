@@ -56,6 +56,9 @@ class Event_handler():
                                 cardbox.light = True
                     return
                 if item.type == "magic_card": #карта магии в колоде
+                    if not globals.player.action_points: #если уже ходил
+                        globals.gameinformationpanel.display("You've already made a move.")
+                        return
                     exec('selected_card = cards.' + item.name + '()') #в переменную selected_card засовываем одну такую карту
                     exec('available_mana = globals.player.' + selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
                     if available_mana >= selected_card.level:
@@ -73,12 +76,12 @@ class Event_handler():
                     else:
                         globals.gameinformationpanel.display('Not enough mana.')
                     return
+                if item.player.id != globals.player_id:
+                    return
                 if globals.cast_focus: #выбор цели для каста
                     if item.type == 'cardbox':
                         globals.cast_focus_wizard.focus_cast_action(item.card)
                         sockets.query({"action":"cast","position":globals.cast_focus_wizard.parent.position,"target":item.position,"focus":True})
-                if item.player.id != globals.player_id:
-                    return
                 if item.player.id != globals.player.id:
                     return
                 if item.type == "cardbox": #Если клик на карточный бокс
