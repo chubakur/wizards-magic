@@ -85,7 +85,7 @@ class Connect(threading.Thread):
                     deck_cards.append({"water_cards": globals.players[1].water_cards,"fire_cards":globals.players[1].fire_cards, "air_cards":globals.players[1].air_cards,"earth_cards":globals.players[1].earth_cards, "life_cards":globals.players[1].life_cards, "death_cards":globals.players[1].death_cards})
                     for connection in connections:
                         #p_id += 1
-                        self.send(connection.sock,{"answ":200,"nicknames":[connections[0].nickname,connection[1].nickname] ,"action":"update","mana":[globals.players[0].get_mana_count(), globals.players[1].get_mana_count()], "deck_cards":deck_cards})
+                        self.send(connection.sock,{"answ":200,"nicknames":[connections[0].nickname,connections[1].nickname] ,"action":"update","mana":[globals.players[0].get_mana_count(), globals.players[1].get_mana_count()], "deck_cards":deck_cards})
             elif query['action'] == "switch_turn":
                 if self.id:
                     self.send(sockets[0],{"answ":200,"action":"switch_turn"})
