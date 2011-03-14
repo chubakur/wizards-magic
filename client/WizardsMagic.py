@@ -121,7 +121,7 @@ globals.screen.blit(globals.background, (0, 0))
 globals.panels.update()
 globals.interface.update()
 pygame.display.flip()
-sockets.query({"action":"join","nickname":nickname}) #входим в игру
+sockets.query({"action":"join","nickname":nickname[0:-1]}) #входим в игру
 def server_handler():
     while True:
         gi = sockets.get_package()
