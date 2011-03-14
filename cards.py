@@ -143,8 +143,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
         self.parent.image.blit(self.parent.surface_backup, (0, 0)) #Рисуем объект-родитель поверх карты
         self.kill() #Выкидываем карту из всех групп
-        pygame.mixer.music.load('misc/sounds/card_die.wav')
-        pygame.mixer.music.play()
+        #pygame.mixer.music.load('misc/sounds/card_die.wav')
+        #pygame.mixer.music.play()
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
     def turn(self):
