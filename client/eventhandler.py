@@ -87,9 +87,9 @@ class Event_handler():
                     if item.card.name != "player": #Если в этом блоке есть карта
                         if item.card.cast: #если есть каст
                             if not item.card.used_cast: # если еще не кастовали
-                                item.card.cast_action()
                                 if not item.card.focus_cast:
                                     sockets.query({"action":"cast","position":item.position,"focus":False})
+                                item.card.cast_action()
                             else:
                                 globals.gameinformationpanel.display("You've already cast.")
                                 return
