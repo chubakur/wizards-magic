@@ -41,11 +41,18 @@ import actionpanel
 import eventhandler
 import gameinformation
 import sockets
+import nickname_window
 #host = "192.168.1.100"
 #port = 7712
 #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect((host, port))
 pygame.init()
+try:
+    nickname_file = file("nickname","r")
+    nickname = nickname_file.readline()
+    nickname_file.close()
+except IOError:
+    nickname = "player"
 globals.screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Wizards Magic')
 clock = pygame.time.Clock()
@@ -114,7 +121,7 @@ globals.screen.blit(globals.background, (0, 0))
 globals.panels.update()
 globals.interface.update()
 pygame.display.flip()
-sockets.query({"action":"join"}) #входим в игру
+sockets.query({"action":"join","nickname":nickname}) #входим в игру
 def server_handler():
     while True:
         gi = sockets.get_package()
@@ -127,6 +134,11 @@ def server_handler():
             print("Join to Game with Player_id "+str(gi['id']))
             globals.player_id = gi['id']
         elif gi['action'] == 'update':
+            #Устанавливаем ники
+            globals.player1.nickname = gi['nicknames'][0]
+            globals.player2.nickname = gi['nicknames'][1]
+            nickname_window.NicknameWindow((200,0), globals.infopanel1)
+            nickname_window.NicknameWindow((200,0), globals.infopanel2)
             #кидаем ману первому игроку
             globals.player1.water_mana = gi['mana'][0][0]
             globals.player1.fire_mana = gi['mana'][0][1]

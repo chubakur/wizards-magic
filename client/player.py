@@ -33,10 +33,12 @@ class Player(): #Прототип игрока
 class Player1(Player):
     def __init__(self):
         self.id = 1
+        #self.nickname = "player1"
         Player.__init__(self)
 class Player2(Player):
     def __init__(self):
         self.id = 2
+        #self.nickname = "player2"
         Player.__init__(self)
 def me_finish_turn():
     #Добавляем ману другому игроку.

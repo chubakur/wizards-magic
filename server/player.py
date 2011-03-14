@@ -10,12 +10,12 @@ class Player(): #Прототип игрока
         self.health = 50
         self.name = "player"
         self.action_points = True #Ходил игрок, или нет
-    def damage(self, damage, enemy):
-        self.health -= damage
-        if self.health <= 0:
-            globals.gameinformationpanel.display("Game Over!")
-    def heal(self, health):
-        self.health += health
+    #def damage(self, damage, enemy):
+     #   self.health -= damage
+     #   if self.health <= 0:
+      #      globals.gameinformationpanel.display("Game Over!")
+   # def heal(self, health):
+    #    self.health += health
     def get_mana(self): #Выдача маны!
         #маны должно быть 25 в сумме!!
         manas = ["self.water_mana","self.fire_mana","self.air_mana","self.earth_mana","self.life_mana","self.death_mana"]

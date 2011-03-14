@@ -78,7 +78,6 @@ class Event_handler():
                 if globals.cast_focus: #выбор цели для каста
                     if item.type == 'cardbox':
                         globals.cast_focus_wizard.focus_cast_action(item.card)
-                        print 1
                         sockets.query({"action":"cast","position":globals.cast_focus_wizard.parent.position,"target":item.position,"focus":True})
                 if item.player.id != globals.player_id:
                     return

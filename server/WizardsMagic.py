@@ -41,6 +41,7 @@ import threading
 host = "192.168.1.100"
 port = 7712
 sockets = []
+connections = []
 class Connect(threading.Thread):
     def __init__(self, sock, addr):
         self.sock = sock
@@ -51,6 +52,7 @@ class Connect(threading.Thread):
             return
         self.id = players
         sockets.append(self.sock)
+        connections.append(self)
         threading.Thread.__init__(self)
     def send(self, sock, msg):
         msg = json.dumps(msg)
@@ -66,6 +68,7 @@ class Connect(threading.Thread):
             if query['action'] == "join":
                 global players
                 players+=1
+                self.player = query['nickname']
                 globals.players.append(player.Player())
                 id = len(globals.players) - 1
                 globals.players[id].id = players
@@ -80,9 +83,9 @@ class Connect(threading.Thread):
                     deck_cards = []
                     deck_cards.append({"water_cards": globals.players[0].water_cards,"fire_cards":globals.players[0].fire_cards, "air_cards":globals.players[0].air_cards,"earth_cards":globals.players[0].earth_cards, "life_cards":globals.players[0].life_cards, "death_cards":globals.players[0].death_cards})
                     deck_cards.append({"water_cards": globals.players[1].water_cards,"fire_cards":globals.players[1].fire_cards, "air_cards":globals.players[1].air_cards,"earth_cards":globals.players[1].earth_cards, "life_cards":globals.players[1].life_cards, "death_cards":globals.players[1].death_cards})
-                    for socket in sockets:
+                    for connection in connections:
                         #p_id += 1
-                        self.send(socket,{"answ":200, "action":"update","mana":[globals.players[0].get_mana_count(), globals.players[1].get_mana_count()], "deck_cards":deck_cards})
+                        self.send(connection.sock,{"answ":200,"nicknames":[connection[0],connection[1]] ,"action":"update","mana":[globals.players[0].get_mana_count(), globals.players[1].get_mana_count()], "deck_cards":deck_cards})
             elif query['action'] == "switch_turn":
                 if self.id:
                     self.send(sockets[0],{"answ":200,"action":"switch_turn"})
