@@ -75,6 +75,4 @@ def me_finish_turn():
             card.turn()
 def finish_turn():
     me_finish_turn()
-    print "ALS"
     sockets.query({"action":"switch_turn"})
-    print "ZAPR"

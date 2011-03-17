@@ -29,6 +29,7 @@ class Event_handler():
         pass
     def event(self, event):
         if event.type == QUIT:
+            sockets.query({"action":"bye","id":globals.player_id})
             sys.exit(0)
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
