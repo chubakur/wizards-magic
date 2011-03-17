@@ -117,9 +117,9 @@ class Connect(threading.Thread):
                         self.send(sockets[1], {"answ":200,"action":"cast","position":query['position'],"target":query['target'],"focus":True})
             elif query['action'] == 'bye':
                 if query['player_id'] == 1:
-                    self.send(socket[1], {"answ":200,"action":"opponent_disconnect"})
+                    self.send(sockets[1], {"answ":200,"action":"opponent_disconnect"})
                 else:
-                    self.send(socket[0], {"answ":200,"action":"opponent_disconnect"})
+                    self.send(sockets[0], {"answ":200,"action":"opponent_disconnect"})
                 #print "Client ",query['player_id'],"disconnected"
                 break
             else:
