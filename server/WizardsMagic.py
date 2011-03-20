@@ -60,6 +60,7 @@ class Connect(threading.Thread):
          #   self.sock.send(json.dumps({"answ":100, "players":len(connections[self.game_id])}))
          #   return
         self.id = players
+        #self.game = False
         sockets[self.game_id].append(self.sock)
         connections[self.game_id].append(self)
         threading.Thread.__init__(self)
@@ -135,15 +136,24 @@ class Connect(threading.Thread):
                     else:
                         self.send(sockets[self.game_id][1], {"answ":200,"action":"cast","position":query['position'],"target":query['target'],"focus":True})
             elif query['action'] == 'bye':
-                if query['player_id'] == 1:
-                    self.send(sockets[self.game_id][1], {"answ":200,"action":"opponent_disconnect"})
-                else:
-                    self.send(sockets[self.game_id][0], {"answ":200,"action":"opponent_disconnect"})
-                #print "Client ",query['player_id'],"disconnected"
-                self.sock.close()
                 global players,game_id
                 players = 0
                 game_id += 1
+                connections.append([])
+                sockets.append([])
+                globals.players.append([])
+                try:
+                    if query['player_id'] == 1:
+                      self.send(sockets[self.game_id][1], {"answ":200,"action":"opponent_disconnect"})
+                    else:
+                       self.send(sockets[self.game_id][0], {"answ":200,"action":"opponent_disconnect"})
+                except IndexError:
+                    print 'Player has left, not waiting for another'
+                #print "Client ",query['player_id'],"disconnected"
+                self.sock.close()
+                break
+            elif query['action'] == 'bbye':
+                self.sock.close()
                 break
             else:
                 self.send(socket, {"answ":300})

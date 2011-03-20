@@ -31,6 +31,8 @@ class Event_handler():
         if event.type == QUIT:
             if not globals.opponent_disconnect:
                 sockets.query({"action":"bye","player_id":globals.player_id})
+            else:
+                sockets.query({"action":"bbye"})
             sys.exit(0)
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
