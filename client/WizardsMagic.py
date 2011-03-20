@@ -42,7 +42,7 @@ import eventhandler
 import gameinformation
 import sockets
 import nickname_window
-import waitingforplayerwindow
+import important_message
 #host = "192.168.1.100"
 #port = 7712
 #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -116,7 +116,7 @@ completethecoursebutton.CompleteTheCourseButton((760, 0), globals.actionpanel2)
 globals.cardsofelementshower1 = cardsofelementshower.CardsOfElementShower((0, 301), globals.player1)
 globals.cardsofelementshower2 = cardsofelementshower.CardsOfElementShower((0, 55), globals.player2)
 globals.gameinformationpanel = gameinformation.GameInformationPanel()
-globals.waitingwindow = waitingforplayerwindow.WaitingWindow()
+globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
 #globals.gameinformationpanel.display('Battle started.')
 #********************************************************************************
 globals.screen.blit(globals.background, (0, 0))
@@ -176,8 +176,8 @@ def server_handler():
                 for card in globals.player2.water_cards + globals.player2.fire_cards + globals.player2.air_cards + globals.player2.earth_cards + globals.player2.life_cards + globals.player2.death_cards:
                     exec("globals.player2."+card.lower()+"= cards."+card+"()")
                 globals.player2.cards_generated = True
-            globals.information_group.remove(globals.waitingwindow)
-            del globals.waitingwindow
+            globals.information_group.remove(globals.importantmessage)
+            del globals.importantmessage
         elif gi['action'] == 'switch_turn':
             player.me_finish_turn()
         elif gi['action'] == 'card':
@@ -210,6 +210,7 @@ def server_handler():
                              #  item.card.cast_action()
         elif gi['action'] == "opponent_disconnect":
             globals.opponent_disconnect = True
+            globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was been disconnected from game.')
 thread.start_new_thread(server_handler, ())
 a = 0
 while 1:
