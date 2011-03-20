@@ -16,7 +16,7 @@ selected_card = False #Выбранная карта
 screen = None
 player = None
 player1 = None
-players = []  #массив игроки. Элемент 0 - 1 игрок , элемент 1 - второй игрок
+players = [[]]  #массив игроки. ID элемента - id игры .Элемент 0 - 1 игрок , элемент 1 - второй игрок
 player2 = None
 #Каст с выбором цели
 cast_focus = False #включен ли режим

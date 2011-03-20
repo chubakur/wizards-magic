@@ -16,6 +16,7 @@ font2 = pygame.font.Font("misc/DroidSerif-Italic.ttf", 13)
 #print pygame.font.match_font('Arial')
 screen = None
 player = None
+opponent_disconnect = False
 #player1 = None
 #player2 = None
 players = []

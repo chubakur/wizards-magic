@@ -208,6 +208,8 @@ def server_handler():
                 exec('globals.cardbox'+str(gi['position'])+".card.focus_cast_action("+"globals.cardbox"+str(gi['target'])+".card)")
                    # if not item.card.used_cast: # если еще не кастовали
                              #  item.card.cast_action()
+        elif gi['action'] == "opponent_disconnect":
+            globals.opponent_disconnect = True
 thread.start_new_thread(server_handler, ())
 a = 0
 while 1:
