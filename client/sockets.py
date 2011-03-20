@@ -18,6 +18,8 @@ def get_package():
     return json.loads(answ)
 def query(query):
     query = json.dumps(query)
+    service = '%08i'%len(query)
+    sock.send(service)
     sock.send(query)
     #print sock.recv(1)
     #return

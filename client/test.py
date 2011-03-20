@@ -25,7 +25,10 @@ class Point(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(rect)
 point = Point()
-label = pgcontrols.Label(background, (100,100),'It`s LABEL!')
+clock = pygame.time.Clock()
+label = pgcontrols.Label(background, (0,0),'It`s LABEL!')
+label2 = pgcontrols.Label(background, (0,label.get_size()[1]),'Second Label')
+box = pgcontrols.Box(background,(100,100),[label,label2])
 #label.set_label('Fuck!')
 btn1 = pgcontrols.Button(background, (0, 0), btn1_action, 'QUIT')
 def btn2_action():
@@ -68,16 +71,17 @@ while 1:
             collided = pygame.sprite.spritecollide(point, pgcontrols.group, 0)
             if collided:
                 item = collided[-1]
-                if item.type == "button":
-                    item.press()
+                if item.type == "pgcontrols":
+                    pgcontrols.event_handler(event,item)
         elif event.type == MOUSEBUTTONUP:
             point.draw(event.pos)
             collided = pygame.sprite.spritecollide(point, pgcontrols.group, 0)
             if collided:
                 item = collided[-1]
-                if item.type == "button":
-                    item.pull()
+                if item.type == "pgcontrols":
+                    pgcontrols.event_handler(event,item)
         pgcontrols.group.update()
         screen.blit(background, (0, 0))
         background.fill((0, 0, 0))
         pygame.display.flip()
+        #clock.tick(100)

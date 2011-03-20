@@ -43,6 +43,10 @@ port = 7712
 sockets = []
 connections = []
 class Connect(threading.Thread):
+    def get_package():
+        MSGLEN, answ = int( self.sock.recv(8) ), ''
+        while len(answ)<MSGLEN: answ += sock.recv(MSGLEN - len(answ))
+        return json.loads(answ)
     def __init__(self, sock, addr):
         self.sock = sock
         self.addr = addr
@@ -62,9 +66,9 @@ class Connect(threading.Thread):
         sock.send(msg)
     def run(self):
         while True:
-            data = self.sock.recv(1024)
-            print data
-            query = json.loads(data)
+            query = self.get_package()
+            #print data
+            #query = json.loads(data)
             if query['action'] == "join":
                 global players
                 players+=1
