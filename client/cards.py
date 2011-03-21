@@ -542,7 +542,6 @@ class Titan(Prototype):
             for enemy_card in self.get_enemy_cards():
                 if enemy_card.element == "earth":
                     enemy_card.damage(3, self)
-        self.used_cast = True
 #    def enemy_die(self): #Перепутал способность
 #        Prototype.enemy_die(self)
 #        self.power+=1
@@ -864,13 +863,23 @@ class Banshee(Prototype):
     def __init__(self):        
         self.name = "Banshee"        
         self.element = "death"
-        self.info = ""
+        self.info = "When summoned, deals 8 damage to enemy. Once it attacks enemy player, dies and enemy player suffers 10 points of extra damage. If Banshee dies from other creature or spell, enemy player doesn't suffer."
         self.level = 7
         self.cast = False
         self.power = 5
         self.health = 12
         self.image = pygame.image.load('misc/cards/death/banshee.gif')
         Prototype.__init__(self)
+    def attack(self):
+        if self.moves_alive:
+            if globals.cardboxes[self.get_attack_position()].card.name == "player":
+                globals.cardboxes[self.get_attack_position()].card.damage(self.power+10,self)
+                self.die()
+            else:
+                Prototype.attack(self)
+    def summon(self):
+        self.play_summon_sound()
+        self.parent.player.enemy.damage(8, self)
 class GrimReaper(Prototype):
     def __init__(self):                
         self.name = "GrimReaper"
