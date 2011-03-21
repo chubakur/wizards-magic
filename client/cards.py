@@ -515,10 +515,43 @@ class Manticore(Prototype):
         self.info = "Attacks casters with additional 3 damage. Only suffers 50% damage from spells. CAST: Casts Memory Loss. Target enemy creature permanently loses ability to cast. Costs 2 Air."
         self.level = 7
         self.power = 5
-        self.cast = False
+        self.cast = True
+        self.focus_cast = True
         self.health = 19
         self.image = pygame.image.load('misc/cards/air/manticore.gif')
         Prototype.__init__(self)
+    def attack(self):
+        attack_position = self.get_attack_position()
+        if globals.cardboxes[attack_position].card.name != 'player': #if card exist
+            if globals.cardboxes[attack_position].card.cast:
+                globals.cardboxes[attack_position].card.damage(self.power+3, self)
+            else:
+                globals.cardboxes[attack_position].card.damage(self.power, self)
+        else:
+            globals.cardboxes[attack_position].card.damage(self.power, self)
+    def cast_action(self):
+        if self.parent.player.air_mana >= 2: #if player have mana for cast
+            Prototype.cast_action(self) #activating focus-cast
+            for card in self.get_enemy_cards():
+                if card.cast: #if it`s caster
+                    card.light_switch(True) #enable lighting
+    def focus_cast_action(self, target):
+        if target.name != 'player': #if it is real card
+            if target.parent.player.id != self.parent.player.id: #if it is enemy`s card
+                if target.cast: #if it is caster
+                    target.cast = False #target now can`t cast
+                    self.used_cast = True #This means, that this card cast already
+                    globals.cast_focus = False #focus-cast off
+                    self.parent.player.air_mana -= 2 #decrease player`s mana. It is payment for this action.
+                    self.play_cast_sound() #play cast sound
+                    for card in self.get_enemy_cards(): #disable lighting
+                        card.light_switch(False)
+                else:
+                    return
+            else:
+                return
+        else:
+            return
 class Titan(Prototype):
     def __init__(self):        
         self.name = "Titan"        
