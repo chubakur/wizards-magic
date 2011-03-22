@@ -301,17 +301,6 @@ class IceWizard(Prototype):
         self.health = 22
         self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
         Prototype.__init__(self)
-class Testw(Prototype):
-    def __init__(self):        
-        self.name = "Testw"        
-        self.element = "water"
-        self.level = 1
-        self.power = 1
-        self.info = "Тестюлька"
-        self.cast = False
-        self.health = 1
-        self.image = pygame.image.load('misc/cards/water/testw.gif')
-        Prototype.__init__(self)
 class Demon(Prototype):
     def __init__(self):        
         self.name = "Demon"        
@@ -579,17 +568,6 @@ class Titan(Prototype):
 #        Prototype.enemy_die(self)
 #        self.power+=1
 #        self.update(None)
-class Testa(Prototype):
-    def __init__(self):        
-        self.name = "Testa"        
-        self.element = "air"
-        self.level = 1
-        self.info = "Еще один не игровой юнит - лох"
-        self.power = 1
-        self.cast = False
-        self.health = 1
-        self.image = pygame.image.load('misc/cards/air/testa.gif')
-        Prototype.__init__(self)
 class Satyr(Prototype):
     def __init__(self):        
         self.name = "Satyr"        
@@ -826,17 +804,6 @@ class Chimera(Prototype):
         self.cast = False
         self.health = 30
         self.image = pygame.image.load('misc/cards/life/chimera.gif')
-        Prototype.__init__(self)
-class Testl(Prototype):
-    def __init__(self):        
-        self.name = "Testl"
-        self.element = "life"        
-        self.level = 1
-        self.power = 1
-        self.cast = False
-        self.info = "Тестовый монстирло"
-        self.health = 1
-        self.image = pygame.image.load('misc/cards/life/testl.gif')
         Prototype.__init__(self)
 class Zombie(Prototype):
     def __init__(self):        
