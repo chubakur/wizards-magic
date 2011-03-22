@@ -35,6 +35,10 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.default_power = self.power
         self.field = False
         self.used_cast = False #Использовал cast
+        if self.element == "death" or self.element == "fire" or self.element == "earth":
+            self.font_color = (255,255,255)
+        else:
+            self.font_color = (0,0,0)
         try:
             self.focus_cast
         except AttributeError:
@@ -159,9 +163,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.health = max_health
         self.update(None)
     def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        text_level = globals.font.render(str(self.level), True, (255, 255, 255))
-        text_power = globals.font.render(str(self.power), True, (255, 255, 255))
-        text_health = globals.font.render(str(self.health), True, (255, 255, 255))
+        text_level = globals.font.render(str(self.level), True, self.font_color)
+        text_power = globals.font.render(str(self.power), True, self.font_color)
+        text_health = globals.font.render(str(self.health), True, self.font_color)
         self.image = self.surface_backup.copy()
         if self.cast:
             if not self.used_cast:
