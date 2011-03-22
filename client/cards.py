@@ -1121,6 +1121,9 @@ class FireSpikes(Magic):
         self.image = pygame.image.load('misc/cards/fire/fire_spikes.gif')
         self.info = "Deals 3 damage to each enemy creature. Cheap and still good. Pure Fire."
         Magic.__init__(self)
+    def cast(self):
+        for card in self.get_enemy_cards():
+            card.damage(3, self)
 class FlamingArrow(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1151,6 +1154,17 @@ class BlackWind(Magic):
         self.image = pygame.image.load('misc/cards/air/black_wind.gif')
         self.info = "Winds away strongest enemy creature. Perfect against high-level enemy creatures. One of the most useful spells."
         Magic.__init__(self)
+    def cast(self):
+        max = 0
+        link_to_max = False
+        for card in self.get_enemy_cards():
+            if card.level > max:
+                max = card.level
+                link_to_max = card
+            else:
+                continue
+        if link_to_max:
+            link_to_max.die()
 class ChainLightning(Magic):
     def __init__(self):
         self.element = "air"
@@ -1159,6 +1173,12 @@ class ChainLightning(Magic):
         self.image = pygame.image.load('misc/cards/air/chain_lightning.gif')
         self.info = "First enemy creature suffers damage equal to owner's Air+2. Lightning travels forth and hits each enemy creature, losing 2 damage each time it hits. For example, if owner has 10 Air and enemy has all 5 creatures, they suffer this damage (left to right): 12-10-8-6-4"
         Magic.__init__(self)
+    def cast(self):
+        air_mana = self.player.air_mana + self.level
+        power = air_mana + 2
+        for card in self.get_enemy_cards():
+            card.damage(power, self)
+            power -= 2
 class Plague(Magic):
     def __init__(self):
         self.element = "air"
@@ -1195,6 +1215,14 @@ class Earthquake(Magic):
         self.image = pygame.image.load('misc/cards/earth/earthquake.gif')
         self.info = "Hits each creature for 15 damage. Doesn't affect owner's creatures, if onwer's Earth > 12. Even the earth itself is a powerful weapon."
         Magic.__init__(self)
+    def cast(self):
+        earth_mana = self.player.earth_mana + self.level
+        if earth_mana > 12:
+            cards = self.get_enemy_cards()
+        else:
+            cards = self.get_enemy_cards() + self.get_self_cards()
+        for card in cards:
+            card.damage(15, self)
 class Quicksands(Magic):
     def __init__(self):
         self.element = "earth"
@@ -1276,6 +1304,23 @@ class Purify(Magic):
         self.image = pygame.image.load('misc/cards/life/purify.gif')
         self.info = "If owner has Life creatures in play, heals owner for 5 and steals 4 health from each enemy creature, giving them to opposed owner's creature. Only pure souls can use God's blessings."
         Magic.__init__(self)
+    def cast(self):
+        has_life = False
+        for card in self.get_self_cards():
+            if card.element == 'life':
+                has_life = True
+        if has_life:
+            self.player.heal(5)
+            for e_card in self.get_enemy_cards():
+                opp_card = globals.cardboxes[e_card.get_attack_position()].card
+                if opp_card.name != 'player': #if card in opposed slot exist
+                    e_card.damage(4,self)
+                    opp_card.heal(4, opp_card.max_health)
+                else:
+                    e_card.damage(4,self)
+        else:
+            return
+
 class Rejuvenation(Magic):
     def __init__(self):
         self.element = "life"
@@ -1298,6 +1343,11 @@ class ChaosVortex(Magic):
         self.image = pygame.image.load('misc/cards/death/chaos_vortex.gif')
         self.info = "Banishes each creature into hell. Each banished creature gives caster 1 Death. Whenever one unfolds Chaos, no mortal can stand its fearful ugly nature."
         Magic.__init__(self)
+    def cast(self):
+        cards = self.get_enemy_cards() + self.get_self_cards()
+        self.player.death_mana += len(cards)
+        for card in cards:
+            card.die()
 class CoverOfDarkness(Magic):
     def __init__(self):
         self.element = "death"
