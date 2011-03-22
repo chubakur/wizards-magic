@@ -301,10 +301,23 @@ class IceWizard(Prototype):
         self.level = 10
         self.info = "Increases Water by 2 every turn. Suffers 200% damage from fire. All damage from Water equal to 1. CAST: Casting Healing Water heals owner equal to 2*Water points. Owner loses all Water."
         self.power = 4
-        self.cast = False
+        self.cast = True
         self.health = 22
         self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
         Prototype.__init__(self)
+    def turn(self):
+        self.parent.player.water_mana += 2
+    def damage(self, damage, enemy):
+        if enemy.element == 'fire':
+            Prototype.damage(self, damage*2, enemy)
+        elif enemy.element == 'water':
+            Prototype.damage(self, 1, enemy)
+        else:
+            Prototype.damage(self, damage, enemy)
+    def cast_action(self):
+        water = self.parent.player.water_mana
+        self.parent.player.water_mana = 0
+        self.parent.player.heal(water*2)
 class Demon(Prototype):
     def __init__(self):        
         self.name = "Demon"        
@@ -696,8 +709,8 @@ class Paladin(Prototype):
         self.info = "Brings 300% of damage to undead creatures. CAST: Casts Exorcism. Destroys any undead, but suffers 10 damage himself. Owner also loses 2 Life as a cost of this holy casting."
         self.cast = True
         self.focus_cast = True
-        #self.level = 8
-        self.level = 1
+        self.level = 8
+        #self.level = 1
         self.power = 4
         self.health = 20
         self.image = pygame.image.load('misc/cards/life/paladin.gif')
@@ -948,6 +961,10 @@ class Magic(pygame.sprite.Sprite):
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
         self.cards = []
+        if self.element == "death" or self.element == "fire" or self.element == "earth":
+            self.font_color = (255,255,255)
+        else:
+            self.font_color = (0,0,0)
         try:
             self.info
         except AttributeError:
@@ -981,7 +998,7 @@ class Magic(pygame.sprite.Sprite):
     def periodical_cast(self):
         pass
     def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        text_level = globals.font.render(str(self.level), True, (255, 255, 255))
+        text_level = globals.font.render(str(self.level), True, self.font_color)
         self.image = self.surface_backup.copy()
         self.image.blit(text_level, (130, 0))
         if not self.field: #Рисование в колоде
