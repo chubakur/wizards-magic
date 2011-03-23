@@ -1071,6 +1071,28 @@ class AcidStorm(Magic):
         self.image = pygame.image.load('misc/cards/water/acid_storm.gif')
         self.info = "Each creature suffers up to 16 points of damage. If a player has Poseidon on a field, his creatures left unaffected. Amazingly poisonous magic storm, has no mercy to both friends and foes."
         Magic.__init__(self)
+    def cast(self):
+        s_cards = self.get_self_cards()
+        s_cards_immune = False
+        e_cards = self.get_enemy_cards()
+        e_cards_immune = False
+        cards = []
+        for card in s_cards:
+            if card.name == "Poseidon":
+                s_cards_immune = True
+            else:
+                continue
+        if not s_cards_immune:
+            cards += s_cards
+        for card in e_cards:
+            if card.name == "Poseidon":
+                e_cards_immune = True
+            else:
+                continue
+        if not e_cards_immune:
+            cards += e_cards
+        for card in cards:
+            card.damage(16, self)
         #предварительный перевод
         #каждое существо на поле получает 16 повреждения. Если игрок(какой ? ) имеет посейдона на поле, то его карты остаются нетронутыми.
 class IceBolt(Magic):
@@ -1146,6 +1168,13 @@ class RitualFlame(Magic):
         self.image = pygame.image.load('misc/cards/fire/ritual_flame.gif')
         self.info = "Destroys all spell effects from all creatures, both owner's and enemy's. Heals all Fire creatures for 3."
         Magic.__init__(self)
+    def cast(self):
+        for card in self.get_enemy_cards() + self.get_self_cards():
+            for spell in card.spells:
+                spell.unset(card)
+            card.spells = []
+            if card.element == 'fire':
+                card.heal(3, card.max_health)
 class BlackWind(Magic):
     def __init__(self):
         self.element = "air"
@@ -1269,6 +1298,21 @@ class Bless(Magic):
         self.image = pygame.image.load('misc/cards/life/bless.gif')
         self.info = "All owner's creatures Blessed: receive +1 to attack, restore 1 point of health every time they are hit. Undead creatures cannot be blessed and suffer 10 damage instead. Your army's now under God's protection, and your enemy is doomed forever!"
         Magic.__init__(self)
+    def cast(self):
+        cards = self.get_self_cards()
+        for card in cards:
+            if card.element != 'death':
+                card.set_power(card.power + 1)
+                self.cards.append(card)
+            else:
+                card.damage(10, self)
+    def periodical_cast(self):
+        if self.cards: #if has cards
+            if self.player.id != globals.player.id: #if enemy turn started
+                for card in self.cards:
+                    card.heal(1, card.max_health)
+        else:
+            self.kill()
 class GodsWrath(Magic):
     def __init__(self):
         self.element = "life"
