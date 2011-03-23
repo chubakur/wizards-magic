@@ -226,7 +226,8 @@ class Hydra(Prototype):
         self.element = "water"
         self.level = 13
         self.power = 5
-        self.cast = False
+        self.cast = True
+        self.focus_cast = True
         self.health = 29
         self.info = "Attacks both adjacent slots. Reduces owner`s Water by 2 every turn. CAST: Consumes friendly unit, receiving up to 50% of his health."
         self.image = pygame.image.load('misc/cards/water/hydra.gif')
@@ -245,6 +246,21 @@ class Hydra(Prototype):
         if self.parent.player.water_mana < 0:
             self.parent.player.water_mana = 0
         Prototype.turn(self)
+    def cast_action(self):
+        Prototype.cast_action(self)
+        for card in self.get_self_cards():
+            if card != self:
+                card.light_switch(True)
+    def focus_cast_action(self, target):
+        if target.name != 'player': #if card exist
+            if target.parent.player.id == self.parent.player.id:
+                hp = target.health
+                target.die()
+                self.heal(int(ceil(hp/2.0)), self.max_health)
+            else:
+                return
+        else:
+            return
 class Waterfall(Prototype):
     def __init__(self):        
         self.name = "Waterfall"
@@ -398,11 +414,27 @@ class Vulcan(Prototype):
         self.element = "fire"
         self.level = 12
         self.power = 1
-        self.cast = False
+        self.cast = True
         self.info = "Fire Elemental. Immune to harmful Fire spells. When summoned, enemy player loses 3 Fire, and opposed Elemental unit suffers 9 damage. Attack equal to owner`s Fire + 3. CAST: Casts Volcano Explode. Vulcan dies, but every unit on field suffers damage equal to 50% of Vulcan`s health."
         self.health = 27
         self.image = pygame.image.load('misc/cards/fire/vulcan.gif')
         Prototype.__init__(self)
+    def summon(self):
+        self.set_power(self.parent.player.fire_mana - self.level + 3)
+        if self.parent.player.enemy.fire_mana >= 3:
+            self.parent.player.enemy.fire_mana -= 3
+        else:
+            self.parent.player.enemy.fire_mana = 0
+        opp_card = globals.cardboxes[self.get_attack_position()].card
+        if opp_card.name != 'player':
+            opp_card.damage(9, self)
+    def turn(self):
+        self.set_power(self.parent.player.fire_mana + 3)
+    def cast_action(self):
+        hp = self.health
+        for card in self.get_enemy_cards() + self.get_self_cards():
+            card.damage(int(floor(hp/2.0)),self)
+        self.die()
 class Cerberus(Prototype):
     def __init__(self):        
         self.name = "Cerberus"        
