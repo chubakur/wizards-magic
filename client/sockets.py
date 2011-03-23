@@ -1,7 +1,10 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 import socket
-import json
+try:
+    import json
+except ImportError:
+    import simplejson as json
 host = "flareguner.zapto.org"
 port = 7712
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
