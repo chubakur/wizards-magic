@@ -3,8 +3,10 @@
 import socket
 try:
     import json
+    print 'JSON'
 except ImportError:
     import simplejson as json
+    print 'SIMPLEJSON'
 host = "flareguner.zapto.org"
 port = 7712
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

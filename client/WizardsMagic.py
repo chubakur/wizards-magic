@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import thread
-import json
 import pygame.sprite
 #Wizards Magic Multi-Player Client
 #Copyright (C) 2011 chubakur@gmail.com
