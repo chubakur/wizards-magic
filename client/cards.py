@@ -826,12 +826,29 @@ class Apostate(Prototype):
         self.name = "Apostate"
         self.element = "life"        
         self.level = 5
-        self.info = ""
-        self.cast = False
+        self.info = "Steals 2 owner's Life and gives owner 1 Death in the beginning of owner's turn. Serves Death. Once cast, Apostate permanently turns into a Banshee. Banshee restores only 1/2 of normal health."
+        self.cast = True
         self.power = 4
         self.health = 14
         self.image = pygame.image.load('misc/cards/life/apostate.gif')
         Prototype.__init__(self)
+    def turn(self):
+        if self.parent.player.life_mana >= 2:
+            self.parent.player.life_mana -= 2
+        else:
+            self.parent.player.life_mana = 0
+        self.parent.player.death_mana += 1
+    def cast_action(self):
+        card = Banshee()
+        card.parent = self.parent
+        card.field = True
+        card.health = card.health / 2
+        self.parent.card = card
+        self.kill()
+        if self.parent.player.id == 1:
+            globals.ccards_1.add(self.parent.card)
+        else:
+            globals.ccards_2.add(self.parent.card)
 class MagicHealer(Prototype):
     def __init__(self):        
         self.name = "MagicHealer"
@@ -909,7 +926,8 @@ class Werewolf(Prototype):
         self.image = pygame.image.load('misc/cards/death/werewolf.gif')
         Prototype.__init__(self)
 class Banshee(Prototype):
-    def __init__(self):        
+    def __init__(self):
+        #self.field = field
         self.name = "Banshee"        
         self.element = "death"
         self.info = "When summoned, deals 8 damage to enemy. Once it attacks enemy player, dies and enemy player suffers 10 points of extra damage. If Banshee dies from other creature or spell, enemy player doesn't suffer."
