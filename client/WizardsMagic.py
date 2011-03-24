@@ -25,6 +25,11 @@ __author__ = "chubakur"
 __date__ = "$12.02.2011 12:11:42$"
 import pygame
 from pygame.locals import *
+try:
+    pygame.display.init()
+except pygame.error:
+    import os
+    os.environ['SDL_VIDEODRIVER'] = 'windib' # to avoid 'No available video device' error for old PC
 import sys
 import player
 import globals
