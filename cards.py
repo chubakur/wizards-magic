@@ -36,9 +36,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.field = False
         self.used_cast = False #Использовал cast
         if self.element == "death" or self.element == "fire" or self.element == "earth":
-            self.font_color = (255,255,255)
+            self.font_color = (255, 255, 255)
         else:
-            self.font_color = (0,0,0)
+            self.font_color = (0, 0, 0)
         try:
             self.focus_cast
         except AttributeError:
@@ -198,7 +198,7 @@ class Nixie(Prototype):
         self.health = 10
         self.cast = True
         self.image = pygame.image.load('misc/cards/water/nixie.gif')
-        self.info = "SAghdagshagsdhuqwetghhsadgdhsassuahdyuhashgasdjeuidjzbjkxjofjhjfnbjghjdfhjdfhjchjjj  ghfvghjk23221123123"
+        self.info = "Causes 200% of damage to fire creatures. Gives owner 1 Water in the beginning of owner's turn. Casting Sea of Sacred increases owner's Water by 1 and reduces Fire by 1."
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -256,7 +256,7 @@ class Hydra(Prototype):
             if target.parent.player.id == self.parent.player.id:
                 hp = target.health
                 target.die()
-                self.heal(int(ceil(hp/2.0)), self.max_health)
+                self.heal(int(ceil(hp / 2.0)), self.max_health)
             else:
                 return
         else:
@@ -325,7 +325,7 @@ class IceWizard(Prototype):
         self.parent.player.water_mana += 2
     def damage(self, damage, enemy):
         if enemy.element == 'fire':
-            Prototype.damage(self, damage*2, enemy)
+            Prototype.damage(self, damage * 2, enemy)
         elif enemy.element == 'water':
             Prototype.damage(self, 1, enemy)
         else:
@@ -333,7 +333,7 @@ class IceWizard(Prototype):
     def cast_action(self):
         water = self.parent.player.water_mana
         self.parent.player.water_mana = 0
-        self.parent.player.heal(water*2)
+        self.parent.player.heal(water * 2)
 class Demon(Prototype):
     def __init__(self):        
         self.name = "Demon"        
@@ -360,21 +360,59 @@ class Devil(Prototype):
         self.info = "Damage from Water is multiplied by 2. Whenever Devil dies, owner suffers 10 damage. CAST: Sacrificing owner`s Fire creature gives 3 Fire to the owner, also healing owner by this amount."
         self.level = 6
         self.power = 4
-        self.cast = False
+        self.cast = True
+        self.focus_cast = True
         self.health = 27
         self.image = pygame.image.load('misc/cards/fire/devil.gif')
         Prototype.__init__(self)
+    def die(self):
+        self.parent.player.damage(10, self)
+        Prototype.die(self)
+    def damage(self, damage, enemy):
+        if enemy.element == "water":
+            Prototype.damage(self, damage * 2, enemy)
+        else:
+            Prototype.damage(self, damage, enemy)
+    def cast_action(self):
+        Prototype.cast_action(self) #enable focus-cast
+        for card in self.get_self_cards():
+            if card.element == 'fire' and card != self:
+                card.light_switch(True)
+            else:
+                continue
+    def focus_cast_action(self, target):
+        if target.name != 'player': #if it is real card
+            if target.parent.player.id == self.parent.player.id: #if it is caster`s card
+                if target.element == 'fire':
+                    if target != self:
+                        self.play_cast_sound()
+                        self.used_cast = True
+                        globals.cast_focus = False
+                        self.parent.player.fire_mana += 3
+                        self.parent.player.heal(target.health)
+                        target.die()
+                        for card in self.get_self_cards():
+                            card.light_switch(False)
 class RedDrake(Prototype):
     def __init__(self):        
         self.name = "RedDrake"        
         self.element = "fire"
         self.level = 7
-        self.info = ""
+        self.info = "When summoned, each enemy creature and enemy player suffers 3 damage. Red Drake Suffers no damage from Fire spells and creatures."
         self.power = 5
         self.cast = False
         self.health = 16
         self.image = pygame.image.load('misc/cards/fire/red_drake.gif')
         Prototype.__init__(self)
+    def summon(self):
+        self.parent.player.enemy.damage(3, self)
+        for card in self.get_enemy_cards():
+            card.damage(3, self)
+    def damage(self, damage, enemy):
+        if enemy.element == 'fire':
+            return
+        else:
+            Prototype.damage(self, damage, enemy)
 class Firelord(Prototype):
     def __init__(self):        
         self.name = "Firelord"        
@@ -433,7 +471,7 @@ class Vulcan(Prototype):
     def cast_action(self):
         hp = self.health
         for card in self.get_enemy_cards() + self.get_self_cards():
-            card.damage(int(floor(hp/2.0)),self)
+            card.damage(int(floor(hp / 2.0)), self)
         self.die()
 class Cerberus(Prototype):
     def __init__(self):        
@@ -562,7 +600,7 @@ class Manticore(Prototype):
         attack_position = self.get_attack_position()
         if globals.cardboxes[attack_position].card.name != 'player': #if card exist
             if globals.cardboxes[attack_position].card.cast:
-                globals.cardboxes[attack_position].card.damage(self.power+3, self)
+                globals.cardboxes[attack_position].card.damage(self.power + 3, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
         else:
@@ -940,7 +978,7 @@ class Banshee(Prototype):
     def attack(self):
         if self.moves_alive:
             if globals.cardboxes[self.get_attack_position()].card.name == "player":
-                globals.cardboxes[self.get_attack_position()].card.damage(self.power+10,self)
+                globals.cardboxes[self.get_attack_position()].card.damage(self.power + 10, self)
                 self.die()
             else:
                 Prototype.attack(self)
@@ -1012,9 +1050,9 @@ class Magic(pygame.sprite.Sprite):
         self.font = pygame.font.Font(None, 19)
         self.cards = []
         if self.element == "death" or self.element == "fire" or self.element == "earth":
-            self.font_color = (255,255,255)
+            self.font_color = (255, 255, 255)
         else:
-            self.font_color = (0,0,0)
+            self.font_color = (0, 0, 0)
         try:
             self.info
         except AttributeError:
@@ -1376,7 +1414,7 @@ class GodsWrath(Magic):
         for card in cards:
             if card.element == "death":
                 card.die()
-                self.player.life_mana+=3
+                self.player.life_mana += 3
                 self.player.heal(1)
 class LifeSacrifice(Magic):
     def __init__(self):
@@ -1408,10 +1446,10 @@ class Purify(Magic):
             for e_card in self.get_enemy_cards():
                 opp_card = globals.cardboxes[e_card.get_attack_position()].card
                 if opp_card.name != 'player': #if card in opposed slot exist
-                    e_card.damage(4,self)
+                    e_card.damage(4, self)
                     opp_card.heal(4, opp_card.max_health)
                 else:
-                    e_card.damage(4,self)
+                    e_card.damage(4, self)
         else:
             return
 
@@ -1505,4 +1543,4 @@ class TotalWeakness(Magic):
     def cast(self):
         cards = self.get_enemy_cards()
         for card in cards:
-            card.set_power(int(floor(card.power/2.0)))
+            card.set_power(int(floor(card.power / 2.0)))
