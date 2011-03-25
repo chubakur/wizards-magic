@@ -420,7 +420,7 @@ class Firelord(Prototype):
         self.level = 11
         self.power = 7
         self.cast = False
-        self.info = ""
+        self.info = "Opens fire gates. This means that both players should receive 1 additional Fire every turn. Upon dying, Firelord brings 8 damage to each player."
         self.health = 21
         self.image = pygame.image.load('misc/cards/fire/firelord.gif')
         Prototype.__init__(self)
@@ -431,7 +431,7 @@ class Salamander(Prototype):
         self.level = 8
         self.power = 3
         self.cast = False
-        self.info = ""
+        self.info = "Increases attack of all owner's creatures by 2. Increases damage from owner player's spellcastings by 2."
         self.health = 15
         self.image = pygame.image.load('misc/cards/fire/salamander.gif')
         Prototype.__init__(self)
@@ -503,7 +503,7 @@ class Nymph(Prototype):
         self.level = 3
         self.power = 1
         self.cast = False
-        self.info = ""
+        self.info = "Owner receives 1 Air at the beginning of Owners turn."
         self.health = 12
         self.image = pygame.image.load('misc/cards/air/nymph.gif')
         Prototype.__init__(self)
@@ -685,7 +685,7 @@ class Golem(Prototype):
         self.power = 4
         self.cast = False
         self.health = 15
-        self.info = ""
+        self.info = "Regenerates 3 health every turn. While owner's Earth less than 3, it suffers 3 damage instead."
         self.image = pygame.image.load('misc/cards/earth/golem.gif')
         Prototype.__init__(self)
 class Dryad(Prototype):
@@ -724,10 +724,17 @@ class Centaur(Prototype):
         self.level = 6
         self.info = "Attacks the same turn he was summoned(No summon sickness). CAST: Strikes magic arrow into enemy player, dealing 3 damage. Costs 1 Earth."
         self.power = 5
-        self.cast = False
+        self.cast = True
         self.health = 14
         self.image = pygame.image.load('misc/cards/earth/centaur.gif')
         Prototype.__init__(self)
+        self.moves_alive = 1
+    def cast_action(self):
+        if self.parent.player.earth_mana:
+            self.play_cast_sound()
+            self.parent.player.enemy.damage(3, self)
+            self.parent.player.earth_mana -= 1
+            self.used_cast = True
 class Elemental(Prototype):
     def __init__(self):        
         self.name = "Elemental"
@@ -739,6 +746,12 @@ class Elemental(Prototype):
         self.health = 45
         self.image = pygame.image.load('misc/cards/earth/elemental.gif')
         Prototype.__init__(self)
+    def summon(self):
+        Prototype.summon(self)
+        self.set_power(self.parent.player.earth_mana - self.level)
+    def turn(self):
+        self.parent.player.earth_mana += 2
+        self.set_power(self.parent.player.earth_mana)
 class Ent(Prototype):
     def __init__(self):        
         self.name = "Ent"
