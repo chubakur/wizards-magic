@@ -87,6 +87,9 @@ class Event_handler():
                                 globals.gameinformationpanel.display("You've already cast.")
                                 return
                     if globals.selected_card: #если выбрана карта
+                        if item.card.name != 'player':
+                            globals.gameinformationpanel.display('This sector is busy.')
+                            return
                         if not globals.player.action_points: #если уже ходил
                             globals.gameinformationpanel.display("You've already made a move.")
                             return
