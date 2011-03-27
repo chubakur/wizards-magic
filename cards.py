@@ -976,6 +976,16 @@ class Werewolf(Prototype):
         self.health = 16
         self.image = pygame.image.load('misc/cards/death/werewolf.gif')
         Prototype.__init__(self)
+    def die(self):
+        card = Ghost()
+        card.parent = self.parent
+        card.field = True
+        self.parent.card = card
+        self.kill()
+        if self.parent.player.id == 1:
+            globals.ccards_1.add(self.parent.card)
+        else:
+            globals.ccards_2.add(self.parent.card)
 class Banshee(Prototype):
     def __init__(self):
         #self.field = field
