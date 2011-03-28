@@ -30,6 +30,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.type = "warrior_card"
         self.killed = 0
         self.spells = []
+        self.default_power = self.power
         self.moves_alive = 0 #Сколько ходов прожила карта
         self.max_health = self.health #Максимальное кол-во жизней
         self.default_power = self.power
@@ -152,6 +153,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
     def turn(self):
+        self.power = self.default_power
         self.used_cast = False
         self.moves_alive += 1
         self.update(None)
@@ -242,10 +244,10 @@ class Hydra(Prototype):
         else:
             return
     def turn(self):
+        Prototype.turn(self)
         self.parent.player.water_mana -= 2
         if self.parent.player.water_mana < 0:
             self.parent.player.water_mana = 0
-        Prototype.turn(self)
     def cast_action(self):
         Prototype.cast_action(self)
         for card in self.get_self_cards():
@@ -273,10 +275,10 @@ class Waterfall(Prototype):
         self.info = "One of the toughest Elementals. Health itself for 3 whenever any player casts water spell of summons water creature. Attack equal to owner`s Water."
         Prototype.__init__(self)
     def turn(self):
+        Prototype.turn(self)
         self.power = self.parent.player.water_mana
         if not self.power:
             self.power = 1
-        Prototype.turn(self)
 class Leviathan(Prototype):
     def __init__(self):        
         self.name = "Leviathan"
@@ -322,6 +324,7 @@ class IceWizard(Prototype):
         self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
         Prototype.__init__(self)
     def turn(self):
+        Prototype.turn(self)
         self.parent.player.water_mana += 2
     def damage(self, damage, enemy):
         if enemy.element == 'fire':
@@ -467,6 +470,7 @@ class Vulcan(Prototype):
         if opp_card.name != 'player':
             opp_card.damage(9, self)
     def turn(self):
+        Prototype.turn(self)
         self.set_power(self.parent.player.fire_mana + 3)
     def cast_action(self):
         hp = self.health
@@ -508,8 +512,8 @@ class Nymph(Prototype):
         self.image = pygame.image.load('misc/cards/air/nymph.gif')
         Prototype.__init__(self)
     def turn(self):
-        self.parent.player.air_mana += 1
         Prototype.turn(self)
+        self.parent.player.air_mana += 1
         #Каждый ход владелец получает дополнительно 1 воздух
 class Fairy(Prototype):
     def __init__(self):        
@@ -518,10 +522,26 @@ class Fairy(Prototype):
         self.info = "Increases its attack by 1 for each creature, killed on a field. CAST: Enslave Mind forces strongest enemy creature to attack it`s owner. Costs 1 Air."
         self.level = 3
         self.power = 3
-        self.cast = False
+        self.cast = True
         self.health = 7
         self.image = pygame.image.load('misc/cards/air/fairy.gif')
         Prototype.__init__(self)
+    def turn(self):
+        self.default_power = 3 + self.killed
+        Prototype.turn(self)
+    def cast_action(self):
+        if self.parent.player.air_mana:
+            self.used_cast = True
+            self.parent.player.air_mana -= 1
+            self.play_cast_sound()
+            max = 0
+            max_link = False
+            for card in self.get_enemy_cards():
+                if card.power > max:
+                    max = card.power
+                    max_link = card
+            if max_link:
+                self.parent.player.enemy.damage(card.power, card)
         #Атака увеличивается на 1 за каждого убитого
         #КАСТ. Сильнейшая карта врага атакует своего героя. 1 воздух.
 class Phoenix(Prototype):
@@ -667,8 +687,8 @@ class Satyr(Prototype):
         self.image = pygame.image.load('misc/cards/earth/satyr.gif')
         Prototype.__init__(self)
     def turn(self):
-        self.parent.player.earth_mana += 1
         Prototype.turn(self)
+        self.parent.player.earth_mana += 1
     def cast_action(self):
         self.play_cast_sound()
         if self.parent.position < 5:
@@ -688,6 +708,12 @@ class Golem(Prototype):
         self.info = "Regenerates 3 health every turn. While owner's Earth less than 3, it suffers 3 damage instead."
         self.image = pygame.image.load('misc/cards/earth/golem.gif')
         Prototype.__init__(self)
+    def turn(self):
+        Prototype.turn(self)
+        if self.parent.player.earth_mana < 3:
+            self.damage(3, self)
+        else:
+            self.heal(3, self.max_health)
 class Dryad(Prototype):
     def __init__(self):        
         self.name = "Dryad"        
@@ -706,7 +732,7 @@ class ForestSpirit(Prototype):
         self.level = 3
         self.info = "Daamge from all non-magical attacks and abilities equal to 1. CAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
         self.power = 2
-        self.cast = False
+        self.cast = True
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
@@ -717,6 +743,12 @@ class ForestSpirit(Prototype):
             self.die()
             return 1
         return 0
+    def cast_action(self):
+        if self.parent.player.earth_mana >= 2:
+            self.parent.player.earth_mana -= 2
+            self.used_cast = True
+            self.play_cast_sound()
+            self.parent.player.heal(5)
 class Centaur(Prototype):
     def __init__(self):        
         self.name = "Centaur"        
@@ -750,6 +782,7 @@ class Elemental(Prototype):
         Prototype.summon(self)
         self.set_power(self.parent.player.earth_mana - self.level)
     def turn(self):
+        Prototype.turn(self)
         self.parent.player.earth_mana += 2
         self.set_power(self.parent.player.earth_mana)
 class Ent(Prototype):
@@ -884,6 +917,7 @@ class Apostate(Prototype):
         self.image = pygame.image.load('misc/cards/life/apostate.gif')
         Prototype.__init__(self)
     def turn(self):
+        Prototype.turn(self)
         if self.parent.player.life_mana >= 2:
             self.parent.player.life_mana -= 2
         else:
@@ -968,7 +1002,7 @@ class Vampire(Prototype):
 class Werewolf(Prototype):
     def __init__(self):        
         self.name = "Werewolf"
-        self.cast = False
+        self.cast = True
         self.element = "death"
         self.level = 6
         self.power = 6
@@ -986,6 +1020,11 @@ class Werewolf(Prototype):
             globals.ccards_1.add(self.parent.card)
         else:
             globals.ccards_2.add(self.parent.card)
+    def cast_action(self):
+        if self.parent.player.death_mana >= 3:
+            self.used_cast = True
+            self.parent.player.death_mana -= 3
+            self.power *= 2
 class Banshee(Prototype):
     def __init__(self):
         #self.field = field
