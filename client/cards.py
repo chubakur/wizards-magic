@@ -135,7 +135,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         pass
     def summon(self): # когда призывают
         self.play_summon_sound()
-    def damage(self, damage, enemy): #Функция, срабатываемая при получении урона.
+    def damage(self, damage, enemy, cast = False): #Функция, срабатываемая при получении урона.
         self.health -= damage
         self.update(0)
         if self.health <= 0:
@@ -326,7 +326,7 @@ class IceWizard(Prototype):
     def turn(self):
         Prototype.turn(self)
         self.parent.player.water_mana += 2
-    def damage(self, damage, enemy):
+    def damage(self, damage, enemy, cast = False):
         if enemy.element == 'fire':
             Prototype.damage(self, damage * 2, enemy)
         elif enemy.element == 'water':
@@ -371,7 +371,7 @@ class Devil(Prototype):
     def die(self):
         self.parent.player.damage(10, self)
         Prototype.die(self)
-    def damage(self, damage, enemy):
+    def damage(self, damage, enemy, cast = False):
         if enemy.element == "water":
             Prototype.damage(self, damage * 2, enemy)
         else:
@@ -411,7 +411,7 @@ class RedDrake(Prototype):
         self.parent.player.enemy.damage(3, self)
         for card in self.get_enemy_cards():
             card.damage(3, self)
-    def damage(self, damage, enemy):
+    def damage(self, damage, enemy, cast = False):
         if enemy.element == 'fire':
             return
         else:
@@ -556,7 +556,7 @@ class Phoenix(Prototype):
         self.recovered = 0 #Восстанавливалась ли карта
         self.image = pygame.image.load('misc/cards/air/phoenix.gif')
         Prototype.__init__(self)
-    def damage(self, damage, enemy):
+    def damage(self, damage, enemy, cast = False):
         self.health -= damage
         self.update(0)
         if self.health <= 0:
@@ -736,7 +736,7 @@ class ForestSpirit(Prototype):
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
-    def damage(self, damage, enemy):
+    def damage(self, damage, enemy, cast = False):
         self.health -= 1
         self.update(0)
         if self.health <= 0:
@@ -791,11 +791,23 @@ class Ent(Prototype):
         self.element = "earth"        
         self.level = 7
         self.power = 3
-        self.info = ""
-        self.cast = False
+        self.info = "Attacks opposed unit and enemy player at the same time. Casts Entangle Roots, damaging each enemy unit for 1 and losing 2 points of own health."
+        self.cast = True
         self.health = 22
         self.image = pygame.image.load('misc/cards/earth/ent.gif')
         Prototype.__init__(self)
+    def attack(self):
+        e_card = globals.cardboxes[self.get_attack_position()].card
+        Prototype.attack(self)
+        if self.moves_alive:
+            if e_card.name != 'player':
+                self.parent.player.enemy.damage(self.power, self)
+        e_card = None
+    def cast_action(self):
+        for card in self.get_enemy_cards():
+            card.damage(1, self)
+        self.used_cast = True
+        self.damage(2, self)
 class Echidna(Prototype):
     def __init__(self):        
         self.name = "Echidna"
@@ -818,6 +830,11 @@ class Priest(Prototype):
         self.info = "Increases owner`s Life by 2 every turn, decreasing Death by the same amount. Decreases owner`s Life by 3 every time owner casts Death spells."
         self.image = pygame.image.load('misc/cards/life/priest.gif')
         Prototype.__init__(self)
+    def turn(self):
+        Prototype.turn(self)
+        if self.parent.player.life_mana >= 2:
+            self.parent.player.life_mana -= 2
+            self.parent.player.heal(2)
 class Paladin(Prototype):
     def __init__(self):        
         self.name = "Paladin"
@@ -901,7 +918,7 @@ class Unicorn(Prototype):
         self.level = 9
         self.power = 8
         self.cast = False
-        self.info = ""
+        self.info = "Unicorn reduces damage from spells to owner's creatures by 50%. Cures poison from owner's creatures. Casts Unicorn Aura. This Aura destroys useful spell effects from enemy creatures. Costs 2 Life."
         self.health = 25
         self.image = pygame.image.load('misc/cards/life/unicorn.gif')
         Prototype.__init__(self)
