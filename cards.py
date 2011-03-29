@@ -832,9 +832,9 @@ class Priest(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        if self.parent.player.life_mana >= 2:
-            self.parent.player.life_mana -= 2
-            self.parent.player.heal(2)
+        if self.parent.player.death_mana >= 2:
+            self.parent.player.death_mana -= 2
+            self.parent.player.life_mana += 2
 class Paladin(Prototype):
     def __init__(self):        
         self.name = "Paladin"
