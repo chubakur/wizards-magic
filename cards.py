@@ -1605,4 +1605,5 @@ class TotalWeakness(Magic):
     def cast(self):
         cards = self.get_enemy_cards()
         for card in cards:
+            card.default_power = int(floor(card.power / 2.0))
             card.set_power(int(floor(card.power / 2.0)))
