@@ -552,6 +552,11 @@ class Fairy(Prototype):
     def turn(self):
         self.default_power = 3 + self.killed
         Prototype.turn(self)
+    def enemy_die(self):
+        Prototype.enemy_die(self)
+        self.default_power = 3 + self.killed
+        self.power = self.default_power
+        self.update(0)
     def cast_action(self):
         if self.parent.player.air_mana:
             self.used_cast = True
