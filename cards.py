@@ -135,6 +135,16 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         pass
     def summon(self): # когда призывают
         self.play_summon_sound()
+        if self.parent.player.id == 1:
+            for card in globals.ccards_1:
+                Prototype.turn(card)
+            for card in globals.ccards_1:
+                card.additional_turn_action()
+        else:
+            for card in globals.ccards_2:
+                Prototype.turn(card)
+            for card in globals.ccards_2:
+                card.additional_turn_action()
     def damage(self, damage, enemy, cast = False): #Функция, срабатываемая при получении урона.
         self.health -= damage
         self.update(0)
@@ -142,6 +152,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.die()
             return 1
         return 0
+    def additional_turn_action(self): # Turn action, but with higher priority.
+        return
     def die(self): #Смерть персонажа
         for spell in self.spells:
             spell.unset(self)
@@ -408,6 +420,7 @@ class RedDrake(Prototype):
         self.image = pygame.image.load('misc/cards/fire/red_drake.gif')
         Prototype.__init__(self)
     def summon(self):
+        Prototype.summon(self)
         self.parent.player.enemy.damage(3, self)
         for card in self.get_enemy_cards():
             card.damage(3, self)
@@ -438,6 +451,15 @@ class Salamander(Prototype):
         self.health = 15
         self.image = pygame.image.load('misc/cards/fire/salamander.gif')
         Prototype.__init__(self)
+    def additional_turn_action(self):
+        for card in self.get_self_cards():
+            #card.default_power += 2
+            if card != self:
+                card.power = card.power + 2
+                card.update(0)
+    def summon(self):
+        Prototype.summon(self)
+        self.additional_turn_action()
 class Efreet(Prototype):
     def __init__(self):        
         self.name = "Efreet"        
@@ -461,6 +483,7 @@ class Vulcan(Prototype):
         self.image = pygame.image.load('misc/cards/fire/vulcan.gif')
         Prototype.__init__(self)
     def summon(self):
+        Prototype.summon(self)
         self.set_power(self.parent.player.fire_mana - self.level + 3)
         if self.parent.player.enemy.fire_mana >= 3:
             self.parent.player.enemy.fire_mana -= 3
@@ -660,7 +683,7 @@ class Titan(Prototype):
         self.image = pygame.image.load('misc/cards/air/titan.gif')
         Prototype.__init__(self)
     def summon(self):
-        self.play_summon_sound()
+        Prototype.summon(self)
         self.parent.player.enemy.air_mana -= 3
         if self.parent.player.enemy.air_mana < 0:
             self.parent.player.enemy.air_mana = 0
@@ -886,6 +909,7 @@ class Pegasus(Prototype):
         self.image = pygame.image.load('misc/cards/life/pegasus.gif')
         Prototype.__init__(self)
     def summon(self):
+        Prototype.summon(self)
         for card in self.get_self_cards():
             card.heal(3, card.max_health)
     def cast_action(self):
@@ -1062,7 +1086,7 @@ class Banshee(Prototype):
             else:
                 Prototype.attack(self)
     def summon(self):
-        self.play_summon_sound()
+        Prototype.summon(self)
         self.parent.player.enemy.damage(8, self)
 class GrimReaper(Prototype):
     def __init__(self):                
@@ -1098,7 +1122,7 @@ class Lich(Prototype):
         self.image = pygame.image.load('misc/cards/death/lich.gif')
         Prototype.__init__(self)
     def summon(self):
-        self.play_summon_sound()
+        Prototype.summon(self)
         attack_position = self.get_attack_position()
         globals.cardboxes[attack_position].card.damage(10, self)
         for adjacent_pos in self.get_attack_adjacent_position(attack_position):

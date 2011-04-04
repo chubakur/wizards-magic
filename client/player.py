@@ -61,6 +61,8 @@ def me_finish_turn():
             card.used_cast = False
         for card in globals.ccards_2:
             card.turn()
+        for card in globals.ccards_2:
+            card.additional_turn_action()
     else:
         globals.player = globals.player1
         globals.player.action_points = True
@@ -73,6 +75,8 @@ def me_finish_turn():
             card.used_cast = False
         for card in globals.ccards_1:
             card.turn()
+        for card in globals.ccards_1:
+            card.additional_turn_action()
 def finish_turn():
     me_finish_turn()
     sockets.query({"action":"switch_turn"})
