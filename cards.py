@@ -628,10 +628,34 @@ class Gargoyle(Prototype):
         self.info = "Suffers no damage from Earth and Air spells. CAST: Casts Petrification on self, as effect turns to stone. In stone form Gargoyle reduces damage done to it by 2 . Owner loses 3 Air and 1 Earth."
         self.level = 5
         self.power = 4
-        self.cast = False
+        self.cast = True
         self.health = 15
         self.image = pygame.image.load('misc/cards/air/gargoyle.gif')
+        self.stone = False
         Prototype.__init__(self)
+    def attack(self):
+        if self.stone:
+            return
+        else:
+            Prototype.attack(self)
+    def damage(self, damage, enemy, cast = False):
+        if self.stone:
+            if damage - 2 > 0:
+                Prototype.damage(self, damage - 2, enemy)
+            else:
+                Prototype.damage(self, 0, enemy)
+        else:
+            Prototype.damage(self, damage, enemy)
+    def cast_action(self):
+        if self.parent.player.air_mana >= 3 and self.parent.player.earth_mana:
+            self.play_cast_sound()
+            self.parent.player.air_mana -= 3
+            self.parent.player.earth_mana -= 1
+            self.used_cast = True
+            self.stone = True
+    def turn(self):
+        Prototype.turn(self)
+        self.stone = False
 class Manticore(Prototype):
     def __init__(self):        
         self.name = "Manticore"        
