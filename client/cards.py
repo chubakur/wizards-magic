@@ -451,7 +451,7 @@ class Firelord(Prototype):
     def __init__(self):        
         self.name = "Firelord"        
         self.element = "fire"
-        self.level = 1 #11
+        self.level = 11
         self.power = 7
         self.cast = False
         self.info = "Opens fire gates. This means that both players should receive 1 additional Fire every turn. Upon dying, Firelord brings 8 damage to each player."
