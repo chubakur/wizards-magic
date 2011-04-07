@@ -11,7 +11,7 @@ class Player(): #Прототип игрока
         self.action_points = True #Ходил игрок, или нет
         self.get_cards()
         self.get_mana()
-    def damage(self, damage, enemy):
+    def damage(self, damage, enemy, cast = False):
         self.health -= damage
         if self.health <= 0:
             globals.gameinformationpanel.display("Game Over!")

@@ -103,6 +103,24 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 if cardbox.card.name != "player":
                     cards.append(cardbox.card)
         return cards
+    def get_adjacent_position(self):
+        adjacent_position = []
+        self_position = self.parent.position
+        if self_position < 5:
+            if self_position > 0:
+                if globals.cardboxes[self_position - 1].card.name != "player":
+                    adjacent_position.append(self_position - 1)
+            if self_position < 4:
+                if globals.cardboxes[self_position + 1].card.name != "player":
+                    adjacent_position.append(self_position + 1)
+        else:
+            if self_position > 5:
+                if globals.cardboxes[self_position - 1].card.name != "player":
+                    adjacent_position.append(self_position - 1)
+            if self_position < 9:
+                if globals.cardboxes[self_position + 1].card.name != "player":
+                    adjacent_position.append(self_position + 1)
+        return adjacent_position
     def get_attack_adjacent_position(self, attack_position):
         adjacent_position = []
         if attack_position < 5:
@@ -145,7 +163,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 Prototype.turn(card)
             for card in globals.ccards_2:
                 card.additional_turn_action()
-    def damage(self, damage, enemy, cast = False): #Функция, срабатываемая при получении урона.
+    def damage(self, damage, enemy, cast=False): #Функция, срабатываемая при получении урона.
         self.health -= damage
         self.update(0)
         if self.health <= 0:
@@ -189,9 +207,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 text_cast = font.render("Cast", True, (0, 0, 0))
                 self.image.blit(text_cast, (50, 100))
         #print text_power
-        self.image.blit(text_level, (130, 0))
-        self.image.blit(text_power, (10, 220))
-        self.image.blit(text_health, (130, 220))
+        self.image.blit(text_level, (140, -5))
+        self.image.blit(text_power, (5, 225))
+        self.image.blit(text_health, (135, 225))
         if self.light:
             self.image.blit(self.light_image, (10, 50))
         if not self.field: #Рисование в колоде
@@ -338,7 +356,7 @@ class IceWizard(Prototype):
     def turn(self):
         Prototype.turn(self)
         self.parent.player.water_mana += 2
-    def damage(self, damage, enemy, cast = False):
+    def damage(self, damage, enemy, cast=False):
         if enemy.element == 'fire':
             Prototype.damage(self, damage * 2, enemy)
         elif enemy.element == 'water':
@@ -383,7 +401,7 @@ class Devil(Prototype):
     def die(self):
         self.parent.player.damage(10, self)
         Prototype.die(self)
-    def damage(self, damage, enemy, cast = False):
+    def damage(self, damage, enemy, cast=False):
         if enemy.element == "water":
             Prototype.damage(self, damage * 2, enemy)
         else:
@@ -424,7 +442,7 @@ class RedDrake(Prototype):
         self.parent.player.enemy.damage(3, self)
         for card in self.get_enemy_cards():
             card.damage(3, self)
-    def damage(self, damage, enemy, cast = False):
+    def damage(self, damage, enemy, cast=False):
         if enemy.element == 'fire':
             return
         else:
@@ -433,13 +451,21 @@ class Firelord(Prototype):
     def __init__(self):        
         self.name = "Firelord"        
         self.element = "fire"
-        self.level = 11
+        self.level = 1 #11
         self.power = 7
         self.cast = False
         self.info = "Opens fire gates. This means that both players should receive 1 additional Fire every turn. Upon dying, Firelord brings 8 damage to each player."
         self.health = 21
         self.image = pygame.image.load('misc/cards/fire/firelord.gif')
         Prototype.__init__(self)
+    def turn(self):
+        Prototype.turn(self)
+        self.parent.player.fire_mana += 1
+        self.parent.player.enemy.fire_mana += 1
+    def die(self):
+        self.parent.player.damage(8, self)
+        self.parent.player.enemy.damage(8, self)
+        Prototype.die(self)
 class Salamander(Prototype):
     def __init__(self):        
         self.name = "Salamander"        
@@ -464,13 +490,24 @@ class Efreet(Prototype):
     def __init__(self):        
         self.name = "Efreet"        
         self.element = "fire"
-        self.level = 10
+        self.level = 10 #10
         self.power = 6
         self.cast = False
         self.health = 33
         self.info = "Whenever any creature attacks Efreet, that creature suffers half of damage send back (same applies to Fire Shield spell). Uppon summoning, all enemy Water creatures suffer 6 damage. CAST: Casts Fire Shield on any owner`s creature. Costs 2 Fire. Fire Shield burns creature from inside, damaging it for 2 points per turn, unless it`s a Fire creature."
         self.image = pygame.image.load('misc/cards/fire/efreet.gif')
         Prototype.__init__(self)
+    def summon(self):
+        Prototype.summon(self)
+        for card in self.get_enemy_cards():
+            if card.element == "water":
+                card.damage(6, self)
+            else:
+                continue
+    def damage(self, damage, enemy, cast = False):
+        if not cast:
+            Prototype.damage(self, damage, enemy, cast)
+            Prototype.damage(enemy, damage / 2, self, cast)
 class Vulcan(Prototype):
     def __init__(self):        
         self.name = "Vulcan"        
@@ -584,7 +621,7 @@ class Phoenix(Prototype):
         self.recovered = 0 #Восстанавливалась ли карта
         self.image = pygame.image.load('misc/cards/air/phoenix.gif')
         Prototype.__init__(self)
-    def damage(self, damage, enemy, cast = False):
+    def damage(self, damage, enemy, cast=False):
         self.health -= damage
         self.update(0)
         if self.health <= 0:
@@ -638,7 +675,7 @@ class Gargoyle(Prototype):
             return
         else:
             Prototype.attack(self)
-    def damage(self, damage, enemy, cast = False):
+    def damage(self, damage, enemy, cast=False):
         if self.stone:
             if damage - 2 > 0:
                 Prototype.damage(self, damage - 2, enemy)
@@ -774,9 +811,17 @@ class Dryad(Prototype):
         self.power = 4
         self.cast = False
         self.health = 12
-        self.info = "Adjacent owner creatures attack increases by 1, and if it`s Earth creaure, by 2 whenever anyone casts Earth spell of summons Earth creature."
+        self.info = "Adjacent owner creatures attack increases by 1, and if it`s Earth creature, by 2 whenever anyone casts Earth spell of summons Earth creature."
         self.image = pygame.image.load('misc/cards/earth/dryad.gif')
         Prototype.__init__(self)
+    def additional_turn_action(self):
+        ids = self.get_adjacent_position()
+        if ids:
+            for id in ids:
+                globals.cardboxes[id].card.set_power( globals.cardboxes[id].card.power + 1)
+    def summon(self):
+        Prototype.summon(self)
+        self.additional_turn_action()
 class ForestSpirit(Prototype):
     def __init__(self):        
         self.name = "ForestSpirit"        
@@ -788,7 +833,7 @@ class ForestSpirit(Prototype):
         self.health = 3
         self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
-    def damage(self, damage, enemy, cast = False):
+    def damage(self, damage, enemy, cast=False):
         self.health -= 1
         self.update(0)
         if self.health <= 0:
@@ -1019,7 +1064,7 @@ class Chimera(Prototype):
     def __init__(self):        
         self.name = "Chimera"
         self.element = "life"
-        self.info = ""
+        self.info = "When Chimera is on a field, every spell casting costs 50% less for the owner. Whenever you summon creature, you gain health equal to this creature's level."
         self.level = 11
         self.power = 11
         self.cast = False
@@ -1045,13 +1090,24 @@ class Ghost(Prototype):
     def __init__(self):        
         self.name = "Ghost"
         self.element = "death"
-        self.info = ""
+        self.info = "Whenever attacked by a creature, suffers 50% less damage, and owner suffers other 50% damage. When suffers from spell, Ghost recieves 200% of normal damage. Casts Bloody Ritual. As a result, owner loses 5 health, but receives one Death."
         self.level = 3
-        self.cast = False
+        self.cast = True
         self.power = 3
         self.health = 13
         self.image = pygame.image.load('misc/cards/death/ghost.gif')
         Prototype.__init__(self)
+    def damage(self, damage, enemy, cast = False):
+        if not cast:
+            Prototype.damage(self, damage / 2, enemy)
+            self.parent.player.damage(damage / 2, enemy)
+        else:
+            Prototype.damage(self, damage * 2, enemy, True)
+    def cast_action(self):
+        self.parent.player.death_mana += 1
+        self.parent.player.health -= 5
+        self.used_cast = True
+        self.play_cast_sound()
 class Vampire(Prototype):
     def __init__(self):        
         self.name = "Vampire"
@@ -1124,15 +1180,34 @@ class GrimReaper(Prototype):
         self.element = "death"
         self.level = 12
         self.power = 8
-        self.cast = False
+        self.cast = True
+        self.focus_cast = True
         self.health = 22
         self.image = pygame.image.load('misc/cards/death/grim_reaper.gif')
         Prototype.__init__(self)
+    def cast_action(self):
+        if self.parent.player.death_mana >= 3:
+            Prototype.cast_action(self)
+            for card in self.get_enemy_cards():
+                if card.level <= 3:
+                    card.light_switch(True)
+    def focus_cast_action(self, target):
+        if target.name != 'player': #if it is real card!
+            if self.parent.player.id != target.parent.player.id:
+                self.play_cast_sound()
+                self.parent.player.death_mana -= 3
+                target.die()
+                self.used_cast = True
+                globals.cast_focus = False
+                for card in self.get_enemy_cards():
+                    card.light_switch(False)
+        else:
+            return
 class Darklord(Prototype):
     def __init__(self):        
         self.name = "Darklord"
         self.element = "death"
-        self.info = ""
+        self.info = "Whenever creature dies, Darklord heals owner for 3 and regenerates self for 2. Steal Spell steals all spell effects from any enemy creature, DarkLord receives these spells. Owner loses 1 Death."
         self.level = 8
         self.power = 4
         self.cast = False
