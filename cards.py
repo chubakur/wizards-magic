@@ -92,6 +92,24 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 if cardbox.card.name != "player":
                     cards.append(cardbox.card)
         return cards
+    def get_self_cardboxes(self):
+        cardboxes = []
+        if self.parent.position < 5:
+            for cardbox in globals.cardboxes[0:5]:
+                cardboxes.append(cardbox)
+        else:
+            for cardbox in globals.cardboxes[5:10]:
+                cardboxes.append(cardbox)
+        return cardboxes
+    def get_enemy_cardboxes(self):
+        cardboxes = []
+        if self.parent.position < 5:
+            for cardbox in globals.cardboxes[5:10]:
+                cardboxes.append(cardbox)
+        else:
+            for cardbox in globals.cardboxes[0:5]:
+                cardboxes.append(cardbox)
+        return cardboxes
     def get_enemy_cards(self):
         cards = []
         if self.parent.position < 5:
@@ -151,8 +169,14 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             globals.cast_focus_wizard = self #создаем ссылку на себя
     def focus_cast_action(self, target):
         pass
+    def card_summoned(self, card): #when any card summon to the field
+        pass
+    def card_died(self, card): #when any card dies
+        pass
     def summon(self): # когда призывают
         self.play_summon_sound()
+        for card in self.get_self_cards() + self.get_enemy_cards():
+            card.card_summoned(self)
         if self.parent.player.id == 1:
             for card in globals.ccards_1:
                 Prototype.turn(card)
@@ -178,6 +202,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
         self.parent.image.blit(self.parent.surface_backup, (0, 0)) #Рисуем объект-родитель поверх карты
         self.kill() #Выкидываем карту из всех групп
+        for card in self.get_enemy_cards() + self.get_self_cards():
+            card.card_died(self)
         #pygame.mixer.music.load('misc/sounds/card_die.wav')
         #pygame.mixer.music.play()
     def enemy_die(self): #когда карта убивает противолежащего юнита
@@ -1058,8 +1084,48 @@ class MagicHealer(Prototype):
         self.power = 2
         self.cast = False
         self.health = 10
+#        self.security_slots = []
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
+#    def summon(self):
+#        for cardbox in self.get_self_cardboxes():
+#            if cardbox.card.name == "player":
+#                cardbox.card = MagicHealerChakra(self)
+#                cardbox.card.parent = self.parent
+#                self.security_slots.append(cardbox)
+#    def card_summoned(self, card):
+#        if card.parent.player.id == self.parent.player.id:
+#            for slot in self.security_slots:
+#                if slot.position == card.parent.position:
+#                    self.security_slots.remove(slot)
+#    def card_died(self, card):
+#        if card.parent.player.id == self.parent.player.id:
+#            card.parent.card = MagicHealerChakra(self)
+#            self.security_slots.append(cardbox)
+#    def die(self):
+#        for slot in self.security_slots:
+#            print 'B:',slot.position,slot.card
+#            slot.card.die()
+#            print 'A:',slot.position,slot.card
+#        self.security_slots = []
+#        Prototype.die(self)
+class MagicHealerChakra(Prototype):
+    def __init__(self, owner):
+        self.name = "player"
+        self.level = 0
+        self.element = "life"
+        self.power = 0
+        self.health = 10
+        self.owner = owner
+        self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
+        Prototype.__init__(self)
+    def die(self):
+        self.parent.card = self.parent.player
+    def attack(self):
+        return
+    def damage(self, damage, enemy, cast=False):
+        print "Recurse Damage to Owner"
+        self.owner.damage(damage, enemy, cast)
 class Chimera(Prototype):
     def __init__(self):        
         self.name = "Chimera"
@@ -1071,6 +1137,10 @@ class Chimera(Prototype):
         self.health = 30
         self.image = pygame.image.load('misc/cards/life/chimera.gif')
         Prototype.__init__(self)
+    def card_summoned(self, card):
+        if self.parent.player.id == card.parent.player.id: #if it`s my card
+            if card != self:
+                self.parent.player.heal(card.level)
 class Zombie(Prototype):
     def __init__(self):        
         self.name = "Zombie"        
@@ -1142,6 +1212,8 @@ class Werewolf(Prototype):
         card.field = True
         self.parent.card = card
         self.kill()
+        for card in self.get_enemy_cards() + self.get_self_cards():
+            card.card_died(self)
         if self.parent.player.id == 1:
             globals.ccards_1.add(self.parent.card)
         else:
@@ -1214,6 +1286,9 @@ class Darklord(Prototype):
         self.health = 14
         self.image = pygame.image.load('misc/cards/death/darklord.gif')
         Prototype.__init__(self)
+    def card_died(self, card):
+        self.heal(2, self.max_health)
+        self.parent.player.heal(3)
 class Lich(Prototype):
     def __init__(self):        
         self.name = "Lich"
@@ -1268,6 +1343,8 @@ class Magic(pygame.sprite.Sprite):
         pass
     def unset(self, card):
         self.cards.remove(card)
+    def set(self, card):
+        self.cards.append(card)
     def get_enemy_cards(self):
         cards = []
         if self.player.id == 1:
