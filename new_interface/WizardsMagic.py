@@ -43,9 +43,11 @@ globals.screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Wizards Magic')
 clock = pygame.time.Clock()
 globals.background = pygame.image.load('misc/bg_sample.gif')
-globals.background_backup = globals.background.copy()
 #globals.background = globals.background.convert()
+#globals.background = pygame.Surface(globals.screen.get_size())
+globals.background = globals.background.convert_alpha()
 #globals.background.fill((0, 0, 0))
+background_backup = globals.background.copy()
 #font.set_bold(0)
 globals.player1 = player.Player1()
 globals.player2 = player.Player2()
@@ -58,46 +60,46 @@ globals.cardinfo = cardinfo.CardInfo()
 #ACTIONS
 #################################################################################################3
 globals.event_handler = eventhandler.Event_handler()
-globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока
-globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока
-globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока
-globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока
+#globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока
+#globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока
+#globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока
+#globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока
 # 0 1 2 3 4   //Расположение
 # 5 6 7 8 9
-globals.cardbox0 = cardbox.Cardbox((0, 55), globals.player1, 0) #0 место на поле
-globals.cardbox1 = cardbox.Cardbox((160, 55), globals.player1, 1) #1 место на поле
-globals.cardbox2 = cardbox.Cardbox((320, 55), globals.player1, 2) #2 место на поле
-globals.cardbox3 = cardbox.Cardbox((480, 55), globals.player1, 3) #3 место на поле
-globals.cardbox4 = cardbox.Cardbox((640, 55), globals.player1, 4) #4 место на поле
-globals.cardbox5 = cardbox.Cardbox((0, 301), globals.player2, 5) #5 место на поле
-globals.cardbox6 = cardbox.Cardbox((160, 301), globals.player2, 6) #6 место на поле
-globals.cardbox7 = cardbox.Cardbox((320, 301), globals.player2, 7) #7 место на поле
-globals.cardbox8 = cardbox.Cardbox((480, 301), globals.player2, 8) #8 место на поле
-globals.cardbox9 = cardbox.Cardbox((640, 301), globals.player2, 9) #9 место на поле
+globals.cardbox0 = cardbox.Cardbox((32, 44), globals.player1, 0) #0 место на поле
+globals.cardbox1 = cardbox.Cardbox((187, 44), globals.player1, 1) #1 место на поле
+globals.cardbox2 = cardbox.Cardbox((340, 44), globals.player1, 2) #2 место на поле
+globals.cardbox3 = cardbox.Cardbox((495, 44), globals.player1, 3) #3 место на поле
+globals.cardbox4 = cardbox.Cardbox((651, 44), globals.player1, 4) #4 место на поле
+globals.cardbox5 = cardbox.Cardbox((32, 248), globals.player2, 5) #5 место на поле
+globals.cardbox6 = cardbox.Cardbox((187, 248), globals.player2, 6) #6 место на поле
+globals.cardbox7 = cardbox.Cardbox((340, 248), globals.player2, 7) #7 место на поле
+globals.cardbox8 = cardbox.Cardbox((495, 248), globals.player2, 8) #8 место на поле
+globals.cardbox9 = cardbox.Cardbox((651, 248), globals.player2, 9) #9 место на поле
 globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
 #playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
-healthwindow.HealthWindow((0, 0), globals.infopanel1) #Окошко здоровья верхнего игрока
-healthwindow.HealthWindow((0, 0), globals.infopanel2) #Окошко здоровья нижнего игрока
+#healthwindow.HealthWindow((0, 0), globals.infopanel1) #Окошко здоровья верхнего игрока
+#healthwindow.HealthWindow((0, 0), globals.infopanel2) #Окошко здоровья нижнего игрока
 # Кнопки колод стихий первого игрока
-elementbutton.WaterElementButton((0, 0), globals.actionpanel1)
-elementbutton.FireElementButton((31, 0), globals.actionpanel1)
-elementbutton.AirElementButton((62, 0), globals.actionpanel1)
-elementbutton.EarthElementButton((93, 0), globals.actionpanel1)
-elementbutton.LifeElementButton((124, 0), globals.actionpanel1)
-elementbutton.DeathElementButton((155, 0), globals.actionpanel1)
+elementbutton.WaterElementButton((369, 0),  globals.player1)
+elementbutton.FireElementButton((400, 0),  globals.player1)
+elementbutton.AirElementButton((431, 0),  globals.player1)
+elementbutton.EarthElementButton((462, 0),  globals.player1)
+elementbutton.LifeElementButton((493, 0),  globals.player1)
+elementbutton.DeathElementButton((524, 0), globals.player1)
 # Кнопки колод стихий второго игрока
-elementbutton.WaterElementButton((0, 0), globals.actionpanel2)
-elementbutton.FireElementButton((31, 0), globals.actionpanel2)
-elementbutton.AirElementButton((62, 0), globals.actionpanel2)
-elementbutton.EarthElementButton((93, 0), globals.actionpanel2)
-elementbutton.LifeElementButton((124, 0), globals.actionpanel2)
-elementbutton.DeathElementButton((155, 0), globals.actionpanel2)
+elementbutton.WaterElementButton((186, 430),  globals.player2)
+elementbutton.FireElementButton((217, 430),  globals.player2)
+elementbutton.AirElementButton((248, 430),  globals.player2)
+elementbutton.EarthElementButton((279, 430),  globals.player2)
+elementbutton.LifeElementButton((310, 430),  globals.player2)
+elementbutton.DeathElementButton((341, 430), globals.player2)
 #Кнопки завершения хода первого и второго игрока.
-completethecoursebutton.CompleteTheCourseButton((760, 0), globals.actionpanel1)
-completethecoursebutton.CompleteTheCourseButton((760, 0), globals.actionpanel2)
+completethecoursebutton.CompleteTheCourseButton((760, 0), globals.player1)
+completethecoursebutton.CompleteTheCourseButton((760, 430), globals.player2)
 #Окна выбора карты стихии
 globals.cardsofelementshower1 = cardsofelementshower.CardsOfElementShower((0, 301), globals.player1)
 globals.cardsofelementshower2 = cardsofelementshower.CardsOfElementShower((0, 55), globals.player2)
@@ -123,7 +125,7 @@ while 1:
     globals.information_group.update()
     #interface_up_layer.update()
     globals.screen.blit(globals.background, (0, 0))
-    #globals.background.fill((0, 0, 0))
-    globals.background = globals.background_backup.copy()
+    #globals.background.fill((0,0,0))
+    globals.background = background_backup.copy()
     pygame.display.flip()
     clock.tick(10)
