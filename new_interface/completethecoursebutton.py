@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
 import globals
-import random
 class CompleteTheCourseButton(pygame.sprite.Sprite):
     def __init__(self, rect, player):
         pygame.sprite.Sprite.__init__(self)

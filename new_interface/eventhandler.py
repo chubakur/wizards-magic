@@ -5,14 +5,6 @@ import player
 import cards
 import sys
 from pygame.locals import *
-def play_bookopen_sound():
-    #pygame.mixer.music.load('misc/sounds/book_open.wav')
-    #pygame.mixer.music.play()
-    return
-def play_bookclose_sound():
-    #pygame.mixer.music.load('misc/sounds/book_close.wav')
-    #pygame.mixer.music.play()
-    return
 class Point(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -109,9 +101,7 @@ class Event_handler():
                         item.card.summon() #функция которая хранит описание действий при выводе карты
                         globals.player.action_points = False
                         exec('globals.player.' + globals.selected_card.element + '_mana -= ' + str(globals.selected_card.level)) #Отнимаем ману
-                        globals.interface.remove(globals.cardsofelementshower1) #Закрываем окна выбора карты
-                        globals.interface.remove(globals.cardsofelementshower2) #Закр. окна выбора карты
-                        globals.cards_in_deck.empty() #очищаем группу карты в колоде
+                        #globals.cards_in_deck.empty() #очищаем группу карты в колоде
                         if item.player.id == 1:
                             globals.ccards_1.add(item.card)
                         else:
@@ -132,11 +122,6 @@ class Event_handler():
                         globals.cards_of_element_shower_element = "life"
                     elif item.element == 'death':
                         globals.cards_of_element_shower_element = "death"
-                    if globals.player.id == 1:
-                        globals.interface.add(globals.cardsofelementshower1)
-                    else:
-                        globals.interface.add(globals.cardsofelementshower2)
-                    play_bookopen_sound()
                 elif item.type == 'completethecoursebutton':
                     player.finish_turn()
             elif event.button == 3: #ПРАВАЯ КНОПКА МЫШИ
@@ -166,7 +151,6 @@ class Event_handler():
                         globals.cardinfo.card = item.card
                         globals.cardinfo.show = True
                 if item.type == 'cardsofelementshower':
-                    play_bookclose_sound()
                     globals.interface.remove(globals.cardsofelementshower1)
                     globals.interface.remove(globals.cardsofelementshower2)
                     globals.cards_in_deck.empty()

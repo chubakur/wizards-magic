@@ -34,8 +34,6 @@ import cardsofelementshower
 import completethecoursebutton
 import healthwindow
 import cardbox
-import infopanel
-import actionpanel
 import eventhandler
 import gameinformation
 pygame.init()
@@ -101,8 +99,9 @@ elementbutton.DeathElementButton((341, 430), globals.player2)
 completethecoursebutton.CompleteTheCourseButton((760, 0), globals.player1)
 completethecoursebutton.CompleteTheCourseButton((760, 430), globals.player2)
 #Окна выбора карты стихии
-globals.cardsofelementshower1 = cardsofelementshower.CardsOfElementShower((0, 301), globals.player1)
-globals.cardsofelementshower2 = cardsofelementshower.CardsOfElementShower((0, 55), globals.player2)
+#globals.cardsofelementshower1 = cardsofelementshower.CardsOfElementShower((0, 301), globals.player1)
+#globals.cardsofelementshower2 = cardsofelementshower.CardsOfElementShower((0, 55), globals.player2)
+globals.cardofelementsshower = cardsofelementshower.CardsOfElementShower()
 globals.gameinformationpanel = gameinformation.GameInformationPanel()
 globals.gameinformationpanel.display('Battle started.')
 #********************************************************************************
@@ -116,11 +115,11 @@ while 1:
     globals.panels.update()
     globals.interface.update()
     if globals.player.id == 1:
-        globals.ccards_1.update(None)
-        globals.cards_in_deck.update(globals.cardsofelementshower1)
+        globals.ccards_1.update()
     else:
-        globals.ccards_2.update(None)
-        globals.cards_in_deck.update(globals.cardsofelementshower2)
+        globals.ccards_2.update()
+    globals.cardofelementsshower.update()
+    globals.cards_in_deck.update()
     globals.card_info_group.update()
     globals.information_group.update()
     #interface_up_layer.update()

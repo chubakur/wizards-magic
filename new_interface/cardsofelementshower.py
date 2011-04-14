@@ -1,59 +1,64 @@
 # -*- coding: utf-8 -*-
 import globals
 import pygame
+#globals.cards_of_element_shower_element содержит стихию
 class CardsOfElementShower(pygame.sprite.Sprite):
     #Не прототип!
-    def __init__(self, rect, player):
+    def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.player = player
+        #self.player = player
         self.type = 'cardsofelementshower'
         self.image = pygame.image.load('misc/cards_box.gif').convert_alpha()
-        self.rect = self.image.get_rect().move((rect[0], rect[1]))
+        #self.rect = self.image.get_rect().move((rect[0], rect[1]))
         self.cards = 0
-        self.shift = 32
+        self.shift = 2
+        self.first_part = True #True - shows 1,2,3 from list, False shows 2,3,4 elements
     def draw(self):
-        globals.background.blit(self.image, self.rect)
+        pass
+        #globals.background.blit(self.image, self.rect)
     def update(self):
-        if self.player.id != globals.player.id:
-            return
+        #print self.type, 'update'
+        globals.cards_in_deck.empty()
         self.cards = 0
-        #{МОЖНО УПРОСТИТЬ АЛГОРИТМ!}&?????
-        if self.player.id == 1:
-            if globals.cards_of_element_shower_element == "water":
-                for card in globals.player1.water_cards:
-                    exec("globals.cards_in_deck.add(globals.player1." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "fire":
-                for card in globals.player1.fire_cards:
-                    exec("globals.cards_in_deck.add(globals.player1." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "air":
-                for card in globals.player1.air_cards:
-                    exec("globals.cards_in_deck.add(globals.player1." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "earth":
-                for card in globals.player1.earth_cards:
-                    exec("globals.cards_in_deck.add(globals.player1." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "life":
-                for card in globals.player1.life_cards:
-                    exec("globals.cards_in_deck.add(globals.player1." + card.lower() + ")")
+        if globals.cards_of_element_shower_element == "water":
+            if self.first_part:
+                for card in globals.player.water_cards[0:3]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
             else:
-                for card in globals.player1.death_cards:
-                    exec("globals.cards_in_deck.add(globals.player1." + card.lower() + ")")
+                for card in globals.player.water_cards[1:4]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+        elif globals.cards_of_element_shower_element == "fire":
+            if self.first_part:
+                for card in globals.player.fire_cards[0:3]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+            else:
+                for card in globals.player.fire_cards[1:4]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+        elif globals.cards_of_element_shower_element == "air":
+            if self.first_part:
+                for card in globals.player.air_cards[0:3]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+            else:
+                for card in globals.player.air_cards[1:4]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+        elif globals.cards_of_element_shower_element == "earth":
+            if self.first_part:
+                for card in globals.player.earth_cards[0:3]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+            else:
+                for card in globals.player.earth_cards[1:4]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+        elif globals.cards_of_element_shower_element == "life":
+            if self.first_part:
+                for card in globals.player.life_cards[0:3]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+            else:
+                for card in globals.player.life_cards[1:4]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
         else:
-            if globals.cards_of_element_shower_element == "water":
-                for card in globals.player2.water_cards:
-                    exec("globals.cards_in_deck.add(globals.player2." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "fire":
-                for card in globals.player2.fire_cards:
-                    exec("globals.cards_in_deck.add(globals.player2." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "air":
-                for card in globals.player2.air_cards:
-                    exec("globals.cards_in_deck.add(globals.player2." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "earth":
-                for card in globals.player2.earth_cards:
-                    exec("globals.cards_in_deck.add(globals.player2." + card.lower() + ")")
-            elif globals.cards_of_element_shower_element == "life":
-                for card in globals.player2.life_cards:
-                    exec("globals.cards_in_deck.add(globals.player2." + card.lower() + ")")
+            if self.first_part:
+                for card in globals.player.death_cards[0:3]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
             else:
-                for card in globals.player2.death_cards:
-                    exec("globals.cards_in_deck.add(globals.player2." + card.lower() + ")")
-        self.draw()
+                for card in globals.player.death_cards[1:4]:
+                    exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")

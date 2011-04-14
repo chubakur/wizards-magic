@@ -8,7 +8,7 @@ class Cardbox(pygame.sprite.Sprite):
         self.position = position
         self.player = player #первый или второй
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert_alpha()
-        self.light_image = pygame.image.load('misc/light.gif').convert_alpha()
+        self.light_image = pygame.image.load('misc/cardbox-activated.gif').convert_alpha()
         self.surface_backup = self.image.copy()
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         self.card = self.player
@@ -17,7 +17,7 @@ class Cardbox(pygame.sprite.Sprite):
     def draw(self):
         #self.image = self.surface_backup.copy()
         if self.light:
-            self.image.blit(self.light_image,(10,50))
+            self.image.blit(self.light_image,(0,0))
             globals.background.blit(self.image, self.rect)
             self.image = self.surface_backup.copy()
             return

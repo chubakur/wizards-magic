@@ -57,16 +57,16 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         #self.cast_button.fill((0,0,255))
     def set_health(self, health):
         self.health = health
-        self.update(None)
+        self.update()
     def set_power(self, power):
         self.power = power
-        self.update(None)
+        self.update()
     def light_switch(self, on):
         if on:
             self.light = True
         else:
             self.light = False
-        self.update(None)
+        self.update()
     def play_cast_sound(self):
         #pygame.mixer.music.load('misc/sounds/card_cast.wav')
         #pygame.mixer.music.play()
@@ -189,7 +189,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 card.additional_turn_action()
     def damage(self, damage, enemy, cast=False): #Функция, срабатываемая при получении урона.
         self.health -= damage
-        self.update(0)
+        self.update()
         if self.health <= 0:
             self.die()
             return 1
@@ -212,15 +212,15 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.power = self.default_power
         self.used_cast = False
         self.moves_alive += 1
-        self.update(None)
+        self.update()
         #print 1
         #print self.playerscards[self.parent.player.id-1].sprites() # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.
     def heal(self, health, max_health):
         self.health += health
         if self.health > max_health:
             self.health = max_health
-        self.update(None)
-    def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+        self.update()
+    def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = globals.font.render(str(self.level), True, self.font_color)
         text_power = globals.font.render(str(self.power), True, self.font_color)
         text_health = globals.font.render(str(self.health), True, self.font_color)
@@ -233,18 +233,20 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 text_cast = font.render("Cast", True, (0, 0, 0))
                 self.image.blit(text_cast, (50, 100))
         #print text_power
-        self.image.blit(text_level, (140, -5))
-        self.image.blit(text_power, (5, 225))
-        self.image.blit(text_health, (135, 225))
+        self.image.blit(text_level, (85, 0))
+        self.image.blit(text_power, (10, 130))
+        self.image.blit(text_health, (85, 130))
         if self.light:
             self.image.blit(self.light_image, (10, 50))
         if not self.field: #Рисование в колоде
-            self.parent = cards_of_element_shower
-            xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
-            self.parent.image.blit(self.image, (xshift, 0))
-            self.rect = self.image.get_rect().move((self.parent.rect[0], self.parent.rect[1]))
-            self.rect = self.rect.move(xshift, 0)
-            self.parent.cards += 1
+            self.parent = globals.background
+            xshift = 389 + globals.cardofelementsshower.cards * self.image.get_size()[0] + globals.cardofelementsshower.shift * globals.cardofelementsshower.cards
+            #xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
+            yshift = 436
+            self.parent.blit(self.image, (xshift, yshift))
+            self.rect = self.image.get_rect()
+            self.rect = self.rect.move(xshift, yshift)
+            globals.cardofelementsshower.cards += 1
         else:
             self.parent.image.blit(self.image, (0, 0))
 class Nixie(Prototype):
@@ -619,7 +621,7 @@ class Fairy(Prototype):
         Prototype.enemy_die(self)
         self.default_power = 3 + self.killed
         self.power = self.default_power
-        self.update(0)
+        self.update()
     def cast_action(self):
         if self.parent.player.air_mana:
             self.used_cast = True
@@ -649,7 +651,7 @@ class Phoenix(Prototype):
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast=False):
         self.health -= damage
-        self.update(0)
+        self.update()
         if self.health <= 0:
             if enemy.element == "fire": #Если стихия врага - огонь
                 if not self.recovered: #если не восстанавливалась
@@ -789,7 +791,7 @@ class Titan(Prototype):
 #    def enemy_die(self): #Перепутал способность
 #        Prototype.enemy_die(self)
 #        self.power+=1
-#        self.update(None)
+#        self.update()
 class Satyr(Prototype):
     def __init__(self):        
         self.name = "Satyr"        
@@ -861,7 +863,7 @@ class ForestSpirit(Prototype):
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast=False):
         self.health -= 1
-        self.update(0)
+        self.update()
         if self.health <= 0:
             self.die()
             return 1
@@ -1155,7 +1157,7 @@ class Zombie(Prototype):
     def enemy_die(self):
         self.max_health += 3
         self.health = self.max_health
-        self.update(None)
+        self.update()
 class Ghost(Prototype):
     def __init__(self):        
         self.name = "Ghost"
@@ -1369,17 +1371,18 @@ class Magic(pygame.sprite.Sprite):
         return cards
     def periodical_cast(self):
         pass
-    def update(self, cards_of_element_shower): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
+    def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = globals.font.render(str(self.level), True, self.font_color)
         self.image = self.surface_backup.copy()
-        self.image.blit(text_level, (130, 0))
+        self.image.blit(text_level, (85, 0))
         if not self.field: #Рисование в колоде
-            self.parent = cards_of_element_shower
-            xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
-            self.parent.image.blit(self.image, (xshift, 0))
-            self.rect = self.image.get_rect().move((self.parent.rect[0], self.parent.rect[1]))
-            self.rect = self.rect.move(xshift, 0)
-            self.parent.cards += 1
+            self.parent = globals.background
+            xshift = 389 + globals.cardofelementsshower.cards * self.image.get_size()[0] + globals.cardofelementsshower.shift * globals.cardofelementsshower.cards
+            yshift = 436
+            self.parent.blit(self.image, (xshift, yshift))
+            self.rect = self.image.get_rect()
+            self.rect = self.rect.move(xshift, yshift)
+            globals.cardofelementsshower.cards += 1
         else:
             self.parent.image.blit(self.image, (0, 0))
 class Poison(Magic):
