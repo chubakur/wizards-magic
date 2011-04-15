@@ -240,13 +240,14 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.image.blit(self.light_image, (10, 50))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
-            xshift = 389 + globals.cardofelementsshower.cards * self.image.get_size()[0] + globals.cardofelementsshower.shift * globals.cardofelementsshower.cards
-            #xshift = self.parent.shift * (self.parent.cards + 1) + self.parent.cards * 160
+            if globals.cardofelementsshower.first_part:
+                xshift = 389 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck
+            else:
+                xshift = 389 + (self.position_in_deck - 1) * self.image.get_size()[0] + globals.cardofelementsshower.shift * (self.position_in_deck - 1)
             yshift = 436
             self.parent.blit(self.image, (xshift, yshift))
             self.rect = self.image.get_rect()
             self.rect = self.rect.move(xshift, yshift)
-            globals.cardofelementsshower.cards += 1
         else:
             self.parent.image.blit(self.image, (0, 0))
 class Nixie(Prototype):
@@ -1377,12 +1378,14 @@ class Magic(pygame.sprite.Sprite):
         self.image.blit(text_level, (85, 0))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
-            xshift = 389 + globals.cardofelementsshower.cards * self.image.get_size()[0] + globals.cardofelementsshower.shift * globals.cardofelementsshower.cards
+            if globals.cardofelementsshower.first_part:
+                xshift = 389 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck
+            else:
+                xshift = 389 + (self.position_in_deck - 1) * self.image.get_size()[0] + globals.cardofelementsshower.shift * (self.position_in_deck - 1)
             yshift = 436
             self.parent.blit(self.image, (xshift, yshift))
             self.rect = self.image.get_rect()
             self.rect = self.rect.move(xshift, yshift)
-            globals.cardofelementsshower.cards += 1
         else:
             self.parent.image.blit(self.image, (0, 0))
 class Poison(Magic):

@@ -40,32 +40,39 @@ class Player(): #Прототип игрока
             #получаем карту элемента воды
             randnum = random.randint(0, len(cards.water_cards)-1)
             self.water_cards.append(cards.water_cards[randnum])
+            #print "self." + cards.water_cards[randnum].lower() + "=cards." + cards.water_cards[randnum] + "()"
             exec("self." + cards.water_cards[randnum].lower() + "=cards." + cards.water_cards[randnum] + "()")
+            exec("self." + cards.water_cards[randnum].lower() + ".position_in_deck="+str(i))
             cards.water_cards.remove(cards.water_cards[randnum])
             #Элемент огня
             randnum = random.randint(0, len(cards.fire_cards)-1)
             self.fire_cards.append(cards.fire_cards[randnum])
             exec("self." + cards.fire_cards[randnum].lower() + "=cards." + cards.fire_cards[randnum] + "()")
+            exec("self." + cards.fire_cards[randnum].lower() + ".position_in_deck="+str(i))
             cards.fire_cards.remove(cards.fire_cards[randnum])
             #Элемент воздуха
             randnum = random.randint(0, len(cards.air_cards)-1)
             self.air_cards.append(cards.air_cards[randnum])
             exec("self." + cards.air_cards[randnum].lower() + "=cards." + cards.air_cards[randnum] + "()")
+            exec("self." + cards.air_cards[randnum].lower() + ".position_in_deck="+str(i))
             cards.air_cards.remove(cards.air_cards[randnum])
             #Элемент земли
             randnum = random.randint(0, len(cards.earth_cards)-1)
             self.earth_cards.append(cards.earth_cards[randnum])
             exec("self." + cards.earth_cards[randnum].lower() + "=cards." + cards.earth_cards[randnum] + "()")
+            exec("self." + cards.earth_cards[randnum].lower() + ".position_in_deck="+str(i))
             cards.earth_cards.remove(cards.earth_cards[randnum])
             #Элемент жизни
             randnum = random.randint(0, len(cards.life_cards)-1)
             self.life_cards.append(cards.life_cards[randnum])
             exec("self." + cards.life_cards[randnum].lower() + "=cards." + cards.life_cards[randnum] + "()")
+            exec("self." + cards.life_cards[randnum].lower() + ".position_in_deck="+str(i))
             cards.life_cards.remove(cards.life_cards[randnum])
             #Элемент смерти
             randnum = random.randint(0, len(cards.death_cards)-1)
             self.death_cards.append(cards.death_cards[randnum])
             exec("self." + cards.death_cards[randnum].lower() + "=cards." + cards.death_cards[randnum] + "()")
+            exec("self." + cards.death_cards[randnum].lower() + ".position_in_deck="+str(i))
             cards.death_cards.remove(cards.death_cards[randnum])
 class Player1(Player):
     def __init__(self):

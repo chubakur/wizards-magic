@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import globals
 import pygame
+import time
 #globals.cards_of_element_shower_element содержит стихию
 class LeftArrow(pygame.sprite.Sprite):
     def __init__(self, rect):
@@ -64,7 +65,6 @@ class CardsOfElementShower(pygame.sprite.Sprite):
     def update(self):
         #print self.type, 'update'
         globals.cards_in_deck.empty()
-        self.cards = 0
         if globals.cards_of_element_shower_element == "water":
             if self.first_part:
                 for card in globals.player.water_cards[0:3]:
