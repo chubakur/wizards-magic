@@ -66,21 +66,21 @@ globals.event_handler = eventhandler.Event_handler()
 # 5 6 7 8 9
 globals.cardbox0 = cardbox.Cardbox((32, 44), globals.player1, 0) #0 место на поле
 globals.cardbox1 = cardbox.Cardbox((187, 44), globals.player1, 1) #1 место на поле
-globals.cardbox2 = cardbox.Cardbox((340, 44), globals.player1, 2) #2 место на поле
-globals.cardbox3 = cardbox.Cardbox((495, 44), globals.player1, 3) #3 место на поле
+globals.cardbox2 = cardbox.Cardbox((341, 44), globals.player1, 2) #2 место на поле
+globals.cardbox3 = cardbox.Cardbox((497, 44), globals.player1, 3) #3 место на поле
 globals.cardbox4 = cardbox.Cardbox((651, 44), globals.player1, 4) #4 место на поле
 globals.cardbox5 = cardbox.Cardbox((32, 248), globals.player2, 5) #5 место на поле
 globals.cardbox6 = cardbox.Cardbox((187, 248), globals.player2, 6) #6 место на поле
-globals.cardbox7 = cardbox.Cardbox((340, 248), globals.player2, 7) #7 место на поле
-globals.cardbox8 = cardbox.Cardbox((495, 248), globals.player2, 8) #8 место на поле
+globals.cardbox7 = cardbox.Cardbox((341, 248), globals.player2, 7) #7 место на поле
+globals.cardbox8 = cardbox.Cardbox((497, 248), globals.player2, 8) #8 место на поле
 globals.cardbox9 = cardbox.Cardbox((651, 248), globals.player2, 9) #9 место на поле
 globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
 #playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
-#healthwindow.HealthWindow((0, 0), globals.infopanel1) #Окошко здоровья верхнего игрока
-#healthwindow.HealthWindow((0, 0), globals.infopanel2) #Окошко здоровья нижнего игрока
+healthwindow.HealthWindow((90, 10), globals.player1) #Окошко здоровья верхнего игрока
+healthwindow.HealthWindow((90, 464), globals.player2) #Окошко здоровья нижнего игрока
 # Кнопки колод стихий первого игрока
 elementbutton.WaterElementButton((369, 0),  globals.player1)
 elementbutton.FireElementButton((400, 0),  globals.player1)
@@ -99,9 +99,10 @@ elementbutton.DeathElementButton((341, 430), globals.player2)
 completethecoursebutton.CompleteTheCourseButton((760, 0), globals.player1)
 completethecoursebutton.CompleteTheCourseButton((760, 430), globals.player2)
 #Окна выбора карты стихии
-#globals.cardsofelementshower1 = cardsofelementshower.CardsOfElementShower((0, 301), globals.player1)
-#globals.cardsofelementshower2 = cardsofelementshower.CardsOfElementShower((0, 55), globals.player2)
 globals.cardofelementsshower = cardsofelementshower.CardsOfElementShower()
+#стрелочки для сдвига карт в колоде
+globals.leftarrow = cardsofelementshower.LeftArrow((356,489))
+globals.rightarrow = cardsofelementshower.RightArrow((739,491))
 globals.gameinformationpanel = gameinformation.GameInformationPanel()
 globals.gameinformationpanel.display('Battle started.')
 #********************************************************************************
@@ -127,4 +128,4 @@ while 1:
     #globals.background.fill((0,0,0))
     globals.background = background_backup.copy()
     pygame.display.flip()
-    clock.tick(10)
+    clock.tick(25)

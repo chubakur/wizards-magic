@@ -16,7 +16,7 @@ class Point(pygame.sprite.Sprite):
         self.rect = self.rect.move(rect)
 class Event_handler():
     def __init__(self):
-        pass
+        self.onmouse_element = False
     def event(self, event):
         if event.type == QUIT:
             sys.exit(0)
@@ -32,6 +32,9 @@ class Event_handler():
                 if not collided:
                     return
                 item = collided[len(collided)-1]
+                if item.type == 'button':
+                    item.onmousedown()
+                    return
                 if item.type == "warrior_card": #Карта в колоде! Карта на поле в cardbox
                     exec('selected_card_0 = cards.' + item.name + '()') #Переменной selected_card_0 присваиваем новый объект
                     globals.selected_card = selected_card_0 # из локальной в глобальную
@@ -57,9 +60,6 @@ class Event_handler():
                         selected_card.player = globals.player
                         selected_card.cast() #вызываем магию, периодизация делается уже внутри класса, путем добавления в группу globals.magic_cards
                         #Закрываем колоду
-                        globals.interface.remove(globals.cardsofelementshower1)
-                        globals.interface.remove(globals.cardsofelementshower2)
-                        globals.cards_in_deck.empty()
                         for cardbox in globals.cardboxes:
                             cardbox.light = False
                     else:
@@ -161,3 +161,21 @@ class Event_handler():
                 if globals.cardinfo.show:
                     globals.cardinfo.show = False
                     globals.card_info_group.empty()
+            else: #1 
+                for elem in globals.interface:
+                    if elem.type == 'button':
+                        elem.onmouseup()
+        elif event.type == MOUSEMOTION:
+            globals.point.draw(event.pos)
+            collided = pygame.sprite.spritecollide(globals.point, globals.interface, 0)
+            if not collided:
+                if self.onmouse_element:
+                    self.onmouse_element.onmouseout()
+                    self.onmouse_element = False
+                return
+            item = collided[len(collided)-1]
+            if item.type == 'button':
+                if self.onmouse_element != item:
+                    item.onmouseout()
+                self.onmouse_element = item
+                item.onmouse()

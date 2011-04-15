@@ -2,13 +2,58 @@
 import globals
 import pygame
 #globals.cards_of_element_shower_element содержит стихию
+class LeftArrow(pygame.sprite.Sprite):
+    def __init__(self, rect):
+        pygame.sprite.Sprite.__init__(self)
+        self.type = 'button'
+        self.image_normal = pygame.image.load('misc/book_button_left_normal.gif')
+        self.image_onmouse = pygame.image.load('misc/book_button_left_onmouse.gif')
+        self.image_onclick = pygame.image.load('misc/book_button_left_onclick.gif')
+        self.image = self.image_normal
+        self.rect = self.image.get_rect().move(rect)
+        globals.interface.add(self)
+    def onmousedown(self):
+        self.image = self.image_onclick
+        globals.cardofelementsshower.first_part = True
+    def onmouse(self):
+        self.image = self.image_onmouse
+    def onmouseout(self):
+        self.image = self.image_normal
+    def onmouseup(self):
+        self.image = self.image_normal
+    def draw(self):
+        globals.background.blit(self.image, self.rect)
+    def update(self):
+        self.draw()
+class RightArrow(pygame.sprite.Sprite):
+    def __init__(self, rect):
+        pygame.sprite.Sprite.__init__(self)
+        self.type = 'button'
+        self.image_normal = pygame.image.load('misc/book_button_right_normal.gif')
+        self.image_onmouse = pygame.image.load('misc/book_button_right_onmouse.gif')
+        self.image_onclick = pygame.image.load('misc/book_button_right_onclick.gif')
+        self.image = self.image_normal
+        self.rect = self.image.get_rect().move(rect)
+        globals.interface.add(self)
+    def onmousedown(self):
+        self.image = self.image_onclick
+        globals.cardofelementsshower.first_part = False
+    def onmouse(self):
+        self.image = self.image_onmouse
+    def onmouseout(self):
+        self.image = self.image_normal
+    def onmouseup(self):
+        self.image = self.image_normal
+    def draw(self):
+        globals.background.blit(self.image, self.rect)
+    def update(self):
+        self.draw()
 class CardsOfElementShower(pygame.sprite.Sprite):
     #Не прототип!
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         #self.player = player
         self.type = 'cardsofelementshower'
-        self.image = pygame.image.load('misc/cards_box.gif').convert_alpha()
         #self.rect = self.image.get_rect().move((rect[0], rect[1]))
         self.cards = 0
         self.shift = 2
