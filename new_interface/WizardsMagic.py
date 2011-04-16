@@ -79,22 +79,22 @@ globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globa
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
-healthwindow.HealthWindow((90, 10), globals.player1) #Окошко здоровья верхнего игрока
-healthwindow.HealthWindow((90, 464), globals.player2) #Окошко здоровья нижнего игрока
+healthwindow.HealthWindow((90, 10)) #Окошко здоровья верхнего игрока
+healthwindow.HealthWindowEnemy((90, 464)) #Окошко здоровья нижнего игрока
 # Кнопки колод стихий первого игрока
-elementbutton.WaterElementButton((369, 0),  globals.player1)
-elementbutton.FireElementButton((400, 0),  globals.player1)
-elementbutton.AirElementButton((431, 0),  globals.player1)
-elementbutton.EarthElementButton((462, 0),  globals.player1)
-elementbutton.LifeElementButton((493, 0),  globals.player1)
-elementbutton.DeathElementButton((524, 0), globals.player1)
+elementbutton.WaterElementShower((391, 10))
+elementbutton.FireElementShower((413, 10))
+elementbutton.AirElementShower((436, 10))
+elementbutton.EarthElementShower((458, 10))
+elementbutton.LifeElementShower((480, 10))
+elementbutton.DeathElementShower((502, 10))
 # Кнопки колод стихий второго игрока
-elementbutton.WaterElementButton((186, 430),  globals.player2)
-elementbutton.FireElementButton((217, 430),  globals.player2)
-elementbutton.AirElementButton((248, 430),  globals.player2)
-elementbutton.EarthElementButton((279, 430),  globals.player2)
-elementbutton.LifeElementButton((310, 430),  globals.player2)
-elementbutton.DeathElementButton((341, 430), globals.player2)
+globals.water_element_button = elementbutton.WaterElementButton((176, 429))
+globals.fire_element_button = elementbutton.FireElementButton((207, 429))
+globals.air_element_button = elementbutton.AirElementButton((238, 429))
+globals.earth_element_button = elementbutton.EarthElementButton((269, 429))
+globals.life_element_button = elementbutton.LifeElementButton((300, 429))
+globals.death_element_button = elementbutton.DeathElementButton((331, 429))
 #Кнопки завершения хода первого и второго игрока.
 completethecoursebutton.CompleteTheCourseButton((760, 0), globals.player1)
 completethecoursebutton.CompleteTheCourseButton((760, 430), globals.player2)

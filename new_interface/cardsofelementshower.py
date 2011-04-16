@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import globals
 import pygame
-import time
 #globals.cards_of_element_shower_element содержит стихию
 class LeftArrow(pygame.sprite.Sprite):
     def __init__(self, rect):

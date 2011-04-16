@@ -32,6 +32,8 @@ class Event_handler():
                 if not collided:
                     return
                 item = collided[len(collided)-1]
+                if item.type == 'outer':
+                    return
                 if item.type == 'button':
                     item.onmousedown()
                     return
@@ -107,21 +109,6 @@ class Event_handler():
                         else:
                             globals.ccards_2.add(item.card)
                         globals.selected_card = 0
-                if item.type == 'elementbutton':
-#                    global cards_of_element_shower_element
-                    globals.cards_in_deck.empty()
-                    if item.element == 'water':
-                        globals.cards_of_element_shower_element = "water"
-                    elif item.element == 'fire':
-                        globals.cards_of_element_shower_element = "fire"
-                    elif item.element == 'air':
-                        globals.cards_of_element_shower_element = "air"
-                    elif item.element == 'earth':
-                        globals.cards_of_element_shower_element = "earth"
-                    elif item.element == 'life':
-                        globals.cards_of_element_shower_element = "life"
-                    elif item.element == 'death':
-                        globals.cards_of_element_shower_element = "death"
                 elif item.type == 'completethecoursebutton':
                     player.finish_turn()
             elif event.button == 3: #ПРАВАЯ КНОПКА МЫШИ
