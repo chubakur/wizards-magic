@@ -7,6 +7,7 @@ class Cardbox(pygame.sprite.Sprite):
         self.type = 'cardbox'
         self.position = position
         self.player = player #первый или второй
+        self.opposite = False
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert_alpha()
         self.light_image = pygame.image.load('misc/cardbox-activated.gif').convert_alpha()
         self.surface_backup = self.image.copy()
@@ -18,15 +19,23 @@ class Cardbox(pygame.sprite.Sprite):
         if self.position < 5:
             opposite_position = self.position + 5 #Id - блока, куда атаковать
         else:
-            opposite_position = self.position-5
+            opposite_position = self.position - 5
         return globals.cardboxes[opposite_position]
     def draw(self):
         #self.image = self.surface_backup.copy()
         if self.light:
             self.image.blit(self.light_image,(0,0))
+            if not self.opposite:
+                self.rect = self.normal_rect
+            else:
+                self.rect = self.opposite_rect
             globals.background.blit(self.image, self.rect)
             self.image = self.surface_backup.copy()
             return
+        if not self.opposite:
+            self.rect = self.normal_rect
+        else:
+            self.rect = self.opposite_rect
         globals.background.blit(self.image, self.rect)
     def update(self):
         self.draw()

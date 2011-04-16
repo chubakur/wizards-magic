@@ -75,6 +75,9 @@ globals.cardbox7 = cardbox.Cardbox((341, 248), globals.player2, 7) #7 место
 globals.cardbox8 = cardbox.Cardbox((497, 248), globals.player2, 8) #8 место на поле
 globals.cardbox9 = cardbox.Cardbox((651, 248), globals.player2, 9) #9 место на поле
 globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
+for cardbox in globals.cardboxes:
+    cardbox.normal_rect = cardbox.rect.copy()
+    cardbox.opposite_rect = cardbox.get_opposite_cardbox().rect.copy()
 #playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
@@ -105,6 +108,7 @@ globals.leftarrow = cardsofelementshower.LeftArrow((356,489))
 globals.rightarrow = cardsofelementshower.RightArrow((739,491))
 globals.gameinformationpanel = gameinformation.GameInformationPanel()
 globals.gameinformationpanel.display('Battle started.')
+player.switch_position()
 #********************************************************************************
 globals.screen.blit(globals.background, (0, 0))
 globals.panels.update()
