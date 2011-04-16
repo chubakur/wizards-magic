@@ -14,6 +14,12 @@ class Cardbox(pygame.sprite.Sprite):
         self.card = self.player
         self.light = False
         globals.panels.add(self)
+    def get_opposite_cardbox(self):
+        if self.position < 5:
+            opposite_position = self.position + 5 #Id - блока, куда атаковать
+        else:
+            opposite_position = self.position-5
+        return globals.cardboxes[opposite_position]
     def draw(self):
         #self.image = self.surface_backup.copy()
         if self.light:
