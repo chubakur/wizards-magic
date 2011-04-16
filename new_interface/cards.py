@@ -159,6 +159,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
+            print globals.cardboxes[attack_position].card
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
             return kill
         else:

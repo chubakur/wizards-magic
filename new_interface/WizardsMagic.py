@@ -82,8 +82,8 @@ for cardbox in globals.cardboxes:
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
-healthwindow.HealthWindow((90, 10)) #Окошко здоровья верхнего игрока
-healthwindow.HealthWindowEnemy((90, 464)) #Окошко здоровья нижнего игрока
+healthwindow.HealthWindowEnemy((90, 10)) #Окошко здоровья верхнего игрока
+healthwindow.HealthWindow((90, 464)) #Окошко здоровья нижнего игрока
 # Кнопки колод стихий первого игрока
 elementbutton.WaterElementShower((391, 10))
 elementbutton.FireElementShower((413, 10))
