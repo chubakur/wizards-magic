@@ -16,7 +16,10 @@ class CompleteTheCourseButton(pygame.sprite.Sprite):
     def onmouseout(self):
         pass
     def onmousedown(self):
-        player.finish_turn()
+        if globals.player_id == globals.player.id:
+            player.finish_turn()
+        else:
+            return
     def onmouseup(self):
         pass
     def draw(self):

@@ -184,7 +184,7 @@ def server_handler():
                     exec("globals.player2."+card.lower()+"= cards."+card+"()")
                     exec("globals.player2."+card.lower()+".position_in_deck = " +str(position))
                     position += 1
-                    if position > 4:
+                    if position > 3:
                         position = 0
                 globals.player2.cards_generated = True
             globals.information_group.remove(globals.importantmessage)
