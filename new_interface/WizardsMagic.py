@@ -99,8 +99,7 @@ globals.earth_element_button = elementbutton.EarthElementButton((269, 429))
 globals.life_element_button = elementbutton.LifeElementButton((300, 429))
 globals.death_element_button = elementbutton.DeathElementButton((331, 429))
 #Кнопки завершения хода первого и второго игрока.
-completethecoursebutton.CompleteTheCourseButton((760, 0), globals.player1)
-completethecoursebutton.CompleteTheCourseButton((760, 430), globals.player2)
+completethecoursebutton.CompleteTheCourseButton((760, 430))
 #Окна выбора карты стихии
 globals.cardofelementsshower = cardsofelementshower.CardsOfElementShower()
 #стрелочки для сдвига карт в колоде

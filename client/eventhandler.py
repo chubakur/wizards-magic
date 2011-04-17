@@ -179,9 +179,6 @@ class Event_handler():
                         globals.cardinfo.show = True
                 if item.type == 'cardsofelementshower':
                     play_bookclose_sound()
-                    globals.interface.remove(globals.cardsofelementshower1)
-                    globals.interface.remove(globals.cardsofelementshower2)
-                    globals.cards_in_deck.empty()
                     for cardbox in globals.cardboxes:
                         cardbox.light = False
         elif event.type == MOUSEBUTTONUP: #отпускаем кнопку мыши

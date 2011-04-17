@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import globals
 import pygame
-import player
 import cards
 import sys
 from pygame.locals import *
@@ -109,8 +108,6 @@ class Event_handler():
                         else:
                             globals.ccards_2.add(item.card)
                         globals.selected_card = 0
-                elif item.type == 'completethecoursebutton':
-                    player.finish_turn()
             elif event.button == 3: #ПРАВАЯ КНОПКА МЫШИ
                 if globals.cast_focus:
                     globals.cast_focus = False

@@ -216,7 +216,6 @@ def server_handler():
             globals.opponent_disconnect = True
             globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was been disconnected from game.')
 thread.start_new_thread(server_handler, ())
-a = 0
 while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)
@@ -234,7 +233,6 @@ while 1:
     globals.screen.blit(globals.background, (0, 0))
     globals.background.fill((0, 0, 0))
     pygame.display.flip()
-    a+=1
     #print a
     clock.tick(10)
 sock.close()
