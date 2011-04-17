@@ -10,7 +10,7 @@ class ElementShower(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
         #self.image = self.surface_backup.copy()
-        exec("text = self.font.render(str(globals.player.enemy" + "." + self.element + "_mana),True,(255,255,255))")
+        exec("text = self.font.render(str(globals.player.enemy" + "." + self.element + "_mana),True,"+self.color+")")
         #self.image.blit(text, (2, 9))
         globals.background.blit(text, self.rect)
     def update(self):
@@ -19,12 +19,14 @@ class WaterElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'water'
+        self.color = "(255,255,255)"
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         globals.interface.add(self)
 class FireElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'fire'
+        self.color = "(255,255,255)"
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -32,6 +34,7 @@ class AirElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'air'
+        self.color = "(0,0,0)"
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -39,6 +42,7 @@ class EarthElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'earth'
+        self.color = "(0,0,0)"
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -46,6 +50,7 @@ class LifeElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'life'
+        self.color = "(0,0,0)"
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -53,6 +58,7 @@ class DeathElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'death'
+        self.color = "(255,255,255)"
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
