@@ -95,12 +95,12 @@ for cardbox in globals.cardboxes:
 healthwindow.HealthWindowEnemy((90, 10)) #Окошко здоровья верхнего игрока
 healthwindow.HealthWindow((90, 464)) #Окошко здоровья нижнего игрока
 # Кнопки колод стихий первого игрока
-elementbutton.WaterElementShower((391, 10))
-elementbutton.FireElementShower((413, 10))
-elementbutton.AirElementShower((436, 10))
-elementbutton.EarthElementShower((458, 10))
-elementbutton.LifeElementShower((480, 10))
-elementbutton.DeathElementShower((502, 10))
+elementbutton.WaterElementShower((385, 10))
+elementbutton.FireElementShower((419, 10))
+elementbutton.AirElementShower((450, 10))
+elementbutton.EarthElementShower((480, 10))
+elementbutton.LifeElementShower((514, 10))
+elementbutton.DeathElementShower((546, 10))
 # Кнопки колод стихий второго игрока
 globals.water_element_button = elementbutton.WaterElementButton((176, 429))
 globals.fire_element_button = elementbutton.FireElementButton((207, 429))
