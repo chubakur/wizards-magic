@@ -23,6 +23,8 @@ class CompleteTheCourseButton(pygame.sprite.Sprite):
     def onmouseup(self):
         pass
     def draw(self):
+        if globals.player.id != globals.player_id:
+            return
         globals.background.blit(self.image, self.relative_rect)
     def update(self):
         self.draw()
