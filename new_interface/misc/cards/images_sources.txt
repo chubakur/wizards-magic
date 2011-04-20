@@ -1,0 +1,8 @@
+List of artwork used for cards
+
+
+Nr | Card Name | Author | Source (URL) | Comment
+------------------------------------------------
+1 | darklord | xeranas | http://xeranas.deviantart.com/art/nobody-201634818 | -
+2 | ice_wizard | / | http://www.openclipart.org/detail/29503 | Edited
+
