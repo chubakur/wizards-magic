@@ -4,5 +4,6 @@ List of artwork used for cards
 Nr | Card Name | Author | Source (URL) | Comment
 ------------------------------------------------
 1 | darklord | xeranas | http://xeranas.deviantart.com/art/nobody-201634818 | -
-2 | ice_wizard | / | http://www.openclipart.org/detail/29503 | Edited
+2 | ice_wizard | N/A | http://www.openclipart.org/detail/29503 | Edited
+3 | priest | AJ | http://www.openclipart.org/detail/1371 | Colored
 
