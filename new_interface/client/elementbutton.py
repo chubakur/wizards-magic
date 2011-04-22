@@ -10,7 +10,7 @@ class ElementShower(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
         #self.image = self.surface_backup.copy()
-        exec("text = self.font.render(str(globals.player.enemy" + "." + self.element + "_mana),True,"+self.color+")")
+        exec("text = self.font.render(str(globals.player"+ str(globals.player_id) +".enemy" + "." + self.element + "_mana),True,"+self.color+")")
         #self.image.blit(text, (2, 9))
         globals.background.blit(text, self.rect)
     def update(self):
@@ -71,7 +71,7 @@ class ElementButton(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
         self.image = self.surface_backup.copy()
-        exec("text = self.font.render(str(globals.player" + "." + self.element + "_mana),True,"+self.color+")")
+        exec("text = self.font.render(str(globals.player" + str(globals.player_id) + "." + self.element + "_mana),True,"+self.color+")")
         self.image.blit(text, (2, 9))
         globals.background.blit(self.image, self.rect)
     def update(self):

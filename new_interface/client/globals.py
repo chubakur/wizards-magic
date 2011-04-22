@@ -14,9 +14,10 @@ font = pygame.font.Font("misc/Domestic_Manners.ttf", 15)
 #print pygame.font.match_font('Arial')
 screen = None
 player = None
-player_id = 0
+player_id = 1
 player1 = None
 player2 = None
+players = []
 opponent_disconnect = False
 #Каст с выбором цели
 cast_focus = False #включен ли режим
