@@ -1172,8 +1172,8 @@ class Ghost(Prototype):
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast = False):
         if not cast:
-            Prototype.damage(self, damage / 2, enemy)
-            self.parent.player.damage(damage / 2, enemy)
+            Prototype.damage(self, int(ceil(damage / floor(2))), enemy)
+            self.parent.player.damage(int(ceil(damage / floor(2))), enemy)
         else:
             Prototype.damage(self, damage * 2, enemy, True)
     def cast_action(self):

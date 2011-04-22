@@ -62,6 +62,8 @@ globals.player2 = player.Player2()
 globals.player1.enemy = globals.player2
 globals.player2.enemy = globals.player1
 globals.player = globals.player1
+globals.players.append(globals.player1)
+globals.players.append(globals.player2)
 globals.point = eventhandler.Point()
 globals.cardinfo = cardinfo.CardInfo()
 ###############################################################################################################
@@ -116,8 +118,6 @@ globals.cardofelementsshower = cardsofelementshower.CardsOfElementShower()
 globals.leftarrow = cardsofelementshower.LeftArrow((356,489))
 globals.rightarrow = cardsofelementshower.RightArrow((739,491))
 globals.gameinformationpanel = gameinformation.GameInformationPanel()
-globals.gameinformationpanel.display('Battle started.')
-player.switch_position()
 globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
 #********************************************************************************
 globals.screen.blit(globals.background, (0, 0))
@@ -136,6 +136,8 @@ def server_handler():
         if gi['action'] == 'join':
             print("Join to Game with Player_id "+str(gi['id']))
             globals.player_id = gi['id']
+            if globals.player_id == 1:
+                player.switch_position()
         elif gi['action'] == 'update':
             #Устанавливаем ники
             globals.player1.nickname = gi['nicknames'][0]
@@ -189,6 +191,7 @@ def server_handler():
                 globals.player2.cards_generated = True
             globals.information_group.remove(globals.importantmessage)
             del globals.importantmessage
+            globals.gameinformationpanel.display('Battle started.')
         elif gi['action'] == 'switch_turn':
             player.me_finish_turn()
         elif gi['action'] == 'card':
@@ -221,7 +224,7 @@ def server_handler():
                              #  item.card.cast_action()
         elif gi['action'] == "opponent_disconnect":
             globals.opponent_disconnect = True
-            globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was been disconnected from game.')
+            globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
 thread.start_new_thread(server_handler, ())
 while 1:
     for event in pygame.event.get():

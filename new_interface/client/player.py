@@ -134,7 +134,6 @@ def me_finish_turn():
             card.turn()
         for card in globals.ccards_1:
             card.additional_turn_action()
-    switch_position()
 def finish_turn():
     me_finish_turn()
     sockets.query({"action":"switch_turn"})
