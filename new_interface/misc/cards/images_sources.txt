@@ -4,7 +4,9 @@ List of artwork used for cards
 Nr | Card Name | Author | Source (URL) | Comment
 ------------------------------------------------
 1 | darklord | xeranas | http://xeranas.deviantart.com/art/nobody-201634818 | -
-2 | ice_wizard | N/A | http://www.openclipart.org/detail/29503 | Edited
+2 | ice_wizard | ? | http://www.openclipart.org/detail/29503 | Edited
 3 | priest | AJ | http://www.openclipart.org/detail/1371 | Colored
 4 | magic_healer | Wesnoth artist / Peileppe | http://www.openclipart.org/people/Peileppe/Peileppe_Delfador.svg | Edited
+5 | chain_lightning | xeranas | - | -
+6 | vampire | Ricardo / Peileppe | http://www.openclipart.org/detail/16553 | Edited
 
