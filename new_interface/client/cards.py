@@ -1087,31 +1087,29 @@ class MagicHealer(Prototype):
         self.power = 2
         self.cast = False
         self.health = 10
-#        self.security_slots = []
+        self.security_slots = []
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
-#    def summon(self):
-#        for cardbox in self.get_self_cardboxes():
-#            if cardbox.card.name == "player":
-#                cardbox.card = MagicHealerChakra(self)
-#                cardbox.card.parent = self.parent
-#                self.security_slots.append(cardbox)
-#    def card_summoned(self, card):
-#        if card.parent.player.id == self.parent.player.id:
-#            for slot in self.security_slots:
-#                if slot.position == card.parent.position:
-#                    self.security_slots.remove(slot)
-#    def card_died(self, card):
-#        if card.parent.player.id == self.parent.player.id:
-#            card.parent.card = MagicHealerChakra(self)
-#            self.security_slots.append(cardbox)
-#    def die(self):
-#        for slot in self.security_slots:
-#            print 'B:',slot.position,slot.card
-#            slot.card.die()
-#            print 'A:',slot.position,slot.card
-#        self.security_slots = []
-#        Prototype.die(self)
+    def summon(self):
+        for cardbox in self.get_self_cardboxes():
+            if cardbox.card.name == "player":
+                cardbox.card = MagicHealerChakra(self)
+                cardbox.card.parent = cardbox
+                self.security_slots.append(cardbox)
+    def card_summoned(self, card):
+        if card.parent.player.id == self.parent.player.id:
+            for slot in self.security_slots:
+                if slot.position == card.parent.position:
+                    self.security_slots.remove(slot)
+    def card_died(self, card):
+        if card.parent.player.id == self.parent.player.id:
+            card.parent.card = MagicHealerChakra(self)
+            self.security_slots.append(cardbox)
+    def die(self):
+        for slot in self.security_slots:
+            slot.card.die()
+        self.security_slots = []
+        Prototype.die(self)
 class MagicHealerChakra(Prototype):
     def __init__(self, owner):
         self.name = "player"
@@ -1124,10 +1122,10 @@ class MagicHealerChakra(Prototype):
         Prototype.__init__(self)
     def die(self):
         self.parent.card = self.parent.player
+        del self
     def attack(self):
         return
     def damage(self, damage, enemy, cast=False):
-        print "Recurse Damage to Owner"
         self.owner.damage(damage, enemy, cast)
 class Chimera(Prototype):
     def __init__(self):        
