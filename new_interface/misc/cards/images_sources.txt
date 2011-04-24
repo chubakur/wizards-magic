@@ -4,9 +4,10 @@ List of artwork used for cards
 Nr | Card Name | Author | Source (URL) | Comment
 ------------------------------------------------
 1 | darklord | xeranas | http://xeranas.deviantart.com/art/nobody-201634818 | -
-2 | ice_wizard | ? | http://www.openclipart.org/detail/29503 | Edited
-3 | priest | AJ | http://www.openclipart.org/detail/1371 | Colored
-4 | magic_healer | Wesnoth artist / Peileppe | http://www.openclipart.org/people/Peileppe/Peileppe_Delfador.svg | Edited
+2 | ice_wizard | ? | http://www.openclipart.org/detail/29503 | Edited by xeranas
+3 | priest | AJ | http://www.openclipart.org/detail/1371 | Colored by xeranas
+4 | magic_healer | Wesnoth artist / Peileppe | http://www.openclipart.org/people/Peileppe/Peileppe_Delfador.svg | Edited by xeranas
 5 | chain_lightning | xeranas | - | -
-6 | vampire | Ricardo / Peileppe | http://www.openclipart.org/detail/16553 | Edited
-
+6 | vampire | Ricardo / Peileppe | http://www.openclipart.org/detail/16553 | Edited by xeranas
+7 | devil | johnny_automatic | http://www.openclipart.org/detail/4369 | Colored by xeranas
+8 | fairy | Harriet Mead Olcott / johnny_automatic | http://www.openclipart.org/detail/10480 | Colored by xeranas
