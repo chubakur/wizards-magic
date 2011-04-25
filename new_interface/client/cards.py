@@ -233,9 +233,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 text_cast = font.render("Cast", True, (0, 0, 0))
                 self.image.blit(text_cast, (50, 100))
         #print text_power
-        self.image.blit(text_level, (85, 0))
-        self.image.blit(text_power, (10, 130))
-        self.image.blit(text_health, (85, 130))
+        self.image.blit(text_level, (90, -7))
+        self.image.blit(text_power, (5, 137))
+        self.image.blit(text_health, (90, 137))
         if self.light:
             self.image.blit(self.light_image, (10, 50))
         if not self.field: #Рисование в колоде
@@ -1373,7 +1373,7 @@ class Magic(pygame.sprite.Sprite):
     def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = globals.font.render(str(self.level), True, self.font_color)
         self.image = self.surface_backup.copy()
-        self.image.blit(text_level, (85, 0))
+        self.image.blit(text_level, (90, -7))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
             if globals.cardofelementsshower.first_part:
