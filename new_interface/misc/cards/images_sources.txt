@@ -11,3 +11,7 @@ Nr | Card Name | Author | Source (URL) | Comment
 6 | vampire | Ricardo / Peileppe | http://www.openclipart.org/detail/16553 | Edited by xeranas
 7 | devil | johnny_automatic | http://www.openclipart.org/detail/4369 | Colored by xeranas
 8 | fairy | Harriet Mead Olcott / johnny_automatic | http://www.openclipart.org/detail/10480 | Colored by xeranas
+9 | poison | jonata, liftarn, papapishu | http://www.openclipart.org/detail/18871 | Edited by xeranas
+10 | ritual_flame | gustavorezende | http://www.openclipart.org/detail/81769 | Edited by xeranas
+11 | cover_of_darkness | inky2010 | http://www.openclipart.org/detail/86773 | Edited by xeranas
+12 | curse | inky2010 | http://www.openclipart.org/detail/85735 | Edited by xeranas
