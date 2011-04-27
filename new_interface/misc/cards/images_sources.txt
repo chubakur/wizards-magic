@@ -15,3 +15,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 10 | ritual_flame | gustavorezende | http://www.openclipart.org/detail/81769 | Edited by xeranas
 11 | cover_of_darkness | inky2010 | http://www.openclipart.org/detail/86773 | Edited by xeranas
 12 | curse | inky2010 | http://www.openclipart.org/detail/85735 | Edited by xeranas
+13 | dryad | George Supreeth / kablam | http://www.openclipart.org/detail/21224 | Edited by xeranas
+14 | absolute_defence | rhysfaber | http://www.openclipart.org/detail/2672 | Edited by xeranas
