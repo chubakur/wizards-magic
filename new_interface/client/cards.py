@@ -347,7 +347,7 @@ class Leviathan(Prototype):
         self.cast = False
         self.health = 37
         self.image = pygame.image.load('misc/cards/water/leviathan.gif')
-        self.info = ""
+        self.info = "When attacking, each enemy creature suffers 1 damage in addition to standard attack. Casting Curing heals owner for 4. In exchange, owner loses 1 Water. Cannot be cast if owner's Water less than 6."
         Prototype.__init__(self)
 class IceGuard(Prototype):
     def __init__(self):        
@@ -360,6 +360,11 @@ class IceGuard(Prototype):
         self.health = 19
         self.image = pygame.image.load('misc/cards/water/ice_guard.gif')
         Prototype.__init__(self)
+    def damage(self, damage, enemy, cast=False):
+        if enemy.element == "fire":
+            Prototype.damage(self, damage*2, enemy, cast)
+        else:
+            Prototype.damage(self, damage, enemy, cast)
 class Poseidon(Prototype):
     def __init__(self):        
         self.name = "Poseidon"        
@@ -1194,7 +1199,7 @@ class Vampire(Prototype):
         attack_position = self.get_attack_position()
         if globals.cardboxes[attack_position].card.name != "player":
             if globals.cardboxes[attack_position].card.element != "death":
-                self.health(ceil(float(self.power / 2)), 30)
+                self.heal(int(ceil(float(self.power / 2.0))), 30)
         globals.cardboxes[attack_position].card.damage(self.power, self)
 class Werewolf(Prototype):
     def __init__(self):        
@@ -1346,6 +1351,24 @@ class Magic(pygame.sprite.Sprite):
         self.cards.remove(card)
     def set(self, card):
         self.cards.append(card)
+    def get_self_cardboxes(self):
+        cardboxes = []
+        if self.player.id == 1:
+            for cardbox in globals.cardboxes[0:5]:
+                cardboxes.append(cardbox)
+        else:
+            for cardbox in globals.cardboxes[5:10]:
+                cardboxes.append(cardbox)
+        return cardboxes
+    def get_enemy_cardboxes(self):
+        cardboxes = []
+        if self.player.id == 1:
+            for cardbox in globals.cardboxes[5:10]:
+                cardboxes.append(cardbox)
+        else:
+            for cardbox in globals.cardboxes[0:5]:
+                cardboxes.append(cardbox)
+        return cardboxes
     def get_enemy_cards(self):
         cards = []
         if self.player.id == 1:
@@ -1612,6 +1635,44 @@ class AbsoluteDefence(Magic):
         self.image = pygame.image.load('misc/cards/earth/absolute_defence.gif')
         self.info = "Owner's creatures gain protection from all attacks. This defence only lasts one turn and lasts till next owner's turn. It's just like an unpenetrable wall has suddenly appeared. Anyone under your command will survive anything!"
         Magic.__init__(self)
+    def cast(self):
+        self.protected_cards = {}
+        for cardbox in self.get_self_cardboxes():
+            if cardbox.card.name != "player": #if card exists
+                print 'Вхождение в',cardbox.position,"сектор:"
+                self.protected_cards[cardbox.position] = cardbox.card
+                print '    Карта:',cardbox.card
+                cardbox.card = AbsoluteDefenceSpirit(cardbox.card)
+                print '    Синтез:',cardbox.card
+        globals.magic_cards.add(self)
+    def periodical_cast(self):
+        if self.player.id == globals.player.id:
+            print "Сегмент проверки на остаточность"
+            for cardboxid in self.protected_cards:
+                print "Сектор:",cardboxid
+                print "    Ссылка:",globals.cardboxes[cardboxid].card
+            print "BYE, SPIRITS"
+            for cardboxid in self.protected_cards:
+                globals.cardboxes[cardboxid].card = self.protected_cards[cardboxid]
+            self.kill()
+class AbsoluteDefenceSpirit(Prototype):
+    def __init__(self, card):
+        self.name = card.name
+        self.level = card.level
+        self.element = card.element
+        self.power = card.power
+        self.health = card.health
+        self.image = card.image
+        self.card = card
+        self.cast = card.cast
+        Prototype.__init__(self)
+    def damage(self, damage, enemy, cast=False):
+        print "RESIST",damage,cast
+        return
+    def attack(self):
+        self.card.attack(self)
+    def cast(self):
+        self.card.cast(self)
 class Earthquake(Magic):
     def __init__(self):
         self.element = "earth"
@@ -1682,6 +1743,7 @@ class Bless(Magic):
                 self.cards.append(card)
             else:
                 card.damage(10, self)
+        globals.magic_cards.add(self)
     def periodical_cast(self):
         if self.cards: #if has cards
             if self.player.id != globals.player.id: #if enemy turn started
