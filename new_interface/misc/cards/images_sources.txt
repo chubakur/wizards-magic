@@ -17,3 +17,6 @@ Nr | Card Name | Author | Source (URL) | Comment
 12 | curse | inky2010 | http://www.openclipart.org/detail/85735 | Edited by xeranas
 13 | dryad | George Supreeth / kablam | http://www.openclipart.org/detail/21224 | Edited by xeranas
 14 | absolute_defence | rhysfaber | http://www.openclipart.org/detail/2672 | Edited by xeranas
+15 | black_wind | xeranas | - | -
+16 | golem | xeranas | - | -
+17 | life_sacrifice | xeranas | - | -
