@@ -159,6 +159,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
+            print self,globals.cardboxes[attack_position].card
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
             return kill
         else:
@@ -1639,19 +1640,11 @@ class AbsoluteDefence(Magic):
         self.protected_cards = {}
         for cardbox in self.get_self_cardboxes():
             if cardbox.card.name != "player": #if card exists
-                print 'Вхождение в',cardbox.position,"сектор:"
                 self.protected_cards[cardbox.position] = cardbox.card
-                print '    Карта:',cardbox.card
                 cardbox.card = AbsoluteDefenceSpirit(cardbox.card)
-                print '    Синтез:',cardbox.card
         globals.magic_cards.add(self)
     def periodical_cast(self):
         if self.player.id == globals.player.id:
-            print "Сегмент проверки на остаточность"
-            for cardboxid in self.protected_cards:
-                print "Сектор:",cardboxid
-                print "    Ссылка:",globals.cardboxes[cardboxid].card
-            print "BYE, SPIRITS"
             for cardboxid in self.protected_cards:
                 globals.cardboxes[cardboxid].card = self.protected_cards[cardboxid]
             self.kill()

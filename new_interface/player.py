@@ -97,13 +97,13 @@ def finish_turn():
     if globals.player.id == 1:
         globals.player = globals.player2
         globals.player.action_points = True
-        for spell in globals.magic_cards: #вызываем функцию повторения магия
-            spell.periodical_cast()
         for card in globals.ccards_1: #Атакуем
             kill = card.attack()
             if kill:
                 card.enemy_die()
             card.used_cast = False
+        for spell in globals.magic_cards: #вызываем функцию повторения магия
+            spell.periodical_cast()
         for card in globals.ccards_2:
             card.turn()
         for card in globals.ccards_2:
@@ -111,13 +111,13 @@ def finish_turn():
     else:
         globals.player = globals.player1
         globals.player.action_points = True
-        for spell in globals.magic_cards: #вызываем функцию повторения магия
-            spell.periodical_cast()
         for card in globals.ccards_2: #Атакуем
             kill = card.attack()
             if kill:
                 card.enemy_die()
             card.used_cast = False
+        for spell in globals.magic_cards: #вызываем функцию повторения магия
+            spell.periodical_cast()
         for card in globals.ccards_1:
             card.turn()
         for card in globals.ccards_1:
