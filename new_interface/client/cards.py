@@ -159,7 +159,6 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            print self,globals.cardboxes[attack_position].card
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
             return kill
         else:
@@ -227,12 +226,13 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         text_health = globals.font.render(str(self.health), True, self.font_color)
         self.image = self.surface_backup.copy()
         if self.cast:
-            if not self.used_cast:
-                text_cast = font.render("Cast", True, (0, 0, 255))
-                self.image.blit(text_cast, (50, 100))
-            else:
-                text_cast = font.render("Cast", True, (0, 0, 0))
-                self.image.blit(text_cast, (50, 100))
+            if self.field:
+                if not self.used_cast:
+                    text_cast = font.render("Cast", True, (0, 0, 255))
+                    self.image.blit(text_cast, (50, 100))
+                else:
+                    text_cast = font.render("Cast", True, (0, 0, 0))
+                    self.image.blit(text_cast, (50, 100))
         #print text_power
         self.image.blit(text_level, (90, -7))
         self.image.blit(text_power, (5, 137))
