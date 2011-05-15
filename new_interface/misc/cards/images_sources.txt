@@ -20,3 +20,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 15 | black_wind | xeranas | - | -
 16 | golem | xeranas | - | -
 17 | life_sacrifice | xeranas | - | -
+18 | banshee | xeranas | - | -
