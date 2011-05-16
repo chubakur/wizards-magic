@@ -21,3 +21,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 16 | golem | xeranas | - | -
 17 | life_sacrifice | xeranas | - | -
 18 | banshee | xeranas | - | -
+19 | ghost | - | http://wtactics.org/
+20 | lich | - | http://wtactics.org/
