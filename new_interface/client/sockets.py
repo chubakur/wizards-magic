@@ -7,7 +7,7 @@ try:
 except ImportError:
     import simplejson as json
     print 'SIMPLEJSON'
-host = "flareguner.zapto.org"
+host = "drakmail.ru"
 port = 7712
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((host, port))
