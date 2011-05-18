@@ -23,3 +23,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 18 | banshee | xeranas | - | -
 19 | ghost | - | http://wtactics.org/
 20 | lich | - | http://wtactics.org/
+21 | paladin | - | http://wtactics.org/
+22 | grim_reaper | - | http://wtactics.org/
