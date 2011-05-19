@@ -17,6 +17,10 @@ import globals
 import player
 pygame.font.init()
 font = pygame.font.Font(None, 25)
+class CastLabel(pygame.sprite.Sprite):
+    def __init__(self):
+        self.cast_active = pygame.image.load("misc/card_cast_logo_active.png").convert_alpha()
+        self.cast_disabled = pygame.image.load("misc/card_cast_logo_disabled.png").convert_alpha()
 class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def __init__(self):
         #self.group = group #Группа, в которой лежит эта карта
@@ -228,11 +232,11 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.cast:
             if self.field:
                 if not self.used_cast:
-                    text_cast = font.render("Cast", True, (0, 0, 255))
-                    self.image.blit(text_cast, (50, 100))
+                    #text_cast = font.render("Cast", True, (0, 0, 255))
+                    self.image.blit(globals.castlabel.cast_active, (0, 10))
                 else:
-                    text_cast = font.render("Cast", True, (0, 0, 0))
-                    self.image.blit(text_cast, (50, 100))
+                    #text_cast = font.render("Cast", True, (0, 0, 0))
+                    self.image.blit(globals.castlabel.cast_disabled, (0, 10))
         #print text_power
         self.image.blit(text_level, (90, -7))
         self.image.blit(text_power, (5, 137))

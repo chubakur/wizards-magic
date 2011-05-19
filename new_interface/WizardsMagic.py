@@ -82,6 +82,7 @@ for cardbox in globals.cardboxes:
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)
+globals.castlabel = cards.CastLabel()
 healthwindow.HealthWindowEnemy((90, 10)) #Окошко здоровья верхнего игрока
 healthwindow.HealthWindow((90, 464)) #Окошко здоровья нижнего игрока
 # Кнопки колод стихий первого игрока
