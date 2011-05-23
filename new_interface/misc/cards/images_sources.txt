@@ -25,3 +25,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 20 | lich | - | http://wtactics.org/
 21 | paladin | - | http://wtactics.org/
 22 | grim_reaper | - | http://wtactics.org/
+23 | ent | - | http://wtactics.org/
+24 | forest_spirit | - | http://wtactics.org/
