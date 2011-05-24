@@ -27,3 +27,6 @@ Nr | Card Name | Author | Source (URL) | Comment
 22 | grim_reaper | - | http://wtactics.org/
 23 | ent | - | http://wtactics.org/
 24 | forest_spirit | - | http://wtactics.org/
+25 | manticore | - | - | added by Marcelo
+26 | spellbreaker | - | http://wtactics.org/
+27 | earthquake | - | http://wtactics.org/
