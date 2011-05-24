@@ -20,6 +20,7 @@ import pygame.sprite
 # and open the template in the editor.
 #import pygame.sprite
 #Внимание!! Для того, чтоsбы слои не наслаивались, я использую объект surface_backup , который является копией изображения. После этого они заменяются
+# Caution! To chtosby layers are layered, I use an object surface_backup, which is a copy of the image. After that, they are replaced
 __author__ = "chubakur"
 __date__ = "$12.02.2011 12:11:42$"
 import pygame

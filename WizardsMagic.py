@@ -20,6 +20,8 @@ import pygame.sprite
 # and open the template in the editor.
 #import pygame.sprite
 #Внимание!! Для того, чтоsбы слои не наслаивались, я использую объект surface_backup , который является копией изображения. После этого они заменяются
+# Caution! To chtosby layers are layered, I use an object surface_backup, which is a copy of the image. After that, they are replaced
+
 __author__ = "chubakur"
 __date__ = "$12.02.2011 12:11:42$"
 import pygame
@@ -57,13 +59,13 @@ globals.cardinfo = cardinfo.CardInfo()
 #ACTIONS
 #################################################################################################3
 globals.event_handler = eventhandler.Event_handler()
-globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока
-globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока
-globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока
-globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока
-# 0 1 2 3 4   //Расположение
+globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока #Initialize the top player's panel
+globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока #Initialize the bottom player's panel
+globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока #Button panel (top player)
+globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока #Button panel (bottom player)
+# 0 1 2 3 4   //Расположение //Locations
 # 5 6 7 8 9
-globals.cardbox0 = cardbox.Cardbox((0, 55), globals.player1, 0) #0 место на поле
+globals.cardbox0 = cardbox.Cardbox((0, 55), globals.player1, 0) #0 место на поле #Position 0 on the field
 globals.cardbox1 = cardbox.Cardbox((160, 55), globals.player1, 1) #1 место на поле
 globals.cardbox2 = cardbox.Cardbox((320, 55), globals.player1, 2) #2 место на поле
 globals.cardbox3 = cardbox.Cardbox((480, 55), globals.player1, 3) #3 место на поле
@@ -74,7 +76,7 @@ globals.cardbox7 = cardbox.Cardbox((320, 301), globals.player2, 7) #7 место
 globals.cardbox8 = cardbox.Cardbox((480, 301), globals.player2, 8) #8 место на поле
 globals.cardbox9 = cardbox.Cardbox((640, 301), globals.player2, 9) #9 место на поле
 globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
-#playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
+#playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки #Links
 #exec('Cardbox((640,301),2)')
 #ElementsWindow((0,0),actionpanel1)
 #ElementsWindow((0,0),actionpanel2)

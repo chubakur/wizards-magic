@@ -39,7 +39,8 @@ import globals
 import socket
 import json
 import threading
-host = "192.168.1.100"
+#host = "192.168.1.100"
+host = "192.168.1.106"
 port = 7712
 sockets = [] #сокеты игроков
 sockets.append([])
