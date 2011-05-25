@@ -30,3 +30,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 25 | manticore | - | - | added by Marcelo
 26 | spellbreaker | - | http://wtactics.org/
 27 | earthquake | - | http://wtactics.org/
+28 | purify | - | http://wtactics.org/
+29 | total_weakness | - | http://wtactics.org/
