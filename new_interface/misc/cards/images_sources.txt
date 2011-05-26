@@ -32,3 +32,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 27 | earthquake | - | http://wtactics.org/
 28 | purify | - | http://wtactics.org/
 29 | total_weakness | - | http://wtactics.org/
+30 | flaming_arrow | boobaloo | http://www.openclipart.org/detail/81955 | edited by xeranas
