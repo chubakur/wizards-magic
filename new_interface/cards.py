@@ -119,7 +119,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         else:
             for cardbox in globals.cardboxes[0:5]:
                 cardboxes.append(cardbox)
-        return cardboxeszz
+        return cardboxes
     def get_enemy_cards(self):
         cards = []
         if self.parent.position < 5:
