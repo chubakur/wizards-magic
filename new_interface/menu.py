@@ -33,7 +33,7 @@ class MenuButton(pygame.sprite.Sprite):
 		self.rect.centerx = bgrect.centerx
 		menupos = globals.menu_bg.get_rect()
 		menupos.centery = globals.background.get_rect().centery
-		self.rect.top=menupos.top+25+(self.rect.height+5)*self.pos
+		self.rect.top=menupos.top+50+(self.rect.height+5)*self.pos
 		globals.background.blit(self.image, self.rect)
 	def update(self):
 		self.draw()
@@ -87,11 +87,11 @@ def menu_main():
 	''' display Main manu '''
 
 	#http://www.feebleminds-gifs.com/wizard-flames.jpg
-	globals.background = pygame.image.load('misc/wizard-flames.jpg').convert_alpha()
-	globals.menu_bg = pygame.image.load('misc/menu_bg.gif').convert_alpha()
+	globals.background = pygame.image.load('misc/menu_bg.jpg').convert_alpha()
+	globals.menu_bg = pygame.image.load('misc/menu_selections_bg.jpg').convert_alpha()
 	menupos = globals.menu_bg.get_rect()
-	menupos.centerx = globals.background.get_rect().centerx
-	menupos.centery = globals.background.get_rect().centery
+	menupos.centerx = globals.background.get_rect().centerx -2 # '-2' hack due lazy designer :)
+	menupos.centery = globals.background.get_rect().centery -1 # '-1' hack due lazy designer :)
 	globals.background.blit(globals.menu_bg, menupos)
 
 	menu1 = MenuButton(0,"Start Game","menu_startgame()")
