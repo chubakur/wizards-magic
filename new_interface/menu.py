@@ -86,7 +86,8 @@ def menu_startgame():
 def menu_main(): 
 	''' display Main manu '''
 
-	globals.background = pygame.image.load('misc/bg_sample.gif').convert_alpha()
+	#http://www.feebleminds-gifs.com/wizard-flames.jpg
+	globals.background = pygame.image.load('misc/wizard-flames.jpg').convert_alpha()
 	globals.menu_bg = pygame.image.load('misc/menu_bg.gif').convert_alpha()
 	menupos = globals.menu_bg.get_rect()
 	menupos.centerx = globals.background.get_rect().centerx
