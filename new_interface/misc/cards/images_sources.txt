@@ -36,4 +36,7 @@ Nr | Card Name | Author | Source (URL) | Comment
 31 | zombie | vidas sinkunas | - | colored by xeranas
 32 | fireball | Benji Park | http://www.openclipart.org/detail/26208 | edited by xeranas
 33 | see justice | - | http://wtactics.org/
-34 | gods_wrath | - | http://wtactics.org/ ; http://www.davegh.com/vg/home.htm
+34 | gods_wrath | - | axe from http://wtactics.org/ texture and blood from http://www.davegh.com/vg/home.htm
+35 | gargoyle | Derek W Freeman | http://www.elfwood.com/~freewad/Gratch.2753430.html | colored by xeranas
+36 | nymph | - | http://wtactics.org/
+
