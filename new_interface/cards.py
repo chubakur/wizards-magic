@@ -47,7 +47,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.default_power = self.power
         self.field = False
         self.used_cast = False #Использовал cast
-        if self.element == "death" or self.element == "fire" or self.element == "earth":
+        if self.element == "death" or self.element == "fire" or self.element == "earth" or self.element == "water":
             self.font_color = (255, 255, 255)
         else:
             self.font_color = (0, 0, 0)
@@ -1355,7 +1355,7 @@ class Magic(pygame.sprite.Sprite):
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
         self.cards = []
-        if self.element == "death" or self.element == "fire" or self.element == "earth":
+        if self.element == "death" or self.element == "fire" or self.element == "earth" or self.element == "water":
             self.font_color = (255, 255, 255)
         else:
             self.font_color = (0, 0, 0)
