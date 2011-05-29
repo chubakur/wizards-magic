@@ -2,27 +2,33 @@
 import pygame
 
 pygame.font.init()
-panels = pygame.sprite.Group() #Нижний уровень
-interface = pygame.sprite.Group() #Уровень кнопок
-cards_in_deck = pygame.sprite.Group() #Уровень дополнительный
-ccards_1 = pygame.sprite.Group() #  Карты, которые вывел первый игрок
-ccards_2 = pygame.sprite.Group() # Карты, которые вывел второй игрок
-magic_cards = pygame.sprite.Group() #Использующаяся магия
+panels = pygame.sprite.Group() #Нижний уровень #Lower Level
+interface = pygame.sprite.Group() #Уровень кнопок #Button Level
+cards_in_deck = pygame.sprite.Group() #Уровень дополнительный #The level of additional
+ccards_1 = pygame.sprite.Group() #  Карты, которые вывел первый игрок #Cards, which brought the first player
+ccards_2 = pygame.sprite.Group() # Карты, которые вывел второй игрок #Cards, which brought the second player
+magic_cards = pygame.sprite.Group() #Использующаяся магия #Magic Cards
 card_info_group = pygame.sprite.Group() #  Группа, которая содержит спрайт, содержащий панель вывода информации о карте
 information_group = pygame.sprite.Group() #Группа, содержащая панель вывода игровой информации
 menu_group = pygame.sprite.Group() # menu items
 font = pygame.font.Font("misc/Domestic_Manners.ttf", 15)
 #print pygame.font.match_font('Arial')
-cards_of_element_shower_element = "water" #какой элемент показывать
-selected_card = False #Выбранная карта
+cards_of_element_shower_element = "water" #какой элемент показывать #Any element to show
+selected_card = False #Выбранная карта #Selected Card
 screen = None
 player = None
 player1 = None
 player2 = None
+
 #Каст с выбором цели
 cast_focus = False #включен ли режим
 cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
 #cast_focus_filter = None
+#Groups for annimations
+animations_running = []
+cards_attacking = []
+turn_ended = False
+
 stage=0 # 0=Menu 1=Single player game 2=network game
 question=False # when true disable all events but key stroke
 answer="" #buffer to store key strokes

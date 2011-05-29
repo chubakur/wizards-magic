@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame.sprite
+import animations
 #from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
@@ -170,6 +171,12 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.moves_alive:
             attack_position = self.get_attack_position()
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
+            #Add the code for animation here
+            cardbox_location = globals.cardboxes[self.parent.position].location
+            attack_animation = animations.CustomAnimation(self.image,cardbox_location) #Instantiating a animation object
+            attack_animation.path = [(cardbox_location[0], cardbox_location[1]-40),(cardbox_location),(50,40),(200,300)]
+            attack_animation.attacking() #Selecting Method
+            globals.animations_running.append(attack_animation) #Adding to current running animations
             return kill
         else:
             return 0

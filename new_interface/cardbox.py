@@ -6,6 +6,7 @@ class Cardbox(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.type = 'cardbox'
         self.position = position
+        self.location = rect
         self.player = player #первый или второй
         self.opposite = False
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert_alpha()
