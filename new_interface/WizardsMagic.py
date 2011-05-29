@@ -61,7 +61,7 @@ def start_game():
 	globals.player = globals.player1
 	###############################################################################################################
 	#ACTIONS
-	#################################################################################################3
+	###############################################################################################################
 	#globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока
 	#globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока
 	#globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока
@@ -118,6 +118,9 @@ def start_game():
 	globals.interface.update()
 	pygame.display.flip()
 	while globals.stage==1:
+		#if globals.turn_ended and len(cards_attacking) = 0:
+		#	for cardbox in globals.cardboxes:
+		#		cardbox.opposite = not cardbox.opposite
 		for event in pygame.event.get():
 			globals.event_handler.event(event)
 		globals.panels.update()
@@ -134,8 +137,10 @@ def start_game():
 		globals.screen.blit(globals.background, (0, 0))
 		#globals.background.fill((0,0,0))
 		globals.background = background_backup.copy()
+		for animation_running in globals.animations_running:
+			animation_running.run()
 		pygame.display.flip()
-		clock.tick(25)
+		clock.tick(50)
 
 
 
@@ -168,4 +173,4 @@ while 1:
 	globals.screen.blit(globals.background, (0, 0))
 	globals.background = background_backup.copy()
 	pygame.display.flip()
-	clock.tick(25)	
+	clock.tick(50)	
