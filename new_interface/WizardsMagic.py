@@ -59,7 +59,6 @@ def start_game():
 	globals.player1.enemy = globals.player2
 	globals.player2.enemy = globals.player1
 	globals.player = globals.player1
-	globals.cardinfo = cardinfo.CardInfo()
 	###############################################################################################################
 	#ACTIONS
 	#################################################################################################3
@@ -150,6 +149,7 @@ menu.menu_main()
 globals.event_handler = eventhandler.Event_handler()
 globals.point = eventhandler.Point()
 globals.gameinformationpanel = gameinformation.GameInformationPanel()
+globals.cardinfo = cardinfo.CardInfo()
 
 globals.screen.blit(globals.background, (0, 0))
 background_backup = globals.background.copy()
