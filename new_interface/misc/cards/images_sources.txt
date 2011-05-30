@@ -39,4 +39,6 @@ Nr | Card Name | Author | Source (URL) | Comment
 34 | gods_wrath | - | axe from http://wtactics.org/ texture and blood from http://www.davegh.com/vg/home.htm
 35 | gargoyle | Derek W Freeman | http://www.elfwood.com/~freewad/Gratch.2753430.html | colored by xeranas
 36 | nymph | - | http://wtactics.org/
+37 | nixie | - | http://wtactics.org/
+38 | ice_guard | - | http://wtactics.org/
 
