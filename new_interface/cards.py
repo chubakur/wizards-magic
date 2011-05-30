@@ -79,12 +79,12 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.light = False
         self.update()
     def play_cast_sound(self):
-        #pygame.mixer.music.load('misc/sounds/card_cast.wav')
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load('misc/sounds/card_cast.mp3')
+        pygame.mixer.music.play()
         return
     def play_summon_sound(self):
-        #pygame.mixer.music.load('misc/sounds/card_summon.wav')
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load('misc/sounds/card_summon.wav')
+        pygame.mixer.music.play()
         return
     def get_attack_position(self):
         if self.parent.position < 5:
@@ -221,8 +221,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.kill() #Выкидываем карту из всех групп
         for card in self.get_enemy_cards() + self.get_self_cards():
             card.card_died(self)
-        #pygame.mixer.music.load('misc/sounds/card_die.wav')
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load('misc/sounds/card_die.mp3')
+        pygame.mixer.music.play()
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
     def turn(self):
@@ -1114,6 +1114,7 @@ class MagicHealer(Prototype):
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def summon(self):
+        self.play_summon_sound()
         for cardbox in self.get_self_cardboxes():
             if cardbox.card.name == "player":
                 cardbox.card = MagicHealerChakra(self)
