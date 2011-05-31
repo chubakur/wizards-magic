@@ -1135,7 +1135,8 @@ class MagicHealer(Prototype):
     def card_died(self, card):
         if card.parent.player.id == self.parent.player.id:
             card.parent.card = MagicHealerChakra(self)
-            self.security_slots.append(cardbox)
+            card.parent.card.parent = card.parent
+            self.security_slots.append(card.parent)
     def die(self):
         for slot in self.security_slots:
             slot.card.die()
@@ -1152,6 +1153,7 @@ class MagicHealerChakra(Prototype):
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def die(self):
+        print self.parent
         self.parent.card = self.parent.player
         del self
     def attack(self):
