@@ -41,4 +41,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 36 | nymph | - | http://wtactics.org/
 37 | nixie | - | http://wtactics.org/
 38 | ice_guard | - | http://wtactics.org/
-
+39 | bless | - | http://wtactics.org/
+40 | acid_storm | xeranas | - | -
