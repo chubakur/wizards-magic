@@ -167,16 +167,18 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 if globals.cardboxes[attack_position + 1].card.name != "player":
                     adjacent_position.append(attack_position + 1)
         return adjacent_position
+    def run_attack_animation(self):
+        #Add the code for animation here
+        cardbox_location = globals.cardboxes[self.parent.position].location
+        attack_animation = animations.CustomAnimation(self.image,cardbox_location) #Instantiating a animation object
+        attack_animation.path = [(cardbox_location[0], cardbox_location[1]-40),(cardbox_location),(50,40),(200,300)]
+        attack_animation.attacking() #Selecting Method
+        globals.animations_running.append(attack_animation) #Adding to current running animations
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
-            #Add the code for animation here
-            cardbox_location = globals.cardboxes[self.parent.position].location
-            attack_animation = animations.CustomAnimation(self.image,cardbox_location) #Instantiating a animation object
-            attack_animation.path = [(cardbox_location[0], cardbox_location[1]-40),(cardbox_location),(50,40),(200,300)]
-            attack_animation.attacking() #Selecting Method
-            globals.animations_running.append(attack_animation) #Adding to current running animations
+            self.run_attack_animation()
             return kill
         else:
             return 0
@@ -289,6 +291,7 @@ class Nixie(Prototype):
                     globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
         else:
             return
     def cast_action(self):
@@ -318,6 +321,7 @@ class Hydra(Prototype):
             adjacent_positions = self.get_attack_adjacent_position(attack_position)
             for adjacent_position in adjacent_positions:
                 globals.cardboxes[adjacent_position].card.damage(self.power, self)
+            self.run_attack_animation()
         else:
             return
     def turn(self):
@@ -610,6 +614,7 @@ class Cerberus(Prototype):
                     globals.cardboxes[adjacent_position].card.damage(1, self)
                 else:
                     globals.cardboxes[adjacent_position].card.damage(int(ceil(float(globals.cardboxes[adjacent_position].card.power) / 2)), self)
+            self.run_attack_animation()
         else:
             return
 class Nymph(Prototype):
@@ -758,14 +763,16 @@ class Manticore(Prototype):
         self.image = pygame.image.load('misc/cards/air/manticore.gif')
         Prototype.__init__(self)
     def attack(self):
-        attack_position = self.get_attack_position()
-        if globals.cardboxes[attack_position].card.name != 'player': #if card exist
-            if globals.cardboxes[attack_position].card.cast:
-                globals.cardboxes[attack_position].card.damage(self.power + 3, self)
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
+            if globals.cardboxes[attack_position].card.name != 'player': #if card exist
+                if globals.cardboxes[attack_position].card.cast:
+                    globals.cardboxes[attack_position].card.damage(self.power + 3, self)
+                else:
+                    globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
-        else:
-            globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
     def cast_action(self):
         if self.parent.player.air_mana >= 2: #if player have mana for cast
             Prototype.cast_action(self) #activating focus-cast
@@ -946,9 +953,9 @@ class Ent(Prototype):
         self.image = pygame.image.load('misc/cards/earth/ent.gif')
         Prototype.__init__(self)
     def attack(self):
-        e_card = globals.cardboxes[self.get_attack_position()].card
-        Prototype.attack(self)
         if self.moves_alive:
+            e_card = globals.cardboxes[self.get_attack_position()].card
+            Prototype.attack(self)
             if e_card.name != 'player':
                 self.parent.player.enemy.damage(self.power, self)
         e_card = None
@@ -1215,11 +1222,13 @@ class Vampire(Prototype):
         self.image = pygame.image.load('misc/cards/death/vampire.gif')
         Prototype.__init__(self)
     def attack(self):
-        attack_position = self.get_attack_position()
-        if globals.cardboxes[attack_position].card.name != "player":
-            if globals.cardboxes[attack_position].card.element != "death":
-                self.heal(int(ceil(float(self.power / 2.0))), 30)
-        globals.cardboxes[attack_position].card.damage(self.power, self)
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
+            if globals.cardboxes[attack_position].card.name != "player":
+                if globals.cardboxes[attack_position].card.element != "death":
+                    self.heal(int(ceil(float(self.power / 2.0))), 30)
+            globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
 class Werewolf(Prototype):
     def __init__(self):        
         self.name = "Werewolf"
@@ -1263,6 +1272,7 @@ class Banshee(Prototype):
     def attack(self):
         if self.moves_alive:
             if globals.cardboxes[self.get_attack_position()].card.name == "player":
+                self.run_attack_animation()
                 globals.cardboxes[self.get_attack_position()].card.damage(self.power + 10, self)
                 self.die()
             else:
@@ -1338,6 +1348,7 @@ class Lich(Prototype):
                 globals.cardboxes[attack_position].card.damage(self.power + 5, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
         else:
             return
 #МАГИЯ

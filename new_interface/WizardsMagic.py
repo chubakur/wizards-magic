@@ -137,8 +137,12 @@ def start_game():
 		globals.screen.blit(globals.background, (0, 0))
 		#globals.background.fill((0,0,0))
 		globals.background = background_backup.copy()
+		if len(globals.animations_running)==False and globals.attack_started:
+			player.switch_position()
 		for animation_running in globals.animations_running:
 			animation_running.run()
+			if globals.attack_started and len(globals.cards_attacking)==False:
+				player.switch_position()
 		pygame.display.flip()
 		clock.tick(50)
 

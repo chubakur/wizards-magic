@@ -27,6 +27,7 @@ cast_focus_wizard = None # ссылка на кастующий объект ( �
 #Groups for annimations
 animations_running = []
 cards_attacking = []
+attack_started = False
 turn_ended = False
 
 stage=0 # 0=Menu 1=Single player game 2=network game

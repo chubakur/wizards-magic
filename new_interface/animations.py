@@ -28,19 +28,19 @@ class Animation():
         self.mode = 'move'
         
         milestone = self.path_trace
-        print "milestone", milestone
-        print "len(path)", len(self.path)
+        #print "milestone", milestone
+        #print "len(path)", len(self.path)
         self.distance_x = self.path[milestone][0] - self.origin[0]
         self.distance_y = self.path[milestone][1] - self.origin[1]
         self.step_x = self.distance_x/self.speed
         self.step_y = self.distance_y/self.speed
-        print self.position
-        print type(self.position)
-        print "stepX",self.step_x
-        print "stepY",self.step_y
-        print "origin", self.origin
-        print "position", self.position
-        print "path", self.path[milestone]
+        #print self.position
+        #print type(self.position)
+        #print "stepX",self.step_x
+        #print "stepY",self.step_y
+        #print "origin", self.origin
+        #print "position", self.position
+        #print "path", self.path[milestone]
         
         if self.step_x > 0:
             reach_target_x = (self.position[0] >= self.path[milestone][0])
@@ -50,12 +50,12 @@ class Animation():
             reach_target_y = (self.position[1] >= self.path[milestone][1])
         else:
             reach_target_y = (self.position[1] <= self.path[milestone][1])
-        print "reach x", reach_target_x
-        print "reach y", reach_target_y        
+        #print "reach x", reach_target_x
+        #print "reach y", reach_target_y        
         if not reach_target_x: self.position[0] = self.position[0] + self.step_x
         if not reach_target_y: self.position[1] = self.position[1] + self.step_y
         if reach_target_x and reach_target_y:
-            print "entra aqui"
+            #print "entra aqui"
             if (self.position[0] != self.path[milestone][0]) or (self.position[1] != self.path[milestone][1]):
                 self.position= [self.path[milestone][0],self.path[milestone][1]]            
             if milestone == len(self.path)-1:
@@ -63,10 +63,10 @@ class Animation():
                 for item in self.additional_groups:
                     item.remove(self)
             else:
-                print "entra en else final"
+                #print "entra en else final"
                 self.origin = self.path[milestone]
                 self.path_trace = self.path_trace + 1
-                print "self.path_trace", self.path_trace
+                #print "self.path_trace", self.path_trace
             
 
     def evolution(self, image, origin):
