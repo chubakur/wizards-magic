@@ -169,7 +169,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         return adjacent_position
     def run_attack_animation(self):
         #Add the code for animation here
-        cardbox_location = globals.cardboxes[self.parent.position].location
+        #print globals.cardboxes[self.parent.position].location
+        #cardbox_location = globals.cardboxes[self.parent.position].location
+        cardbox_location = (globals.cardboxes[self.parent.position].rect[0],globals.cardboxes[self.parent.position].rect[1])
         attack_animation = animations.CustomAnimation(self.image,cardbox_location) #Instantiating a animation object
         attack_animation.path = [(cardbox_location[0], cardbox_location[1]-40),(cardbox_location),(50,40),(200,300)]
         attack_animation.attacking() #Selecting Method
@@ -1153,7 +1155,6 @@ class MagicHealerChakra(Prototype):
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def die(self):
-        print self.parent
         self.parent.card = self.parent.player
         del self
     def attack(self):
