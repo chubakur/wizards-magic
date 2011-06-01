@@ -43,3 +43,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 38 | ice_guard | - | http://wtactics.org/
 39 | bless | - | http://wtactics.org/
 40 | acid_storm | xeranas | - | -
+41 | waterfall | Thomas Moran | http://www.artrenewal.org/pages/artwork.php?artworkid=26351
+42 | plague | Nicolas Poussin | http://www.artrenewal.org/pages/artwork.php?artworkid=9170
