@@ -45,3 +45,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 40 | acid_storm | xeranas | - | -
 41 | waterfall | Thomas Moran | http://www.artrenewal.org/pages/artwork.php?artworkid=26351
 42 | plague | Nicolas Poussin | http://www.artrenewal.org/pages/artwork.php?artworkid=9170
+43 | chaos vortex | Albert Goodwin | http://www.artrenewal.org/pages/artwork.php?artworkid=32410
+44 | vulcan | Oliver Spalt | http://en.wikipedia.org/wiki/File:Rinjani_1994.jpg
