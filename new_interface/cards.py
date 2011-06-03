@@ -227,6 +227,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             card.card_died(self)
         pygame.mixer.music.load('misc/sounds/card_die.mp3')
         pygame.mixer.music.play()
+        self.image = None
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
     def turn(self):
@@ -888,7 +889,7 @@ class ForestSpirit(Prototype):
         self.name = "ForestSpirit"        
         self.element = "earth"
         self.level = 3
-        self.info = "Daamge from all non-magical attacks and abilities equal to 1. CAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
+        self.info = "Damage from all non-magical attacks and abilities equal to 1. CAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
         self.power = 2
         self.cast = True
         self.health = 3
@@ -1347,8 +1348,11 @@ class Lich(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            if globals.cardboxes[attack_position].card.element == "life":
-                globals.cardboxes[attack_position].card.damage(self.power + 5, self)
+            if globals.cardboxes[attack_position].card.name != 'player':
+                if globals.cardboxes[attack_position].card.element == "life":
+                    globals.cardboxes[attack_position].card.damage(self.power + 5, self)
+                else:
+                    globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
             self.run_attack_animation()

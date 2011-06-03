@@ -7,7 +7,7 @@ class Cardbox(pygame.sprite.Sprite):
         self.type = 'cardbox'
         self.position = position
         self.location = rect
-        self.player = player #первый или второй
+        self.player = player #ссылка на игрока
         self.opposite = False
         self.image = pygame.image.load('misc/cardbox_bg.gif').convert_alpha()
         self.light_image = pygame.image.load('misc/cardbox-activated.gif').convert_alpha()
