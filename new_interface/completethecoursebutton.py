@@ -12,13 +12,15 @@ class CompleteTheCourseButton(pygame.sprite.Sprite):
         self.rect = self.relative_rect #.move(self.panel.rect[0], self.panel.rect[1])
         globals.interface.add(self)
     def onmouse(self):
-        pass
+        return
     def onmouseout(self):
-        pass
+        return
     def onmousedown(self):
+        for cardbox in globals.cardboxes:
+            cardbox.light = False
         player.finish_turn()
     def onmouseup(self):
-        pass
+        return
     def draw(self):
         globals.background.blit(self.image, self.relative_rect)
     def update(self):
