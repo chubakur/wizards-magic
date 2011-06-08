@@ -97,7 +97,7 @@ def finish_turn():
     globals.player.enemy.death_mana += 1
     #Меняем игрока
     pygame.mixer.music.load('misc/sounds/card_attack.mp3')
-    pygame.mixer.music.play()
+    globals.playmusic()
     if globals.player.id == 1:
         globals.player = globals.player2
         globals.player.action_points = True

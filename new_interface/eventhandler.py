@@ -28,12 +28,14 @@ class Event_handler():
 				else:
 					menu.clean_question()
 					return
-			if globals.question and (event.key>=K_0 and event.key<=K_9 or event.key>=K_a and event.key<=K_z or event.key>=K_PERIOD):
+			if globals.question and (event.key>=K_0 and event.key<=K_9 or event.key>=K_a and event.key<=K_z or event.key==K_PERIOD):
 				globals.answer=globals.answer+pygame.key.name(event.key)
 			if globals.question and (event.key==K_RETURN or len(globals.answer)>=globals.answer_maxchar):
 				exec(globals.answer_cmd)
 				menu.clean_question()
 				return
+			if globals.itemfocus: 
+				globals.itemfocus.change(event)
 		if event.type == MOUSEBUTTONDOWN:
 			if event.button == 1:
 				#global player
@@ -51,7 +53,7 @@ class Event_handler():
 				item = collided[len(collided)-1]
 				if item.type == 'outer':
 					return
-				if item.type == 'button':
+				if item.type == 'button' or item.type == 'txtinput':
 					item.onmousedown()
 					return
 				if item.type == "warrior_card": #Карта в колоде! Карта на поле в cardbox

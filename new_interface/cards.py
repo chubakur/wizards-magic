@@ -80,11 +80,11 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.update()
     def play_cast_sound(self):
         pygame.mixer.music.load('misc/sounds/card_cast.mp3')
-        pygame.mixer.music.play()
+        globals.playmusic()
         return
     def play_summon_sound(self):
         pygame.mixer.music.load('misc/sounds/card_summon.wav')
-        pygame.mixer.music.play()
+        globals.playmusic()
         return
     def get_attack_position(self):
         if self.parent.position < 5:
@@ -226,7 +226,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         for card in self.get_enemy_cards() + self.get_self_cards():
             card.card_died(self)
         pygame.mixer.music.load('misc/sounds/card_die.mp3')
-        pygame.mixer.music.play()
+        globals.playmusic()
         self.image = None
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
@@ -1384,7 +1384,7 @@ class Magic(pygame.sprite.Sprite):
             self.info = ""
     def cast(self):
         pygame.mixer.music.load('misc/sounds/card_cast.mp3')
-        pygame.mixer.music.play()
+        globals.playmusic()
     def unset(self, card):
         self.cards.remove(card)
     def set(self, card):

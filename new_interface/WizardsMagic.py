@@ -38,6 +38,7 @@ import cardbox
 import eventhandler
 import gameinformation
 import menu
+import options
 
 def start_game():
 	globals.background = pygame.image.load('misc/bg_sample.gif')
@@ -153,6 +154,9 @@ globals.screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Wizards Magic')
 clock = pygame.time.Clock()
 
+#read configuration file
+options.read_configuration()
+
 menu.menu_main()
 
 globals.event_handler = eventhandler.Event_handler()
@@ -161,7 +165,6 @@ globals.gameinformationpanel = gameinformation.GameInformationPanel()
 globals.cardinfo = cardinfo.CardInfo()
 
 globals.screen.blit(globals.background, (0, 0))
-background_backup = globals.background.copy()
 
 pygame.display.flip()
 while 1:
@@ -175,6 +178,6 @@ while 1:
 	globals.menu_group.update()
 	globals.information_group.update()
 	globals.screen.blit(globals.background, (0, 0))
-	globals.background = background_backup.copy()
+	globals.background = globals.background_backup.copy()
 	pygame.display.flip()
 	clock.tick(50)	

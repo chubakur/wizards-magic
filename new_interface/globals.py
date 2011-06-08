@@ -30,11 +30,16 @@ cards_attacking = []
 attack_started = False
 turn_ended = False
 
-stage=0 # 0=Menu 1=Single player game 2=network game
-question=False # when true disable all events but key stroke
-answer="" #buffer to store key strokes
-answer_maxchar=0 # max number of characters we are waiting for
-answer_cmd="" #function to execute when stoke ENTER
+stage = 0 # 0=Menu 1=Single player game 2=network game 9=options
+question = False # when true disable all events but key stroke
+answer = "" #buffer to store key strokes
+answer_maxchar = 0 # max number of characters we are waiting for
+answer_cmd = "" #function to execute when stoke ENTER
+itemfocus = None #input object with focus
+sound = 'Y' #enable sound
+nick = "" #nickname for network game
+server = "" # ip server for network game
+port = "" # port to connect to/serve network game
 def clean():
 	cards_of_element_shower_element = "water" #какой элемент показывать
 	selected_card = False #Выбранная карта
@@ -58,4 +63,10 @@ def clean():
 	card_info_group.empty()
 	#information_group.empty()
 	menu_group.empty()
+	
+def playmusic():
+	''' global function to control music and sounds '''
+	if sound=='Y':
+		pygame.mixer.music.play()
+
 
