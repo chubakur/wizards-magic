@@ -1,6 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 import socket
+import globals
 try:
     import json
     print 'JSON'
@@ -9,11 +10,15 @@ except ImportError:
     print 'SIMPLEJSON'
 #host = "drakmail.ru"
 #port = 7712
-host = globals.server
-port = globals.port
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((host, port))
-print "CONNECTED"
+sock = socket
+def connect():
+    global sock
+    host = globals.server
+    port = globals.port
+    print host,port
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((host, int(port)))
+    print "CONNECTED"
 def get_package():
     #print "SERVICE:"
     #print service_package
@@ -31,5 +36,5 @@ def query_(query):
 query=query_
     #print sock.recv(1)
     #return
-    #return get_package()
+    #return get_package()62.176.21.105
  

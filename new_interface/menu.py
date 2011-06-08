@@ -96,7 +96,11 @@ def menu_startgame():
 	''' function called after the user click start menu item'''
 	globals.stage=1
 	globals.gameinformationpanel.show=False
-
+def menu_startgame_onserver():
+	''' finction called after the user click Connect to Server item '''
+	globals.cli = True
+	globals.stage = 1
+	globals.gameinformationpanel.show=False
 def menu_options():
 	''' function called after the user click options menu item'''
 	options.options_main()
@@ -116,7 +120,7 @@ def menu_main():
 	globals.menu_group.empty()
 	menu1 = MenuButton(0,"Start Game","menu_startgame()")
 	menu2 = MenuButton(1,"Start Server","",enabled=False)
-	menu3 = MenuButton(2,"Connect to Server","",enabled=False)
+	menu3 = MenuButton(2,"Connect to Server","menu_startgame_onserver()")
 	menu4 = MenuButton(3,"Options","menu_options()")
 	menu5 = MenuButton(5,"Quit","menu_esc_question()")
 

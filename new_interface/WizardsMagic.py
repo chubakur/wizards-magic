@@ -220,6 +220,7 @@ def start_game(cli=False):
        sockets.query = lambda x: x
     else:
        globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
+       sockets.connect()
        sockets.query = sockets.query_
        globals.cli = True
        thread.start_new_thread(server_handler, ())
@@ -285,8 +286,11 @@ pygame.display.flip()
 while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)
-    if globals.stage == 1: 
-        start_game()
+    if globals.stage == 1:
+        if globals.cli: 
+            start_game(1)
+        else:
+            start_game
         globals.clean()
         menu.menu_main()
 
