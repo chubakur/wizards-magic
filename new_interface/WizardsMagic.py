@@ -215,9 +215,9 @@ def start_game(cli=False):
     globals.leftarrow = cardsofelementshower.LeftArrow((356, 489))
     globals.rightarrow = cardsofelementshower.RightArrow((739, 491))
     if not cli:
-       globals.gameinformationpanel.display('Battle Started')
-       globals.cli = False
-       sockets.query = lambda x: x
+        globals.gameinformationpanel.display('Battle Started')
+        globals.cli = False
+        sockets.query = lambda x: x
     else:
        globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
        sockets.connect()
@@ -287,10 +287,11 @@ while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)
     if globals.stage == 1:
+        print globals.cli
         if globals.cli: 
             start_game(1)
         else:
-            start_game
+            start_game()
         globals.clean()
         menu.menu_main()
 

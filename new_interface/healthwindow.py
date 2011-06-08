@@ -11,7 +11,13 @@ class HealthWindow(pygame.sprite.Sprite):
         self.rect = text.get_rect().move(rect)
     def draw(self):
         #cb3b3a
-        text = self.font.render(str(globals.player.health), True, (203, 59, 58))
+        if not globals.cli:
+            text = self.font.render(str(globals.player.health), True, (203, 59, 58))
+        else:
+            if globals.player_id == 1:
+                text = self.font.render(str(globals.player1.health), True, (203, 59, 58))
+            else:
+                text = self.font.render(str(globals.player2.health), True, (203, 59, 58))
         globals.background.blit(text, self.rect)
     def update(self):
         self.draw()
@@ -25,7 +31,13 @@ class HealthWindowEnemy(pygame.sprite.Sprite):
         self.rect = text.get_rect().move(rect)
     def draw(self):
         #cb3b3a
-        text = self.font.render(str(globals.player.enemy.health), True, (203, 59, 58))
+        if not globals.cli:
+            text = self.font.render(str(globals.player.enemy.health), True, (203, 59, 58))
+        else:
+            if globals.player_id == 1:
+                text = self.font.render(str(globals.player2.health), True, (203, 59, 58))
+            else:
+                text = self.font.render(str(globals.player1.health), True, (203, 59, 58))
         globals.background.blit(text, self.rect)
     def update(self):
         self.draw()

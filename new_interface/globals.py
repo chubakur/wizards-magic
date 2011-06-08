@@ -19,7 +19,7 @@ screen = None
 player = None
 player1 = None
 player2 = None
-player_id = -1
+player_id = 0
 opponent_disconnect = False
 #Каст с выбором цели
 cast_focus = False #включен ли режим
