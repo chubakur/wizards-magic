@@ -1,16 +1,23 @@
 # -*- coding: utf-8 -*-
 import pygame.sprite
+import animations
 #from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-water_cards = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Poison", "SeaJustice", "Paralyze", "AcidStorm", "IceBolt"]
-fire_cards = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus", "Armageddon", "Fireball", "FireSpikes", "FlamingArrow", "RitualFlame"]
-air_cards = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Plague", "Spellbreaker", "BlackWind", "ChainLightning"]
-earth_cards = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit", "AbsoluteDefence", "Earthquake", "Quicksands", "Restructure", "Revival"]
-life_cards = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHealer", "Chimera", "Bless", "GodsWrath", "LifeSacrifice", "Purify", "Rejuvenation"]
-death_cards = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich", "ChaosVortex", "CoverOfDarkness", "Curse", "StealLife", "TotalWeakness"]
+water_cards_deck = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Poison", "SeaJustice", "Paralyze", "AcidStorm", "IceBolt"]
+fire_cards_deck = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus", "Armageddon", "Fireball", "FireSpikes", "FlamingArrow", "RitualFlame"]
+air_cards_deck = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Plague", "Spellbreaker", "BlackWind", "ChainLightning"]
+earth_cards_deck = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit", "AbsoluteDefence", "Earthquake", "Quicksands", "Restructure", "Revival"]
+life_cards_deck = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHealer", "Chimera", "Bless", "GodsWrath", "LifeSacrifice", "Purify", "Rejuvenation"]
+death_cards_deck = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich", "ChaosVortex", "CoverOfDarkness", "Curse", "StealLife", "TotalWeakness"]
+#water_cards = list([c for c in water_cards_deck])
+#fire_cards = list([c for c in fire_cards_deck]) 
+#air_cards = list([c for c in air_cards_deck]) 
+#earth_cards = list([c for c in earth_cards_deck]) 
+#life_cards = list([c for c in life_cards_deck]) 
+#death_cards = list([c for c in death_cards_deck]) 
 import pygame
 from math import *
 import globals
@@ -40,7 +47,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.default_power = self.power
         self.field = False
         self.used_cast = False #Использовал cast
-        if self.element == "death" or self.element == "fire" or self.element == "earth":
+        if self.element == "death" or self.element == "fire" or self.element == "earth" or self.element == "water":
             self.font_color = (255, 255, 255)
         else:
             self.font_color = (0, 0, 0)
@@ -72,12 +79,12 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.light = False
         self.update()
     def play_cast_sound(self):
-        #pygame.mixer.music.load('misc/sounds/card_cast.wav')
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load('misc/sounds/card_cast.mp3')
+        globals.playmusic()
         return
     def play_summon_sound(self):
-        #pygame.mixer.music.load('misc/sounds/card_summon.wav')
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load('misc/sounds/card_summon.wav')
+        globals.playmusic()
         return
     def get_attack_position(self):
         if self.parent.position < 5:
@@ -160,10 +167,20 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
                 if globals.cardboxes[attack_position + 1].card.name != "player":
                     adjacent_position.append(attack_position + 1)
         return adjacent_position
+    def run_attack_animation(self):
+        #Add the code for animation here
+        #print globals.cardboxes[self.parent.position].location
+        #cardbox_location = globals.cardboxes[self.parent.position].location
+        cardbox_location = (globals.cardboxes[self.parent.position].rect[0],globals.cardboxes[self.parent.position].rect[1])
+        attack_animation = animations.CustomAnimation(self.image,cardbox_location) #Instantiating a animation object
+        attack_animation.path = [(cardbox_location[0], cardbox_location[1]-40),(cardbox_location),(50,40),(200,300)]
+        attack_animation.attacking() #Selecting Method
+        globals.animations_running.append(attack_animation) #Adding to current running animations
     def attack(self): #Функция , срабатываемая при атаке персонажа
         if self.moves_alive:
             attack_position = self.get_attack_position()
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
             return kill
         else:
             return 0
@@ -208,8 +225,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.kill() #Выкидываем карту из всех групп
         for card in self.get_enemy_cards() + self.get_self_cards():
             card.card_died(self)
-        #pygame.mixer.music.load('misc/sounds/card_die.wav')
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load('misc/sounds/card_die.mp3')
+        globals.playmusic()
+        self.image = None
     def enemy_die(self): #когда карта убивает противолежащего юнита
         self.killed += 1
     def turn(self):
@@ -276,6 +294,7 @@ class Nixie(Prototype):
                     globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
         else:
             return
     def cast_action(self):
@@ -305,6 +324,7 @@ class Hydra(Prototype):
             adjacent_positions = self.get_attack_adjacent_position(attack_position)
             for adjacent_position in adjacent_positions:
                 globals.cardboxes[adjacent_position].card.damage(self.power, self)
+            self.run_attack_animation()
         else:
             return
     def turn(self):
@@ -521,7 +541,7 @@ class Salamander(Prototype):
             #card.default_power += 2
             if card != self:
                 card.power = card.power + 2
-                card.update(0)
+                card.update()
     def summon(self):
         Prototype.summon(self)
         self.additional_turn_action()
@@ -597,6 +617,7 @@ class Cerberus(Prototype):
                     globals.cardboxes[adjacent_position].card.damage(1, self)
                 else:
                     globals.cardboxes[adjacent_position].card.damage(int(ceil(float(globals.cardboxes[adjacent_position].card.power) / 2)), self)
+            self.run_attack_animation()
         else:
             return
 class Nymph(Prototype):
@@ -745,14 +766,16 @@ class Manticore(Prototype):
         self.image = pygame.image.load('misc/cards/air/manticore.gif')
         Prototype.__init__(self)
     def attack(self):
-        attack_position = self.get_attack_position()
-        if globals.cardboxes[attack_position].card.name != 'player': #if card exist
-            if globals.cardboxes[attack_position].card.cast:
-                globals.cardboxes[attack_position].card.damage(self.power + 3, self)
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
+            if globals.cardboxes[attack_position].card.name != 'player': #if card exist
+                if globals.cardboxes[attack_position].card.cast:
+                    globals.cardboxes[attack_position].card.damage(self.power + 3, self)
+                else:
+                    globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
-        else:
-            globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
     def cast_action(self):
         if self.parent.player.air_mana >= 2: #if player have mana for cast
             Prototype.cast_action(self) #activating focus-cast
@@ -866,7 +889,7 @@ class ForestSpirit(Prototype):
         self.name = "ForestSpirit"        
         self.element = "earth"
         self.level = 3
-        self.info = "Daamge from all non-magical attacks and abilities equal to 1. CAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
+        self.info = "Damage from all non-magical attacks and abilities equal to 1. CAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
         self.power = 2
         self.cast = True
         self.health = 3
@@ -933,9 +956,9 @@ class Ent(Prototype):
         self.image = pygame.image.load('misc/cards/earth/ent.gif')
         Prototype.__init__(self)
     def attack(self):
-        e_card = globals.cardboxes[self.get_attack_position()].card
-        Prototype.attack(self)
         if self.moves_alive:
+            e_card = globals.cardboxes[self.get_attack_position()].card
+            Prototype.attack(self)
             if e_card.name != 'player':
                 self.parent.player.enemy.damage(self.power, self)
         e_card = None
@@ -1101,6 +1124,7 @@ class MagicHealer(Prototype):
         self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def summon(self):
+        self.play_summon_sound()
         for cardbox in self.get_self_cardboxes():
             if cardbox.card.name == "player":
                 cardbox.card = MagicHealerChakra(self)
@@ -1114,7 +1138,8 @@ class MagicHealer(Prototype):
     def card_died(self, card):
         if card.parent.player.id == self.parent.player.id:
             card.parent.card = MagicHealerChakra(self)
-            self.security_slots.append(cardbox)
+            card.parent.card.parent = card.parent
+            self.security_slots.append(card.parent)
     def die(self):
         for slot in self.security_slots:
             slot.card.die()
@@ -1201,11 +1226,13 @@ class Vampire(Prototype):
         self.image = pygame.image.load('misc/cards/death/vampire.gif')
         Prototype.__init__(self)
     def attack(self):
-        attack_position = self.get_attack_position()
-        if globals.cardboxes[attack_position].card.name != "player":
-            if globals.cardboxes[attack_position].card.element != "death":
-                self.heal(int(ceil(float(self.power / 2.0))), 30)
-        globals.cardboxes[attack_position].card.damage(self.power, self)
+        if self.moves_alive:
+            attack_position = self.get_attack_position()
+            if globals.cardboxes[attack_position].card.name != "player":
+                if globals.cardboxes[attack_position].card.element != "death":
+                    self.heal(int(ceil(float(self.power / 2.0))), 30)
+            globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
 class Werewolf(Prototype):
     def __init__(self):        
         self.name = "Werewolf"
@@ -1249,6 +1276,7 @@ class Banshee(Prototype):
     def attack(self):
         if self.moves_alive:
             if globals.cardboxes[self.get_attack_position()].card.name == "player":
+                self.run_attack_animation()
                 globals.cardboxes[self.get_attack_position()].card.damage(self.power + 10, self)
                 self.die()
             else:
@@ -1320,10 +1348,14 @@ class Lich(Prototype):
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
-            if globals.cardboxes[attack_position].card.element == "life":
-                globals.cardboxes[attack_position].card.damage(self.power + 5, self)
+            if globals.cardboxes[attack_position].card.name != 'player':
+                if globals.cardboxes[attack_position].card.element == "life":
+                    globals.cardboxes[attack_position].card.damage(self.power + 5, self)
+                else:
+                    globals.cardboxes[attack_position].card.damage(self.power, self)
             else:
                 globals.cardboxes[attack_position].card.damage(self.power, self)
+            self.run_attack_animation()
         else:
             return
 #МАГИЯ
@@ -1342,7 +1374,7 @@ class Magic(pygame.sprite.Sprite):
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
         self.cards = []
-        if self.element == "death" or self.element == "fire" or self.element == "earth":
+        if self.element == "death" or self.element == "fire" or self.element == "earth" or self.element == "water":
             self.font_color = (255, 255, 255)
         else:
             self.font_color = (0, 0, 0)
@@ -1351,7 +1383,8 @@ class Magic(pygame.sprite.Sprite):
         except AttributeError:
             self.info = ""
     def cast(self):
-        pass
+        pygame.mixer.music.load('misc/sounds/card_cast.mp3')
+        globals.playmusic()
     def unset(self, card):
         self.cards.remove(card)
     def set(self, card):
@@ -1424,6 +1457,7 @@ class Poison(Magic):
         Magic.__init__(self)
         #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
     def cast(self):
+        Magic.cast(self)
         self.cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
         for card in self.cards:
             card.spells.append(self) #говорим карте чтобы она начала креститься
@@ -1449,6 +1483,7 @@ class SeaJustice(Magic):
         #Атакует каждую карту противника с силой равной силе карты-1
     def cast(self):
         #работает единожды, поэтому нет нужды добавлять в группу и создавать ф-ию периодического каста.
+        Magic.cast(self)
         enemy_cards = self.get_enemy_cards() #берем список вражеских карт
         for card in enemy_cards:
             card.damage(card.power, self)
@@ -1462,6 +1497,7 @@ class Paralyze(Magic):
         Magic.__init__(self)
         #противник пропускает ход
     def cast(self):
+        Magic.cast(self)
         globals.magic_cards.add(self) #добавляем периодизацию
     def periodical_cast(self):
         if self.player.id != globals.player.id:
@@ -1476,6 +1512,7 @@ class AcidStorm(Magic):
         self.info = "Each creature suffers up to 16 points of damage. If a player has Poseidon on a field, his creatures left unaffected. Amazingly poisonous magic storm, has no mercy to both friends and foes."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         s_cards = self.get_self_cards()
         s_cards_immune = False
         e_cards = self.get_enemy_cards()
@@ -1508,6 +1545,7 @@ class IceBolt(Magic):
         self.info = "Inflicts 10 + Water/2 damage to enemy player. Caster suffers 6 damage as a side effect. Large bolt of Ice, fired at a great speed. Superior efficiency"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         self.player.enemy.damage((self.player.water_mana + self.level) / 2, self)
         self.player.damage(6, self)
         self.player.water_mana = 0
@@ -1521,6 +1559,7 @@ class Armageddon(Magic):
         self.info = "All units on a field suffer 25 damage. Each player suffers 25 damage. The ultimate spell of the game. The strongest and most harmful. Beware, it's far too powerful!"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         enemy_cards = self.get_enemy_cards()
         self_cards = self.get_self_cards()
         for card in enemy_cards + self_cards:
@@ -1536,6 +1575,7 @@ class Fireball(Magic):
         self.info = "Each enemy creature suffers damage equal to owner's Fire + 3. As easy as it is - a ball of burning fire."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         enemy_cards = self.get_enemy_cards()
         for card in enemy_cards:
             card.damage(self.player.fire_mana + self.level + 3, self)
@@ -1548,6 +1588,7 @@ class FireSpikes(Magic):
         self.info = "Deals 3 damage to each enemy creature. Cheap and still good. Pure Fire."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         for card in self.get_enemy_cards():
             card.damage(3, self)
 class FlamingArrow(Magic):
@@ -1559,6 +1600,7 @@ class FlamingArrow(Magic):
         self.info = "If enemy has less Fire than owner does, enemy suffers damage, equal to this difference, multiplied by 2. Otherwise enemy suffers 1 damage. Now this is a smart one - a magic arrow made of pure Fire, never misses your foe."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         diff = self.player.fire_mana + self.level - self.player.enemy.fire_mana
         if diff > 0:
             self.player.enemy.damage(diff * 2, self)
@@ -1573,6 +1615,7 @@ class RitualFlame(Magic):
         self.info = "Destroys all spell effects from all creatures, both owner's and enemy's. Heals all Fire creatures for 3."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         for card in self.get_enemy_cards() + self.get_self_cards():
             for spell in card.spells:
                 spell.unset(card)
@@ -1588,6 +1631,7 @@ class BlackWind(Magic):
         self.info = "Winds away strongest enemy creature. Perfect against high-level enemy creatures. One of the most useful spells."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         max = 0
         link_to_max = False
         for card in self.get_enemy_cards():
@@ -1607,6 +1651,7 @@ class ChainLightning(Magic):
         self.info = "First enemy creature suffers damage equal to owner's Air+2. Lightning travels forth and hits each enemy creature, losing 2 damage each time it hits. For example, if owner has 10 Air and enemy has all 5 creatures, they suffer this damage (left to right): 12-10-8-6-4"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         air_mana = self.player.air_mana + self.level
         power = air_mana + 2
         for card in self.get_enemy_cards():
@@ -1621,6 +1666,7 @@ class Plague(Magic):
         self.info = "Every creature on a field plagued - loses all hit points except one. Ignores all defences and modifiers. None shall escape the Plague! Great lands burnt to dust where the plague passed."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         cards = self.get_enemy_cards() + self.get_self_cards()
         for card in cards:
             card.set_health(1)
@@ -1641,6 +1687,7 @@ class AbsoluteDefence(Magic):
         self.info = "Owner's creatures gain protection from all attacks. This defence only lasts one turn and lasts till next owner's turn. It's just like an unpenetrable wall has suddenly appeared. Anyone under your command will survive anything!"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         self.protected_cards = {}
         for cardbox in self.get_self_cardboxes():
             if cardbox.card.name != "player": #if card exists
@@ -1679,6 +1726,7 @@ class Earthquake(Magic):
         self.info = "Hits each creature for 15 damage. Doesn't affect owner's creatures, if onwer's Earth > 12. Even the earth itself is a powerful weapon."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         earth_mana = self.player.earth_mana + self.level
         if earth_mana > 12:
             cards = self.get_enemy_cards()
@@ -1695,6 +1743,7 @@ class Quicksands(Magic):
         self.info = "Kills all enemy creatures of level less than 5. Only the skilled one can survive the swamp's most dangerous weapon."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         for card in self.get_enemy_cards():
             if card.level < 5:
                 card.die()
@@ -1709,6 +1758,7 @@ class Restructure(Magic):
         self.info = "All onwer's creatures gain +3 health to their maximum, healing for 6 in the same time. Scatter to pieces, connect once again. Now you are stronger, none shall remain!"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         for card in self.get_self_cards():
             card.max_health += 3
             card.heal(6, card.max_health)
@@ -1721,6 +1771,7 @@ class Revival(Magic):
         self.info = "Heals all friendly creatures for 4. Gives owner 2 health for each of his creatures on a field. Heal me! Heal me!"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         for card in self.get_self_cards():
             card.heal(4, card.max_health)
             self.player.heal(2)
@@ -1733,6 +1784,7 @@ class Bless(Magic):
         self.info = "All owner's creatures Blessed: receive +1 to attack, restore 1 point of health every time they are hit. Undead creatures cannot be blessed and suffer 10 damage instead. Your army's now under God's protection, and your enemy is doomed forever!"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         cards = self.get_self_cards()
         for card in cards:
             if card.element != 'death':
@@ -1757,6 +1809,7 @@ class GodsWrath(Magic):
         self.info = "All undead on a field are destroyed. Owner receives 3 Life and 1 health for each destroyed creature. The great day of $The Lord ^is near and coming quickly. That day will be a day of $Wrath, ^a day of distress and anguish."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         cards = self.get_enemy_cards() + self.get_self_cards()
         for card in cards:
             if card.element == "death":
@@ -1772,6 +1825,7 @@ class LifeSacrifice(Magic):
         self.info = "Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         power = self.player.life_mana + self.level
         self.player.damage(power, self)
         self.player.enemy.damage(power * 2, self)
@@ -1784,6 +1838,7 @@ class Purify(Magic):
         self.info = "If owner has Life creatures in play, heals owner for 5 and steals 4 health from each enemy creature, giving them to opposed owner's creature. Only pure souls can use God's blessings."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         has_life = False
         for card in self.get_self_cards():
             if card.element == 'life':
@@ -1809,6 +1864,7 @@ class Rejuvenation(Magic):
         self.info = "Heals owner equal to his Life*3. Owner loses all Life elements. Blessed creatures heal for 3. Now you live again, mortal. Life is the most precious, be careful next time!"
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         life_mana = globals.player.life_mana + self.level
         globals.player.heal(life_mana * 3)
         for card in self.get_self_cards():
@@ -1823,6 +1879,7 @@ class ChaosVortex(Magic):
         self.info = "Banishes each creature into hell. Each banished creature gives caster 1 Death. Whenever one unfolds Chaos, no mortal can stand its fearful ugly nature."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         cards = self.get_enemy_cards() + self.get_self_cards()
         self.player.death_mana += len(cards)
         for card in cards:
@@ -1836,6 +1893,7 @@ class CoverOfDarkness(Magic):
         self.info = "All living creatures suffer 13 damage. All undead creatures heal for 5. The Lord of Chaos most useful tool. Your army of darkness shall reign forever."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         cards = self.get_enemy_cards() + self.get_self_cards()
         for card in cards:
             if card.element == "death":
@@ -1851,6 +1909,7 @@ class Curse(Magic):
         self.info = "Reduces all enemy elements by 1. Curse and Doom are now your enemy's only guests."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         if globals.player.enemy.water_mana:
             globals.player.enemy.water_mana -= 1
         if globals.player.enemy.fire_mana:
@@ -1872,6 +1931,7 @@ class StealLife(Magic):
         self.info = "If owner's Death less than 8, steals 5 health from enemy player. Otherwise steals Death + 5. Death's cold vampiric touch. So painful and surreal.."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         death_mana = globals.player.death_mana + self.level
         if death_mana < 8:
             globals.player.enemy.damage(5, self)
@@ -1888,6 +1948,7 @@ class TotalWeakness(Magic):
         self.info = " Every enemy creature suffers effect of Weakness: its attack decreased by 50% (rounded down). Make the strongest the weakest, and then assasinate him."
         Magic.__init__(self)
     def cast(self):
+        Magic.cast(self)
         cards = self.get_enemy_cards()
         for card in cards:
             card.default_power = int(floor(card.power / 2.0))

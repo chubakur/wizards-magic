@@ -3,6 +3,7 @@ import globals
 import pygame
 import cards
 import sys
+import sockets
 import menu
 from pygame.locals import *
 class Point(pygame.sprite.Sprite):
@@ -19,6 +20,10 @@ class Event_handler():
 		self.onmouse_element = False
 	def event(self, event):
 		if event.type == QUIT:
+			if not globals.opponent_disconnect:
+				sockets.query({"action":"bye","player_id":globals.player_id})
+			else:
+				sockets.query({"action":"bbye"})
 			sys.exit(0)
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_ESCAPE:
@@ -79,6 +84,7 @@ class Event_handler():
 						exec('globals.player.' + selected_card.element + '_mana -= ' + str(selected_card.level)) #Отнимаем ману
 						globals.player.action_points = False #ставим запись, что ход сделан
 						selected_card.player = globals.player
+						sockets.query({"action":"card","card":selected_card.name,"type":"magic"})
 						selected_card.cast() #вызываем магию, периодизация делается уже внутри класса, путем добавления в группу globals.magic_cards
 						#Закрываем колоду
 						for cardbox in globals.cardboxes:
@@ -89,12 +95,18 @@ class Event_handler():
 				if globals.cast_focus: #выбор цели для каста
 					if item.type == 'cardbox':
 						globals.cast_focus_wizard.focus_cast_action(item.card)
+						sockets.query({"action":"cast","position":globals.cast_focus_wizard.parent.position,"target":item.position,"focus":True})
 				if item.player.id != globals.player.id:
 					return
+				if globals.cli:
+					if item.player.id != globals.player_id:
+						return
 				if item.type == "cardbox": #Если клик на карточный бокс
 					if item.card.name != "player": #Если в этом блоке есть карта
 						if item.card.cast: #если есть каст
 							if not item.card.used_cast: # если еще не кастовали
+								if not item.card.focus_cast:
+									sockets.query({"action":"cast","position":item.position,"focus":False})
 								item.card.cast_action()
 							else:
 								globals.gameinformationpanel.display("You've already cast.")
@@ -116,6 +128,7 @@ class Event_handler():
 							return
 						item.card = globals.selected_card
 						item.card.parent = item
+						sockets.query({"action":"card","card":item.card.name,"position":item.position,"type":"warrior"})
 						#item.card.cardboxes = cardboxes
 						#item.card.playerscards = playerscards
 						item.card.field = True

@@ -16,12 +16,18 @@ class CompleteTheCourseButton(pygame.sprite.Sprite):
     def onmouseout(self):
         return
     def onmousedown(self):
+        if globals.cli:
+            if globals.player_id != globals.player.id:
+                return
         for cardbox in globals.cardboxes:
             cardbox.light = False
         player.finish_turn()
     def onmouseup(self):
         return
     def draw(self):
+        if globals.cli:
+            if globals.player_id != globals.player.id:
+                return
         globals.background.blit(self.image, self.relative_rect)
     def update(self):
         self.draw()

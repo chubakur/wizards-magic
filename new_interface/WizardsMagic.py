@@ -39,8 +39,112 @@ import eventhandler
 import gameinformation
 import menu
 import options
-
-def start_game():
+import sockets
+import nickname_window
+import thread
+import important_message
+def server_handler():
+    while True:
+        gi = sockets.get_package()
+        #si = sock.recv(256)
+        #print 'si'
+        #print si
+        #print "RETURN:"
+        #print get_package()
+        print gi
+        if gi['action'] == 'join':
+            print("Join to Game with Player_id "+str(gi['id']))
+            globals.player_id = gi['id']
+            if globals.player_id == 1:
+                player.switch_position()
+        elif gi['action'] == 'update':
+            #Устанавливаем ники
+            globals.player1.nickname = gi['nicknames'][0]
+            globals.player2.nickname = gi['nicknames'][1]
+            #nickname_window.NicknameWindow((200,0), globals.infopanel1)
+            #nickname_window.NicknameWindow((200,0), globals.infopanel2)
+            #кидаем ману первому игроку
+            globals.player1.water_mana = gi['mana'][0][0]
+            globals.player1.fire_mana = gi['mana'][0][1]
+            globals.player1.air_mana = gi['mana'][0][2]
+            globals.player1.earth_mana = gi['mana'][0][3]
+            globals.player1.life_mana = gi['mana'][0][4]
+            globals.player1.death_mana = gi['mana'][0][5]
+            #кидаем ману второму игроку
+            globals.player2.water_mana = gi['mana'][1][0]
+            globals.player2.fire_mana = gi['mana'][1][1]
+            globals.player2.air_mana = gi['mana'][1][2]
+            globals.player2.earth_mana = gi['mana'][1][3]
+            globals.player2.life_mana = gi['mana'][1][4]
+            globals.player2.death_mana = gi['mana'][1][5]
+            if globals.player2.cards_generated == 0 and globals.player1.cards_generated == 0:
+                print "Выдаем карты"
+                globals.player1.water_cards = gi['deck_cards'][0]['water_cards']
+                globals.player1.fire_cards = gi['deck_cards'][0]['fire_cards']
+                globals.player1.air_cards = gi['deck_cards'][0]['air_cards']
+                globals.player1.earth_cards = gi['deck_cards'][0]['earth_cards']
+                globals.player1.life_cards = gi['deck_cards'][0]['life_cards']
+                globals.player1.death_cards = gi['deck_cards'][0]['death_cards']
+                position = 0
+                for card in globals.player1.water_cards + globals.player1.fire_cards + globals.player1.air_cards + globals.player1.earth_cards + globals.player1.life_cards + globals.player1.death_cards:
+                    exec("globals.player1."+card.lower()+"= cards."+card+"()")
+                    exec("globals.player1."+card.lower()+".position_in_deck = " +str(position))
+                    position += 1
+                    if position > 3:
+                        position = 0
+                globals.player1.cards_generated = True
+                #а теперь второму
+                globals.player2.water_cards = gi['deck_cards'][1]['water_cards']
+                globals.player2.fire_cards = gi['deck_cards'][1]['fire_cards']
+                globals.player2.air_cards = gi['deck_cards'][1]['air_cards']
+                globals.player2.earth_cards = gi['deck_cards'][1]['earth_cards']
+                globals.player2.life_cards = gi['deck_cards'][1]['life_cards']
+                globals.player2.death_cards = gi['deck_cards'][1]['death_cards']
+                position = 0
+                for card in globals.player2.water_cards + globals.player2.fire_cards + globals.player2.air_cards + globals.player2.earth_cards + globals.player2.life_cards + globals.player2.death_cards:
+                    exec("globals.player2."+card.lower()+"= cards."+card+"()")
+                    exec("globals.player2."+card.lower()+".position_in_deck = " +str(position))
+                    position += 1
+                    if position > 3:
+                        position = 0
+                globals.player2.cards_generated = True
+            globals.information_group.remove(globals.importantmessage)
+            del globals.importantmessage
+            globals.gameinformationpanel.display('Battle started.')
+        elif gi['action'] == 'switch_turn':
+            player.me_finish_turn()
+        elif gi['action'] == 'card':
+            #print gi
+            #if gi['position'] == 0:
+                #cardbox = globals.cardbox0
+            if gi['type'] == 'warrior':
+                exec("tmp_card = cards."+gi['card']+"()")
+                exec("globals.cardbox"+str(gi['position'])+".card =  tmp_card")
+                exec("globals.cardbox"+str(gi['position'])+".card.parent = globals.cardbox"+str(gi['position']))
+                exec("globals.cardbox"+str(gi['position'])+".card.field = True")
+                exec("globals.cardbox"+str(gi['position'])+".card.summon()")
+                exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
+                exec("globals.ccards_"+str(globals.player.id)+".add(globals.cardbox"+str(gi['position'])+".card)")
+                #exec("globals.ccards_2.add(globals.cardbox"+str(gi['position'])+".card)")
+                #print globals.player.id,tmp_card
+            elif gi['type'] == 'magic':
+                exec("tmp_card = cards."+gi['card']+"()")
+                exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
+                globals.player.action_points = False #ставим запись, что ход сделан
+                tmp_card.player = globals.player
+                tmp_card.cast()
+                globals.gameinformationpanel.display('Enemy used '+gi['card'])
+        elif gi['action'] == 'cast':
+            if not gi['focus']:
+                exec('globals.cardbox'+str(gi['position'])+".card.cast_action()")
+            else:#фокус каст
+                exec('globals.cardbox'+str(gi['position'])+".card.focus_cast_action("+"globals.cardbox"+str(gi['target'])+".card)")
+                   # if not item.card.used_cast: # если еще не кастовали
+                             #  item.card.cast_action()
+        elif gi['action'] == "opponent_disconnect":
+            globals.opponent_disconnect = True
+            globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
+def start_game(cli=False):
 	globals.background = pygame.image.load('misc/bg_sample.gif')
 	#globals.background = globals.background.convert()
 	#globals.background = pygame.Surface(globals.screen.get_size())
@@ -111,13 +215,23 @@ def start_game():
 	#стрелочки для сдвига карт в колоде
 	globals.leftarrow = cardsofelementshower.LeftArrow((356,489))
 	globals.rightarrow = cardsofelementshower.RightArrow((739,491))
-	globals.gameinformationpanel.display('Battle started.')
-	player.switch_position()
+	if not cli:
+	   globals.gameinformationpanel.display('Battle Started')
+	   globals.cli = False
+	   sockets.query = lambda x: x
+	else:
+	   globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
+	   sockets.query = sockets.query_
+	   globals.cli = True
+	   thread.start_new_thread(server_handler, ())
+	if not globals.cli:
+	   player.switch_position()
 	#********************************************************************************
 	globals.screen.blit(globals.background, (0, 0))
 	globals.panels.update()
 	globals.interface.update()
 	pygame.display.flip()
+	sockets.query({"action":"join","nickname":globals.nick}) #входим в игру
 	while globals.stage==1:
 		#if globals.turn_ended and len(cards_attacking) = 0:
 		#	for cardbox in globals.cardboxes:
@@ -139,11 +253,13 @@ def start_game():
 		#globals.background.fill((0,0,0))
 		globals.background = background_backup.copy()
 		if len(globals.animations_running)==False and globals.attack_started:
+		     if not globals.cli:
 			player.switch_position()
 		for animation_running in globals.animations_running:
 			animation_running.run()
 			if globals.attack_started and len(globals.cards_attacking)==False:
-				player.switch_position()
+			    if not globals.cli:
+			      player.switch_position()
 		pygame.display.flip()
 		clock.tick(50)
 

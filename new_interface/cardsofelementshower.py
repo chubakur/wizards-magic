@@ -64,6 +64,9 @@ class CardsOfElementShower(pygame.sprite.Sprite):
     def update(self):
         #print self.type, 'update'
         globals.cards_in_deck.empty()
+        if globals.cli:
+            if globals.player_id != globals.player.id:
+                return
         if globals.cards_of_element_shower_element == "water":
             if self.first_part:
                 for card in globals.player.water_cards[0:3]:

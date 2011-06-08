@@ -19,7 +19,8 @@ screen = None
 player = None
 player1 = None
 player2 = None
-
+player_id = -1
+opponent_disconnect = False
 #Каст с выбором цели
 cast_focus = False #включен ли режим
 cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
@@ -29,7 +30,7 @@ animations_running = []
 cards_attacking = []
 attack_started = False
 turn_ended = False
-
+cli = False
 stage = 0 # 0=Menu 1=Single player game 2=network game 9=options
 question = False # when true disable all events but key stroke
 answer = "" #buffer to store key strokes

@@ -3,6 +3,7 @@
 import cards
 import random
 import globals
+import sockets
 import pygame
 class Player(): #Прототип игрока
     def __init__(self):
@@ -11,6 +12,7 @@ class Player(): #Прототип игрока
         self.action_points = True #Ходил игрок, или нет
         self.get_cards()
         self.get_mana()
+        self.cards_generated = False
     def damage(self, damage, enemy, cast = False):
         self.health -= damage
         if self.health <= 0:
@@ -86,7 +88,7 @@ def switch_position():
     globals.attack_started = False
     for cardbox in globals.cardboxes:
         cardbox.opposite = not cardbox.opposite
-def finish_turn():
+def me_finish_turn():
     #Добавляем ману другому игроку.
     globals.attack_started = True
     globals.player.enemy.water_mana += 1
@@ -126,4 +128,7 @@ def finish_turn():
             card.turn()
         for card in globals.ccards_1:
             card.additional_turn_action()
+def finish_turn():
+    me_finish_turn()
+    sockets.query({"action":"switch_turn"})
     #switch_position()
