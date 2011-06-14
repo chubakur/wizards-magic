@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import pygame.sprite
 import animations
+import os
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 #from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
@@ -26,8 +29,8 @@ pygame.font.init()
 font = pygame.font.Font(None, 25)
 class CastLabel(pygame.sprite.Sprite):
     def __init__(self):
-        self.cast_active = pygame.image.load("misc/card_cast_logo_active.png").convert_alpha()
-        self.cast_disabled = pygame.image.load("misc/card_cast_logo_disabled.png").convert_alpha()
+        self.cast_active = pygame.image.load(current_folder+"/misc/card_cast_logo_active.png").convert_alpha()
+        self.cast_disabled = pygame.image.load(current_folder+"/misc/card_cast_logo_disabled.png").convert_alpha()
 class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def __init__(self):
         #self.group = group #Группа, в которой лежит эта карта
@@ -35,7 +38,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.parent = 0
         self.light = False
         self.image = self.image.convert_alpha()
-        self.light_image = pygame.image.load('misc/light.gif').convert_alpha()
+        self.light_image = pygame.image.load(current_folder+'/misc/light.gif').convert_alpha()
         self.surface_backup = self.image.copy()
         self.font = pygame.font.Font(None, 19)
         self.type = "warrior_card"
@@ -79,11 +82,11 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.light = False
         self.update()
     def play_cast_sound(self):
-        pygame.mixer.music.load('misc/sounds/card_cast.mp3')
+        pygame.mixer.music.load(current_folder+'/misc/sounds/card_cast.mp3')
         globals.playmusic()
         return
     def play_summon_sound(self):
-        pygame.mixer.music.load('misc/sounds/card_summon.wav')
+        pygame.mixer.music.load(current_folder+'/misc/sounds/card_summon.wav')
         globals.playmusic()
         return
     def get_attack_position(self):
@@ -225,7 +228,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.kill() #Выкидываем карту из всех групп
         for card in self.get_enemy_cards() + self.get_self_cards():
             card.card_died(self)
-        pygame.mixer.music.load('misc/sounds/card_die.mp3')
+        pygame.mixer.music.load(current_folder+'/misc/sounds/card_die.mp3')
         globals.playmusic()
         self.image = None
     def enemy_die(self): #когда карта убивает противолежащего юнита
@@ -281,7 +284,7 @@ class Nixie(Prototype):
         self.power = 3
         self.health = 10
         self.cast = True
-        self.image = pygame.image.load('misc/cards/water/nixie.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/nixie.gif')
         self.info = "Causes 200% of damage to fire creatures. Gives owner 1 Water in the beginning of owner's turn. Casting Sea of Sacred increases owner's Water by 1 and reduces Fire by 1."
         Prototype.__init__(self)
     def attack(self):
@@ -315,7 +318,7 @@ class Hydra(Prototype):
         self.focus_cast = True
         self.health = 29
         self.info = "Attacks both adjacent slots. Reduces owner`s Water by 2 every turn. CAST: Consumes friendly unit, receiving up to 50% of his health."
-        self.image = pygame.image.load('misc/cards/water/hydra.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/hydra.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -355,7 +358,7 @@ class Waterfall(Prototype):
         self.power = 1
         self.cast = False
         self.health = 33
-        self.image = pygame.image.load('misc/cards/water/waterfall.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/waterfall.gif')
         self.info = "One of the toughest Elementals. Health itself for 3 whenever any player casts water spell of summons water creature. Attack equal to owner`s Water."
         Prototype.__init__(self)
     def turn(self):
@@ -371,7 +374,7 @@ class Leviathan(Prototype):
         self.power = 6
         self.cast = False
         self.health = 37
-        self.image = pygame.image.load('misc/cards/water/leviathan.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/leviathan.gif')
         self.info = "When attacking, each enemy creature suffers 1 damage in addition to standard attack. Casting Curing heals owner for 4. In exchange, owner loses 1 Water. Cannot be cast if owner's Water less than 6."
         Prototype.__init__(self)
 class IceGuard(Prototype):
@@ -383,7 +386,7 @@ class IceGuard(Prototype):
         self.power = 4
         self.cast = False
         self.health = 19
-        self.image = pygame.image.load('misc/cards/water/ice_guard.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/ice_guard.gif')
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast=False):
         if enemy.element == "fire":
@@ -399,7 +402,7 @@ class Poseidon(Prototype):
         self.info = "Every time anyone casts Water spell or summons Water creature, opponent suffers 4 damage and owner gains 2 health."
         self.cast = False
         self.health = 25
-        self.image = pygame.image.load('misc/cards/water/poseidon.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/poseidon.gif')
         Prototype.__init__(self)
 class IceWizard(Prototype):
     def __init__(self):        
@@ -410,7 +413,7 @@ class IceWizard(Prototype):
         self.power = 4
         self.cast = True
         self.health = 22
-        self.image = pygame.image.load('misc/cards/water/ice_wizard.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/ice_wizard.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -435,7 +438,7 @@ class Demon(Prototype):
         self.info = "Doesn`t suffer from Fire and Earth spells. CAST: Whenever Demon casts Fire Bleed owner loses 1 Earth and receives 2 Fire elements."
         self.cast = True
         self.health = 12
-        self.image = pygame.image.load('misc/cards/fire/demon.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/demon.gif')
         Prototype.__init__(self)
     def cast_action(self):
         self.play_cast_sound()
@@ -455,7 +458,7 @@ class Devil(Prototype):
         self.cast = True
         self.focus_cast = True
         self.health = 27
-        self.image = pygame.image.load('misc/cards/fire/devil.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/devil.gif')
         Prototype.__init__(self)
     def die(self):
         self.parent.player.damage(10, self)
@@ -494,7 +497,7 @@ class RedDrake(Prototype):
         self.power = 5
         self.cast = False
         self.health = 16
-        self.image = pygame.image.load('misc/cards/fire/red_drake.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/red_drake.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -515,7 +518,7 @@ class Firelord(Prototype):
         self.cast = False
         self.info = "Opens fire gates. This means that both players should receive 1 additional Fire every turn. Upon dying, Firelord brings 8 damage to each player."
         self.health = 21
-        self.image = pygame.image.load('misc/cards/fire/firelord.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/firelord.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -534,7 +537,7 @@ class Salamander(Prototype):
         self.cast = False
         self.info = "Increases attack of all owner's creatures by 2. Increases damage from owner player's spellcastings by 2."
         self.health = 15
-        self.image = pygame.image.load('misc/cards/fire/salamander.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/salamander.gif')
         Prototype.__init__(self)
     def additional_turn_action(self):
         for card in self.get_self_cards():
@@ -554,7 +557,7 @@ class Efreet(Prototype):
         self.cast = False
         self.health = 33
         self.info = "Whenever any creature attacks Efreet, that creature suffers half of damage send back (same applies to Fire Shield spell). Uppon summoning, all enemy Water creatures suffer 6 damage. CAST: Casts Fire Shield on any owner`s creature. Costs 2 Fire. Fire Shield burns creature from inside, damaging it for 2 points per turn, unless it`s a Fire creature."
-        self.image = pygame.image.load('misc/cards/fire/efreet.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/efreet.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -576,7 +579,7 @@ class Vulcan(Prototype):
         self.cast = True
         self.info = "Fire Elemental. Immune to harmful Fire spells. When summoned, enemy player loses 3 Fire, and opposed Elemental unit suffers 9 damage. Attack equal to owner`s Fire + 3. CAST: Casts Volcano Explode. Vulcan dies, but every unit on field suffers damage equal to 50% of Vulcan`s health."
         self.health = 27
-        self.image = pygame.image.load('misc/cards/fire/vulcan.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/vulcan.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -605,7 +608,7 @@ class Cerberus(Prototype):
         self.info = "Attacks adjacent enemy units at a half of it`s strength."
         self.cast = False
         self.health = 6
-        self.image = pygame.image.load('misc/cards/fire/cerberus.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/cerberus.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -629,7 +632,7 @@ class Nymph(Prototype):
         self.cast = False
         self.info = "Owner receives 1 Air at the beginning of Owners turn."
         self.health = 12
-        self.image = pygame.image.load('misc/cards/air/nymph.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/nymph.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -644,7 +647,7 @@ class Fairy(Prototype):
         self.power = 3
         self.cast = True
         self.health = 7
-        self.image = pygame.image.load('misc/cards/air/fairy.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/fairy.gif')
         Prototype.__init__(self)
     def turn(self):
         self.default_power = 3 + self.killed
@@ -679,7 +682,7 @@ class Phoenix(Prototype):
         self.cast = False
         self.health = 20
         self.recovered = 0 #Восстанавливалась ли карта
-        self.image = pygame.image.load('misc/cards/air/phoenix.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/phoenix.gif')
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast=False):
         self.health -= damage
@@ -708,7 +711,7 @@ class Zeus(Prototype):
         self.cast = False
         self.health = 24
         self.info = "Owner receives 1 air element for each enemy creature, killed by Zeus. CAST: Strikes Lighting into choosen creature. Costs 1 Air and inflicts 8 damage. Cannot strike creatures of level 7 and highter."
-        self.image = pygame.image.load('misc/cards/air/zeus.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/zeus.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -727,7 +730,7 @@ class Gargoyle(Prototype):
         self.power = 4
         self.cast = True
         self.health = 15
-        self.image = pygame.image.load('misc/cards/air/gargoyle.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/gargoyle.gif')
         self.stone = False
         Prototype.__init__(self)
     def attack(self):
@@ -763,7 +766,7 @@ class Manticore(Prototype):
         self.cast = True
         self.focus_cast = True
         self.health = 19
-        self.image = pygame.image.load('misc/cards/air/manticore.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/manticore.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -808,7 +811,7 @@ class Titan(Prototype):
         self.cast = True
         self.info = "When summoned, enemy loses 3 Air. Titan`s attack is increased by 1 for each Air creature in play. CAST: Casts Thunder Fist. All enemy Earth creatures suffer 3 damage. Owner loses 1 Air."
         self.health = 28
-        self.image = pygame.image.load('misc/cards/air/titan.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/titan.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -835,7 +838,7 @@ class Satyr(Prototype):
         self.cast = True
         self.info = "Increases Earth by 1 every turn. CAST: Once Satyr casts Dissolve, it dies and creature in the opposed slot suffers 5 damage. If there`s no creature, damage dealt to enemy player."
         self.health = 10
-        self.image = pygame.image.load('misc/cards/earth/satyr.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/satyr.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -857,7 +860,7 @@ class Golem(Prototype):
         self.cast = False
         self.health = 15
         self.info = "Regenerates 3 health every turn. While owner's Earth less than 3, it suffers 3 damage instead."
-        self.image = pygame.image.load('misc/cards/earth/golem.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/golem.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -874,7 +877,7 @@ class Dryad(Prototype):
         self.cast = False
         self.health = 12
         self.info = "Adjacent owner creatures attack increases by 1, and if it`s Earth creature, by 2 whenever anyone casts Earth spell of summons Earth creature."
-        self.image = pygame.image.load('misc/cards/earth/dryad.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/dryad.gif')
         Prototype.__init__(self)
     def additional_turn_action(self):
         ids = self.get_adjacent_position()
@@ -893,7 +896,7 @@ class ForestSpirit(Prototype):
         self.power = 2
         self.cast = True
         self.health = 3
-        self.image = pygame.image.load('misc/cards/earth/forest_spirit.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast=False):
         self.health -= 1
@@ -917,7 +920,7 @@ class Centaur(Prototype):
         self.power = 5
         self.cast = True
         self.health = 14
-        self.image = pygame.image.load('misc/cards/earth/centaur.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/centaur.gif')
         Prototype.__init__(self)
         self.moves_alive = 1
     def cast_action(self):
@@ -935,7 +938,7 @@ class Elemental(Prototype):
         self.cast = False
         self.info = "Attack equal to owner`s Earth. Increases Earth by 2 every turn. Fire spells deal additional 10 damage. CAST: Casts Stone Skin onto owner`s creature. That creature gain 1 point of defence from all attacks greater than 1."
         self.health = 45
-        self.image = pygame.image.load('misc/cards/earth/elemental.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/elemental.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -953,7 +956,7 @@ class Ent(Prototype):
         self.info = "Attacks opposed unit and enemy player at the same time. Casts Entangle Roots, damaging each enemy unit for 1 and losing 2 points of own health."
         self.cast = True
         self.health = 22
-        self.image = pygame.image.load('misc/cards/earth/ent.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/ent.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -976,7 +979,7 @@ class Echidna(Prototype):
         self.cast = False
         self.health = 26
         self.info = "When attacks, poisons her target. This target will lose 2 health every turn. In the beginning og owner`s turn, Echidna hits all poisoned creatures for 1."
-        self.image = pygame.image.load('misc/cards/earth/echidna.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/echidna.gif')
         Prototype.__init__(self)
 class Priest(Prototype):
     def __init__(self):        
@@ -987,7 +990,7 @@ class Priest(Prototype):
         self.power = 1
         self.health = 9
         self.info = "Increases owner`s Life by 2 every turn, decreasing Death by the same amount. Decreases owner`s Life by 3 every time owner casts Death spells."
-        self.image = pygame.image.load('misc/cards/life/priest.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/priest.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -1005,7 +1008,7 @@ class Paladin(Prototype):
         #self.level = 1
         self.power = 4
         self.health = 20
-        self.image = pygame.image.load('misc/cards/life/paladin.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/paladin.gif')
         Prototype.__init__(self)
     def cast_action(self):
         if self.parent.player.life_mana >= 2: #если хватает маны, то активируем фокус
@@ -1042,7 +1045,7 @@ class Pegasus(Prototype):
         self.info = "When summoned, each owner`s creature is healed for 3. Also, it destroys harmful spell effects from each of them. CAST: Holy Strike deals 5 damage to a target creature. If it is undead creature, Pegasus also suffer 3 damage homself. Costs 2 Life."
         self.cast = True
         self.focus_cast = True
-        self.image = pygame.image.load('misc/cards/life/pegasus.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/pegasus.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -1080,7 +1083,7 @@ class Unicorn(Prototype):
         self.cast = False
         self.info = "Unicorn reduces damage from spells to owner's creatures by 50%. Cures poison from owner's creatures. Casts Unicorn Aura. This Aura destroys useful spell effects from enemy creatures. Costs 2 Life."
         self.health = 25
-        self.image = pygame.image.load('misc/cards/life/unicorn.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/unicorn.gif')
         Prototype.__init__(self)
 class Apostate(Prototype):
     def __init__(self):        
@@ -1091,7 +1094,7 @@ class Apostate(Prototype):
         self.cast = True
         self.power = 4
         self.health = 14
-        self.image = pygame.image.load('misc/cards/life/apostate.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/apostate.gif')
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
@@ -1121,7 +1124,7 @@ class MagicHealer(Prototype):
         self.cast = False
         self.health = 10
         self.security_slots = []
-        self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def summon(self):
         self.play_summon_sound()
@@ -1153,7 +1156,7 @@ class MagicHealerChakra(Prototype):
         self.power = 0
         self.health = 10
         self.owner = owner
-        self.image = pygame.image.load('misc/cards/life/magic_healer.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def die(self):
         self.parent.card = self.parent.player
@@ -1171,7 +1174,7 @@ class Chimera(Prototype):
         self.power = 11
         self.cast = False
         self.health = 30
-        self.image = pygame.image.load('misc/cards/life/chimera.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/chimera.gif')
         Prototype.__init__(self)
     def card_summoned(self, card):
         if self.parent.player.id == card.parent.player.id: #if it`s my card
@@ -1186,7 +1189,7 @@ class Zombie(Prototype):
         self.health = 11
         self.info = "Eats enemies corpses - every time if kills enemy creature, totally health and his health increases by 3."
         self.cast = False
-        self.image = pygame.image.load('misc/cards/death/zombie.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/zombie.gif')
         Prototype.__init__(self)
     def enemy_die(self):
         self.max_health += 3
@@ -1201,7 +1204,7 @@ class Ghost(Prototype):
         self.cast = True
         self.power = 3
         self.health = 13
-        self.image = pygame.image.load('misc/cards/death/ghost.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/ghost.gif')
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast = False):
         if not cast:
@@ -1223,7 +1226,7 @@ class Vampire(Prototype):
         self.health = 22
         self.cast = False
         self.info = "When attacks living creature, restores health equal to 50% of damage dealt. Maximum 30 health."
-        self.image = pygame.image.load('misc/cards/death/vampire.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/vampire.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -1242,7 +1245,7 @@ class Werewolf(Prototype):
         self.power = 6
         self.info = "When dies, becomes a ghost. CAST: Casts Blood Rage on self. Strikes twice as hard this turn, but owner loses 3 Death points on casting."
         self.health = 16
-        self.image = pygame.image.load('misc/cards/death/werewolf.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/werewolf.gif')
         Prototype.__init__(self)
     def die(self):
         card = Ghost()
@@ -1271,7 +1274,7 @@ class Banshee(Prototype):
         self.cast = False
         self.power = 5
         self.health = 12
-        self.image = pygame.image.load('misc/cards/death/banshee.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/banshee.gif')
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -1294,7 +1297,7 @@ class GrimReaper(Prototype):
         self.cast = True
         self.focus_cast = True
         self.health = 22
-        self.image = pygame.image.load('misc/cards/death/grim_reaper.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/grim_reaper.gif')
         Prototype.__init__(self)
     def cast_action(self):
         if self.parent.player.death_mana >= 3:
@@ -1323,7 +1326,7 @@ class Darklord(Prototype):
         self.power = 4
         self.cast = False
         self.health = 14
-        self.image = pygame.image.load('misc/cards/death/darklord.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/darklord.gif')
         Prototype.__init__(self)
     def card_died(self, card):
         self.heal(2, self.max_health)
@@ -1337,7 +1340,7 @@ class Lich(Prototype):
         self.cast = False
         self.power = 7
         self.health = 18
-        self.image = pygame.image.load('misc/cards/death/lich.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/lich.gif')
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
@@ -1383,7 +1386,7 @@ class Magic(pygame.sprite.Sprite):
         except AttributeError:
             self.info = ""
     def cast(self):
-        pygame.mixer.music.load('misc/sounds/card_cast.mp3')
+        pygame.mixer.music.load(current_folder+'/misc/sounds/card_cast.mp3')
         globals.playmusic()
     def unset(self, card):
         self.cards.remove(card)
@@ -1452,7 +1455,7 @@ class Poison(Magic):
         self.element = "water"
         self.name = "Poison"
         self.level = 3
-        self.image = pygame.image.load('misc/cards/water/poison.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/poison.gif')
         self.info = "Poisons all enemy units so that they lose health every turn, also hits them with 1 damage. Posion doesn`t affect undead."
         Magic.__init__(self)
         #Каждый ход отнимает у карты противника по 1 здоровью. Не действует на класс смерти
@@ -1478,7 +1481,7 @@ class SeaJustice(Magic):
         self.name = "SeaJustice"
         self.level = 3
         self.info = "It`s magic card called SeaJustice. Try It!"
-        self.image = pygame.image.load('misc/cards/water/sea_justice.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/sea_justice.gif')
         Magic.__init__(self)
         #Атакует каждую карту противника с силой равной силе карты-1
     def cast(self):
@@ -1492,7 +1495,7 @@ class Paralyze(Magic):
         self.element = "water"
         self.name = "Paralyze"
         self.level = 10
-        self.image = pygame.image.load('misc/cards/water/paralyze.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/paralyze.gif')
         self.info = "Vasya nakakal v shtani!"
         Magic.__init__(self)
         #противник пропускает ход
@@ -1508,7 +1511,7 @@ class AcidStorm(Magic):
         self.element = "water"
         self.name = "AcidStorm"
         self.level = 9
-        self.image = pygame.image.load('misc/cards/water/acid_storm.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/acid_storm.gif')
         self.info = "Each creature suffers up to 16 points of damage. If a player has Poseidon on a field, his creatures left unaffected. Amazingly poisonous magic storm, has no mercy to both friends and foes."
         Magic.__init__(self)
     def cast(self):
@@ -1541,7 +1544,7 @@ class IceBolt(Magic):
         self.element = "water"
         self.name = "IceBolt"
         self.level = 7
-        self.image = pygame.image.load('misc/cards/water/ice_bolt.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/water/ice_bolt.gif')
         self.info = "Inflicts 10 + Water/2 damage to enemy player. Caster suffers 6 damage as a side effect. Large bolt of Ice, fired at a great speed. Superior efficiency"
         Magic.__init__(self)
     def cast(self):
@@ -1555,7 +1558,7 @@ class Armageddon(Magic):
         self.element = "fire"
         self.name = "Armageddon"
         self.level = 11
-        self.image = pygame.image.load('misc/cards/fire/armageddon.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/armageddon.gif')
         self.info = "All units on a field suffer 25 damage. Each player suffers 25 damage. The ultimate spell of the game. The strongest and most harmful. Beware, it's far too powerful!"
         Magic.__init__(self)
     def cast(self):
@@ -1571,7 +1574,7 @@ class Fireball(Magic):
         self.element = "fire"
         self.name = "Fireball"
         self.level = 8
-        self.image = pygame.image.load('misc/cards/fire/fireball.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/fireball.gif')
         self.info = "Each enemy creature suffers damage equal to owner's Fire + 3. As easy as it is - a ball of burning fire."
         Magic.__init__(self)
     def cast(self):
@@ -1584,7 +1587,7 @@ class FireSpikes(Magic):
         self.element = "fire"
         self.name = "FireSpikes"
         self.level = 3
-        self.image = pygame.image.load('misc/cards/fire/fire_spikes.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/fire_spikes.gif')
         self.info = "Deals 3 damage to each enemy creature. Cheap and still good. Pure Fire."
         Magic.__init__(self)
     def cast(self):
@@ -1596,7 +1599,7 @@ class FlamingArrow(Magic):
         self.element = "fire"
         self.name = "FlamingArrow"
         self.level = 4
-        self.image = pygame.image.load('misc/cards/fire/flaming_arrow.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/flaming_arrow.gif')
         self.info = "If enemy has less Fire than owner does, enemy suffers damage, equal to this difference, multiplied by 2. Otherwise enemy suffers 1 damage. Now this is a smart one - a magic arrow made of pure Fire, never misses your foe."
         Magic.__init__(self)
     def cast(self):
@@ -1611,7 +1614,7 @@ class RitualFlame(Magic):
         self.element = "fire"
         self.name = "RitualFlame"
         self.level = 5
-        self.image = pygame.image.load('misc/cards/fire/ritual_flame.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/fire/ritual_flame.gif')
         self.info = "Destroys all spell effects from all creatures, both owner's and enemy's. Heals all Fire creatures for 3."
         Magic.__init__(self)
     def cast(self):
@@ -1627,7 +1630,7 @@ class BlackWind(Magic):
         self.element = "air"
         self.name = "BlackWind"
         self.level = 8
-        self.image = pygame.image.load('misc/cards/air/black_wind.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/black_wind.gif')
         self.info = "Winds away strongest enemy creature. Perfect against high-level enemy creatures. One of the most useful spells."
         Magic.__init__(self)
     def cast(self):
@@ -1647,7 +1650,7 @@ class ChainLightning(Magic):
         self.element = "air"
         self.name = "ChainLightning"
         self.level = 9
-        self.image = pygame.image.load('misc/cards/air/chain_lightning.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/chain_lightning.gif')
         self.info = "First enemy creature suffers damage equal to owner's Air+2. Lightning travels forth and hits each enemy creature, losing 2 damage each time it hits. For example, if owner has 10 Air and enemy has all 5 creatures, they suffer this damage (left to right): 12-10-8-6-4"
         Magic.__init__(self)
     def cast(self):
@@ -1662,7 +1665,7 @@ class Plague(Magic):
         self.element = "air"
         self.name = "Plague"
         self.level = 12
-        self.image = pygame.image.load('misc/cards/air/plague.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/plague.gif')
         self.info = "Every creature on a field plagued - loses all hit points except one. Ignores all defences and modifiers. None shall escape the Plague! Great lands burnt to dust where the plague passed."
         Magic.__init__(self)
     def cast(self):
@@ -1675,7 +1678,7 @@ class Spellbreaker(Magic):
         self.element = "air"
         self.name = "Spellbreaker"
         self.level = 7
-        self.image = pygame.image.load('misc/cards/air/spellbreaker.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/air/spellbreaker.gif')
         self.info = "Owner's creatures become permanently immune to all damaging spells, spell effects, and poison. Remember that your creatures can no longer be affected by Bless, Restructure and other good spell effects."
         Magic.__init__(self)
 class AbsoluteDefence(Magic): 
@@ -1683,7 +1686,7 @@ class AbsoluteDefence(Magic):
         self.element = "earth"
         self.name = "AbsoluteDefence"
         self.level = 7
-        self.image = pygame.image.load('misc/cards/earth/absolute_defence.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/absolute_defence.gif')
         self.info = "Owner's creatures gain protection from all attacks. This defence only lasts one turn and lasts till next owner's turn. It's just like an unpenetrable wall has suddenly appeared. Anyone under your command will survive anything!"
         Magic.__init__(self)
     def cast(self):
@@ -1722,7 +1725,7 @@ class Earthquake(Magic):
         self.element = "earth"
         self.name = "Earthquake"
         self.level = 10
-        self.image = pygame.image.load('misc/cards/earth/earthquake.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/earthquake.gif')
         self.info = "Hits each creature for 15 damage. Doesn't affect owner's creatures, if onwer's Earth > 12. Even the earth itself is a powerful weapon."
         Magic.__init__(self)
     def cast(self):
@@ -1739,7 +1742,7 @@ class Quicksands(Magic):
         self.element = "earth"
         self.name = "Quicksands"
         self.level = 6
-        self.image = pygame.image.load('misc/cards/earth/quicksands.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/quicksands.gif')
         self.info = "Kills all enemy creatures of level less than 5. Only the skilled one can survive the swamp's most dangerous weapon."
         Magic.__init__(self)
     def cast(self):
@@ -1754,7 +1757,7 @@ class Restructure(Magic):
         self.element = "earth"
         self.name = "Restructure"
         self.level = 6
-        self.image = pygame.image.load('misc/cards/earth/restructure.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/restructure.gif')
         self.info = "All onwer's creatures gain +3 health to their maximum, healing for 6 in the same time. Scatter to pieces, connect once again. Now you are stronger, none shall remain!"
         Magic.__init__(self)
     def cast(self):
@@ -1767,7 +1770,7 @@ class Revival(Magic):
         self.element = "earth"
         self.name = "Revival"
         self.level = 5
-        self.image = pygame.image.load('misc/cards/earth/revival.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/earth/revival.gif')
         self.info = "Heals all friendly creatures for 4. Gives owner 2 health for each of his creatures on a field. Heal me! Heal me!"
         Magic.__init__(self)
     def cast(self):
@@ -1780,7 +1783,7 @@ class Bless(Magic):
         self.element = "life"
         self.name = "Bless"
         self.level = 5
-        self.image = pygame.image.load('misc/cards/life/bless.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/bless.gif')
         self.info = "All owner's creatures Blessed: receive +1 to attack, restore 1 point of health every time they are hit. Undead creatures cannot be blessed and suffer 10 damage instead. Your army's now under God's protection, and your enemy is doomed forever!"
         Magic.__init__(self)
     def cast(self):
@@ -1805,7 +1808,7 @@ class GodsWrath(Magic):
         self.element = "life"
         self.name = "GodsWrath"
         self.level = 10
-        self.image = pygame.image.load('misc/cards/life/gods_wrath.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/gods_wrath.gif')
         self.info = "All undead on a field are destroyed. Owner receives 3 Life and 1 health for each destroyed creature. The great day of $The Lord ^is near and coming quickly. That day will be a day of $Wrath, ^a day of distress and anguish."
         Magic.__init__(self)
     def cast(self):
@@ -1821,7 +1824,7 @@ class LifeSacrifice(Magic):
         self.element = "life"
         self.name = "LifeSacrifice"
         self.level = 8
-        self.image = pygame.image.load('misc/cards/life/life_sacrifice.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/life_sacrifice.gif')
         self.info = "Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
         Magic.__init__(self)
     def cast(self):
@@ -1834,7 +1837,7 @@ class Purify(Magic):
         self.element = "life"
         self.name = "Purify"
         self.level = 7
-        self.image = pygame.image.load('misc/cards/life/purify.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/purify.gif')
         self.info = "If owner has Life creatures in play, heals owner for 5 and steals 4 health from each enemy creature, giving them to opposed owner's creature. Only pure souls can use God's blessings."
         Magic.__init__(self)
     def cast(self):
@@ -1860,7 +1863,7 @@ class Rejuvenation(Magic):
         self.element = "life"
         self.name = "Rejuvenation"
         self.level = 6
-        self.image = pygame.image.load('misc/cards/life/rejuvenation.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/life/rejuvenation.gif')
         self.info = "Heals owner equal to his Life*3. Owner loses all Life elements. Blessed creatures heal for 3. Now you live again, mortal. Life is the most precious, be careful next time!"
         Magic.__init__(self)
     def cast(self):
@@ -1875,7 +1878,7 @@ class ChaosVortex(Magic):
         self.element = "death"
         self.name = "ChaosVortex"
         self.level = 13
-        self.image = pygame.image.load('misc/cards/death/chaos_vortex.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/chaos_vortex.gif')
         self.info = "Banishes each creature into hell. Each banished creature gives caster 1 Death. Whenever one unfolds Chaos, no mortal can stand its fearful ugly nature."
         Magic.__init__(self)
     def cast(self):
@@ -1889,7 +1892,7 @@ class CoverOfDarkness(Magic):
         self.element = "death"
         self.name = "CoverOfDarkness"
         self.level = 11
-        self.image = pygame.image.load('misc/cards/death/cover_of_darkness.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/cover_of_darkness.gif')
         self.info = "All living creatures suffer 13 damage. All undead creatures heal for 5. The Lord of Chaos most useful tool. Your army of darkness shall reign forever."
         Magic.__init__(self)
     def cast(self):
@@ -1905,7 +1908,7 @@ class Curse(Magic):
         self.element = "death"
         self.name = "Curse"
         self.level = 4
-        self.image = pygame.image.load('misc/cards/death/curse.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/curse.gif')
         self.info = "Reduces all enemy elements by 1. Curse and Doom are now your enemy's only guests."
         Magic.__init__(self)
     def cast(self):
@@ -1927,7 +1930,7 @@ class StealLife(Magic):
         self.element = "death"
         self.name = "StealLife"
         self.level = 6
-        self.image = pygame.image.load('misc/cards/death/steal_life.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/steal_life.gif')
         self.info = "If owner's Death less than 8, steals 5 health from enemy player. Otherwise steals Death + 5. Death's cold vampiric touch. So painful and surreal.."
         Magic.__init__(self)
     def cast(self):
@@ -1944,7 +1947,7 @@ class TotalWeakness(Magic):
         self.element = "death"
         self.name = "TotalWeakness"
         self.level = 8
-        self.image = pygame.image.load('misc/cards/death/total_weakness.gif')
+        self.image = pygame.image.load(current_folder+'/misc/cards/death/total_weakness.gif')
         self.info = " Every enemy creature suffers effect of Weakness: its attack decreased by 50% (rounded down). Make the strongest the weakest, and then assasinate him."
         Magic.__init__(self)
     def cast(self):

@@ -51,3 +51,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 46 | pegasus | Steve Allen | http://pomprint.deviantart.com/art/Pegasus-207301552 | -
 47 | ice_bolt | xeranas
 48 | werewolf | xeranas
+49 | fire spikes | xeranas

@@ -2,9 +2,12 @@
 # vim: set fileencoding=utf-8 :
 import pygame
 import sys
+import os
 import globals
 from pygame.locals import *
 import options
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 
 class MenuButton(pygame.sprite.Sprite):
 	''' menu item '''
@@ -19,7 +22,7 @@ class MenuButton(pygame.sprite.Sprite):
 		pygame.sprite.Sprite.__init__(self)
 		self.type = 'button'
 		self.color = (255,255,255)
-		self.font = pygame.font.Font("misc/Domestic_Manners.ttf", 20)
+		self.font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 20)
 		self.text=text
 		self.pos=pos  
 		self.cmd=cmd
@@ -108,10 +111,10 @@ def menu_main():
 	''' display Main manu '''
 
 	#http://www.feebleminds-gifs.com/wizard-flames.jpg
-	globals.background = pygame.image.load('misc/menu_bg.jpg').convert_alpha()
+	globals.background = pygame.image.load(current_folder+'/misc/menu_bg.jpg').convert_alpha()
 	globals.background_backup = globals.background.copy()
 	
-	globals.menu_bg = pygame.image.load('misc/menu_selections_bg.jpg').convert_alpha()
+	globals.menu_bg = pygame.image.load(current_folder+'/misc/menu_selections_bg.jpg').convert_alpha()
 	menupos = globals.menu_bg.get_rect()
 	menupos.centerx = globals.background.get_rect().centerx -2 # '-2' hack due lazy designer :)
 	menupos.centery = globals.background.get_rect().centery -1 # '-1' hack due lazy designer :)

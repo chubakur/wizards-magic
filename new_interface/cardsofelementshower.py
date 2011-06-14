@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import globals
+import os
 import pygame
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 #globals.cards_of_element_shower_element содержит стихию
 class LeftArrow(pygame.sprite.Sprite):
     def __init__(self, rect):
         pygame.sprite.Sprite.__init__(self)
         self.type = 'button'
-        self.image_normal = pygame.image.load('misc/book_button_left_normal.gif')
-        self.image_onmouse = pygame.image.load('misc/book_button_left_onmouse.gif')
-        self.image_onclick = pygame.image.load('misc/book_button_left_onclick.gif')
+        self.image_normal = pygame.image.load(current_folder+'/misc/book_button_left_normal.gif')
+        self.image_onmouse = pygame.image.load(current_folder+'/misc/book_button_left_onmouse.gif')
+        self.image_onclick = pygame.image.load(current_folder+'/misc/book_button_left_onclick.gif')
         self.image = self.image_normal
         self.rect = self.image.get_rect().move(rect)
         globals.interface.add(self)
@@ -29,9 +32,9 @@ class RightArrow(pygame.sprite.Sprite):
     def __init__(self, rect):
         pygame.sprite.Sprite.__init__(self)
         self.type = 'button'
-        self.image_normal = pygame.image.load('misc/book_button_right_normal.gif')
-        self.image_onmouse = pygame.image.load('misc/book_button_right_onmouse.gif')
-        self.image_onclick = pygame.image.load('misc/book_button_right_onclick.gif')
+        self.image_normal = pygame.image.load(current_folder+'/misc/book_button_right_normal.gif')
+        self.image_onmouse = pygame.image.load(current_folder+'/misc/book_button_right_onmouse.gif')
+        self.image_onclick = pygame.image.load(current_folder+'/misc/book_button_right_onclick.gif')
         self.image = self.image_normal
         self.rect = self.image.get_rect().move(rect)
         globals.interface.add(self)

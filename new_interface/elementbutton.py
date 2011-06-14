@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import pygame
 import globals
+import os
 pygame.font.init()
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 class ElementShower(pygame.sprite.Sprite):
     def __init__(self):
         self.type = 'outer'
-        self.font = pygame.font.Font("misc/Domestic_Manners.ttf", 12)
+        self.font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 12)
         self.init_text = self.font.render('',False,(0,0,0))
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
@@ -72,7 +75,7 @@ class ElementButton(pygame.sprite.Sprite):
         #Это прототип!
         self.type = 'button'
         self.surface_backup = self.image.copy()
-        self.font = pygame.font.Font("misc/Domestic_Manners.ttf", 15)
+        self.font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
         self.image = self.surface_backup.copy()
@@ -104,8 +107,8 @@ class ElementButton(pygame.sprite.Sprite):
 class WaterElementButton(ElementButton):
     def __init__(self, rect):
         self.element = 'water'
-        self.image_normal = pygame.image.load('misc/water_icon_big.gif').convert_alpha()
-        self.image_pressed = pygame.image.load('misc/water_icon_big_selected.gif').convert_alpha()
+        self.image_normal = pygame.image.load(current_folder+'/misc/water_icon_big.gif').convert_alpha()
+        self.image_pressed = pygame.image.load(current_folder+'/misc/water_icon_big_selected.gif').convert_alpha()
         self.image = self.image_pressed
         self.color = '(255,255,255)'
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
@@ -114,8 +117,8 @@ class WaterElementButton(ElementButton):
 class FireElementButton(ElementButton):
     def __init__(self, rect):
         self.element = 'fire'
-        self.image_normal = pygame.image.load('misc/fire_icon_big.gif').convert_alpha()
-        self.image_pressed = pygame.image.load('misc/fire_icon_big_selected.gif').convert_alpha()
+        self.image_normal = pygame.image.load(current_folder+'/misc/fire_icon_big.gif').convert_alpha()
+        self.image_pressed = pygame.image.load(current_folder+'/misc/fire_icon_big_selected.gif').convert_alpha()
         self.image = self.image_normal
         self.color = '(255,255,255)'
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
@@ -124,8 +127,8 @@ class FireElementButton(ElementButton):
 class AirElementButton(ElementButton):
     def __init__(self, rect):
         self.element = 'air'
-        self.image_normal = pygame.image.load('misc/air_icon_big.gif').convert_alpha()
-        self.image_pressed = pygame.image.load('misc/air_icon_big_selected.gif').convert_alpha()
+        self.image_normal = pygame.image.load(current_folder+'/misc/air_icon_big.gif').convert_alpha()
+        self.image_pressed = pygame.image.load(current_folder+'/misc/air_icon_big_selected.gif').convert_alpha()
         self.image = self.image_normal
         self.color = '(0,0,0)'
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
@@ -134,8 +137,8 @@ class AirElementButton(ElementButton):
 class EarthElementButton(ElementButton):
     def __init__(self, rect):
         self.element = 'earth'
-        self.image_normal = pygame.image.load('misc/earth_icon_big.gif').convert_alpha()
-        self.image_pressed = pygame.image.load('misc/earth_icon_big_selected.gif').convert_alpha()
+        self.image_normal = pygame.image.load(current_folder+'/misc/earth_icon_big.gif').convert_alpha()
+        self.image_pressed = pygame.image.load(current_folder+'/misc/earth_icon_big_selected.gif').convert_alpha()
         self.image = self.image_normal
         self.color = '(0,0,0)'
         self.surface_backup = self.image.copy()
@@ -145,8 +148,8 @@ class EarthElementButton(ElementButton):
 class LifeElementButton(ElementButton):
     def __init__(self, rect):
         self.element = 'life'
-        self.image_normal = pygame.image.load('misc/life_icon_big.gif').convert_alpha()
-        self.image_pressed = pygame.image.load('misc/life_icon_big_selected.gif').convert_alpha()
+        self.image_normal = pygame.image.load(current_folder+'/misc/life_icon_big.gif').convert_alpha()
+        self.image_pressed = pygame.image.load(current_folder+'/misc/life_icon_big_selected.gif').convert_alpha()
         self.image = self.image_normal
         self.color = '(0,0,0)'
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
@@ -155,8 +158,8 @@ class LifeElementButton(ElementButton):
 class DeathElementButton(ElementButton):
     def __init__(self, rect):
         self.element = 'death'
-        self.image_normal = pygame.image.load('misc/death_icon_big.gif').convert_alpha()
-        self.image_pressed = pygame.image.load('misc/death_icon_big_selected.gif').convert_alpha()
+        self.image_normal = pygame.image.load(current_folder+'/misc/death_icon_big.gif').convert_alpha()
+        self.image_pressed = pygame.image.load(current_folder+'/misc/death_icon_big_selected.gif').convert_alpha()
         self.image = self.image_normal
         self.color = '(255,255,255)'
         self.rect = self.image.get_rect().move((rect[0], rect[1]))

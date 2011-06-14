@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import pygame
 import globals
+import os
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 class CardInfo(pygame.sprite.Sprite):
     """ class to display information about a card """
     def __init__(self):
@@ -9,7 +12,7 @@ class CardInfo(pygame.sprite.Sprite):
         #self.image = pygame.Surface((450, 300))
         #self.image = self.image.convert()
         #self.image.fill((0, 0, 0))
-        self.image = pygame.image.load('misc/card_information.gif').convert_alpha()
+        self.image = pygame.image.load(current_folder+'/misc/card_information.gif').convert_alpha()
         self.surface_backup = self.image.copy()
         self.rect = (globals.screen.get_size()[0] / 2-self.image.get_size()[0] / 2, globals.screen.get_size()[1] / 2-self.image.get_size()[1] / 2)
         self.show = False

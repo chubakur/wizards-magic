@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 #import pygame
 import cards
+import os
 import random
 import globals
 import sockets
 import pygame
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 class Player(): #Прототип игрока
     def __init__(self):
         self.health = 50
@@ -98,7 +101,7 @@ def me_finish_turn():
     globals.player.enemy.life_mana += 1
     globals.player.enemy.death_mana += 1
     #Меняем игрока
-    pygame.mixer.music.load('misc/sounds/card_attack.mp3')
+    pygame.mixer.music.load(current_folder+'/misc/sounds/card_attack.mp3')
     globals.playmusic()
     if globals.player.id == 1:
         globals.player = globals.player2

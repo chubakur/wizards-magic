@@ -2,11 +2,14 @@
 import pygame
 import globals
 import threading
+import os
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 class GameInformationPanel(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.type = "gameinformationpanel"
-        self.image = pygame.image.load('misc/game_information.gif').convert_alpha()
+        self.image = pygame.image.load(current_folder+'/misc/game_information.gif').convert_alpha()
         self.surface_backup = self.image.copy()
         self.rect = (globals.screen.get_size()[0] / 2-self.image.get_size()[0] / 2, globals.screen.get_size()[1] / 2-self.image.get_size()[1] / 2)
         self.show = False

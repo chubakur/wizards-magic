@@ -3,13 +3,16 @@ import globals
 import pygame
 import cards
 import sys
+import os
 import sockets
 import menu
 from pygame.locals import *
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
 class Point(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.image.load('misc/point_alpha.gif').convert_alpha()
+		self.image = pygame.image.load(current_folder+'/misc/point_alpha.gif').convert_alpha()
 		self.rect = self.image.get_rect()
 	def draw(self, rect):
 		globals.background.blit(self.image, rect)
