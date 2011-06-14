@@ -64,8 +64,8 @@ def server_handler():
             #Устанавливаем ники
             globals.player1.nickname = gi['nicknames'][0]
             globals.player2.nickname = gi['nicknames'][1]
-            #nickname_window.NicknameWindow((200,0), globals.infopanel1)
-            #nickname_window.NicknameWindow((200,0), globals.infopanel2)
+            #nickname_window.NicknameWindow((200,10), globals.player1)
+            #nickname_window.NicknameWindow((200,400), globals.player2)
             #кидаем ману первому игроку
             globals.player1.water_mana = gi['mana'][0][0]
             globals.player1.fire_mana = gi['mana'][0][1]
@@ -290,7 +290,6 @@ while 1:
     for event in pygame.event.get():
         globals.event_handler.event(event)
     if globals.stage == 1:
-        print globals.cli
         if globals.cli: 
             start_game(1)
         else:

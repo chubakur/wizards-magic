@@ -3,12 +3,11 @@
 import globals
 import pygame
 class NicknameWindow(pygame.sprite.Sprite):
-    def __init__(self,rect,panel):
+    def __init__(self,rect,player):
         pygame.sprite.Sprite.__init__(self)
-        self.panel = panel
         self.type = 'nicknamewindow'
         #self.rect = rect
-        self.player = panel.player
+        self.player = player
         self.nickname = globals.font2.render(self.player.nickname, True, (255,255,255))
         self.rect = self.nickname.get_rect()
         self.rect = self.rect.move(rect)
