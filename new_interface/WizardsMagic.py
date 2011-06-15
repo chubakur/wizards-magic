@@ -166,8 +166,6 @@ def start_game(cli=False):
     globals.player1.enemy = globals.player2
     globals.player2.enemy = globals.player1
     globals.player = globals.player1
-    globals.bg_sound = pygame.mixer.Sound('misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
-    globals.bg_sound.play(-1)
     ###############################################################################################################
     #ACTIONS
     ###############################################################################################################
@@ -277,7 +275,8 @@ clock = pygame.time.Clock()
 
 #read configuration file
 options.read_configuration()
-
+globals.bg_sound = pygame.mixer.Sound('misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
+globals.bg_sound.play(-1)
 menu.menu_main()
 
 globals.event_handler = eventhandler.Event_handler()
