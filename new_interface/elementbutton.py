@@ -94,11 +94,17 @@ class ElementButton(pygame.sprite.Sprite):
     def onmouseout(self):
         pass
     def onmousedown(self):
-        exec('globals.'+globals.cards_of_element_shower_element+'_element_button.default()')
-        globals.cards_in_deck.empty()
-        globals.cards_of_element_shower_element = self.element
-        self.image = self.image_pressed
-        self.surface_backup = self.image.copy()
+        pygame.mixer.music.stop()
+        if self.element != globals.selected_elem:
+            globals.selected_elem = self.element
+            exec('globals.'+globals.cards_of_element_shower_element+'_element_button.default()')
+            globals.cards_in_deck.empty()
+            globals.cards_of_element_shower_element = self.element
+            self.image = self.image_pressed
+            self.surface_backup = self.image.copy()
+            #elements sound
+            globals.set_element_sound(self.element) 
+            globals.playmusic(time=2500);
     def onmouseup(self):
         pass
     def default(self):

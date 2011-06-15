@@ -17,6 +17,7 @@ font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
 #print pygame.font.match_font('Arial')
 cards_of_element_shower_element = "water" #какой элемент показывать #Any element to show
 selected_card = False #Выбранная карта #Selected Card
+selected_elem = None
 screen = None
 player = None
 player1 = None
@@ -44,32 +45,55 @@ nick = "" #nickname for network game
 server = "" # ip server for network game
 port = "" # port to connect to/serve network game
 def clean():
-	cards_of_element_shower_element = "water" #какой элемент показывать
-	selected_card = False #Выбранная карта
-	screen = None
-	player = None
-	player1 = None
-	player2 = None
-	#Каст с выбором цели
-	cast_focus = False #включен ли режим
-	cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
-	question=False # when true disable all events but key stroke
-	answer="" #buffer to store key strokes
-	answer_cmd="" #function to execute when stoke ENTER
+    cards_of_element_shower_element = "water" #какой элемент показывать
+    selected_card = False #Выбранная карта
+    screen = None
+    player = None
+    player1 = None
+    player2 = None
+    #Каст с выбором цели
+    cast_focus = False #включен ли режим
+    cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
+    question=False # when true disable all events but key stroke
+    answer="" #buffer to store key strokes
+    answer_cmd="" #function to execute when stoke ENTER
 
-	panels.empty()
-	interface.empty()
-	cards_in_deck.empty()
-	ccards_1.empty()
-	ccards_2.empty()
-	magic_cards.empty()
-	card_info_group.empty()
-	#information_group.empty()
-	menu_group.empty()
-	
-def playmusic():
-	''' global function to control music and sounds '''
-	if sound=='Y':
-		pygame.mixer.music.play()
+    panels.empty()
+    interface.empty()
+    cards_in_deck.empty()
+    ccards_1.empty()
+    ccards_2.empty()
+    magic_cards.empty()
+    card_info_group.empty()
+    #information_group.empty()
+    menu_group.empty()
+    
+def playmusic(time=None):
+    ''' global function to control music and sounds '''
+    ''' time used for fadeout (ms)'''
+    if sound=='Y':
+        pygame.mixer.music.play()
+        if time != None:
+            pygame.mixer.music.fadeout(time)
+
+def set_element_sound(element):
+    if element == 'water':
+        pygame.mixer.music.load(current_folder+'/misc/sounds/water_elem_click.mp3')
+    elif element == 'air':
+        pygame.mixer.music.load(current_folder+'/misc/sounds/air_elem_click.mp3')
+    elif element == 'fire':
+        pygame.mixer.music.load(current_folder+'/misc/sounds/fire_elem_click.mp3')
+    elif element == 'earth':
+        pygame.mixer.music.load(current_folder+'/misc/sounds/earth_elem_click.mp3')
+    elif element == 'death':
+        pygame.mixer.music.load(current_folder+'/misc/sounds/death_elem_click.mp3')
+    elif element == 'life':
+        pygame.mixer.music.load(current_folder+'/misc/sounds/life_elem_click.mp3')
+
+
+
+
+
+    
 
 

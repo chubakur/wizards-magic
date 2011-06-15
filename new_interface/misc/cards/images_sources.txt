@@ -52,3 +52,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 47 | ice_bolt | xeranas
 48 | werewolf | xeranas
 49 | fire spikes | xeranas
+50 | efreet | - | http://wtactics.org/ | remaked by xeranas
