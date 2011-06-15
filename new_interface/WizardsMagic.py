@@ -64,6 +64,7 @@ def server_handler():
             #Устанавливаем ники
             globals.player1.nickname = gi['nicknames'][0]
             globals.player2.nickname = gi['nicknames'][1]
+            #TODO: draw nicknames
             #nickname_window.NicknameWindow((200,10), globals.player1)
             #nickname_window.NicknameWindow((200,400), globals.player2)
             #кидаем ману первому игроку
