@@ -4,12 +4,12 @@ import globals
 from pygame.locals import *
 import ConfigParser
 import os.path
-from txtinput import TxtInput
+from widgets import TxtInput, CheckBox
 import menu
 def launcher():
     #Something ,what we need to change after reset configuration
     globals.bg_sound.stop()
-    if globals.sound == "Y":
+    if globals.music == "Y":
         globals.bg_sound.play(-1)
 def save():
     config = ConfigParser.RawConfigParser()
@@ -17,6 +17,8 @@ def save():
     for item in globals.menu_group:
         if item.type=='txtinput':
             config.set('WizardsMagic', item.key, item.text)
+        if item.type=='checkbox':
+            config.set('WizardsMagic', item.key, (item.value and 'Y' or 'N'))
     configfile=open('wizardsmagic.cfg', 'wb')
     config.write(configfile)
     configfile.close()
@@ -31,6 +33,13 @@ def read_configuration():
     config = ConfigParser.ConfigParser()
     config.read('wizardsmagic.cfg')
 
+    try:
+        globals.music = config.get('WizardsMagic', 'music')
+        globals.music = globals.music.upper()
+        if not globals.music in "YN":
+            globals.music = "Y"
+    except:
+        globals.music = "Y"
     try:
         globals.sound = config.get('WizardsMagic', 'sound')
         globals.sound = globals.sound.upper()
@@ -71,6 +80,7 @@ def options_main():
     if not os.path.isfile('wizardsmagic.cfg'):
         config = ConfigParser.RawConfigParser()
         config.add_section('WizardsMagic')
+        config.set('WizardsMagic', 'music', 'Y')
         config.set('WizardsMagic', 'sound', 'Y')
         config.set('WizardsMagic', 'nick', 'myname')
         config.set('WizardsMagic', 'server', '127.0.0.1')
@@ -82,10 +92,11 @@ def options_main():
     #read configuration file
     read_configuration()
 
-    option1 = TxtInput(0,"SOUND:", globals.sound, 1, key="sound")
-    option2 = TxtInput(1,"NICK:", globals.nick, 8, key="nick")
-    option3 = TxtInput(2,"SERVER:", globals.server, 15, key="server")
-    option4 = TxtInput(3,"PORT:", globals.port, 5, key="port")
+    option1 = CheckBox(0,"MUSIC:", (globals.music == 'Y'), key="music")
+    option1 = CheckBox(1,"SOUNDS:", (globals.sound == 'Y'), key="sound")
+    option2 = TxtInput(2,"NICK:", globals.nick, 8, key="nick")
+    option3 = TxtInput(3,"SERVER:", globals.server, 15, key="server")
+    option4 = TxtInput(4,"PORT:", globals.port, 5, key="port")
     option5 = menu.MenuButton(-1, "SAVE", "options.save()", loc=(70, menupos.height-50))
     option6 = menu.MenuButton(-1, "CANCEL", "options.cancel()", loc=(160, menupos.height-50))
     globals.menu_group.update()

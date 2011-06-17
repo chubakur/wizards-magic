@@ -40,10 +40,14 @@ answer = "" #buffer to store key strokes
 answer_maxchar = 0 # max number of characters we are waiting for
 answer_cmd = "" #function to execute when stoke ENTER
 itemfocus = None #input object with focus
-sound = 'Y' #enable sound
+
+#configuration global variables
+music = 'Y' #enable background music
+sound = 'Y' #enable sound effects
 nick = "" #nickname for network game
 server = "" # ip server for network game
 port = "" # port to connect to/serve network game
+
 def clean():
     cards_of_element_shower_element = "water" #какой элемент показывать
     selected_card = False #Выбранная карта

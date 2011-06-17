@@ -256,7 +256,7 @@ class Event_handler():
                 item = collided[len(collided)-1]
                 if item.type == 'outer':
                     return
-                if item.type == 'button' or item.type == 'txtinput':
+                if item.type == 'button' or item.type == 'txtinput' or item.type == 'checkbox':
                     item.onmousedown()
                     return
                 if item.type == "warrior_card": #Карта в колоде! Карта на поле в cardbox
