@@ -252,12 +252,13 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.image = self.surface_backup.copy()
         if self.cast:
             if self.field:
-                if not self.used_cast:
-                    #text_cast = font.render("Cast", True, (0, 0, 255))
-                    self.image.blit(globals.castlabel.cast_active, (0, 10))
-                else:
-                    #text_cast = font.render("Cast", True, (0, 0, 0))
-                    self.image.blit(globals.castlabel.cast_disabled, (0, 10))
+                if globals.player == self.parent.player:
+                    if not self.used_cast:
+                        #text_cast = font.render("Cast", True, (0, 0, 255))
+                        self.image.blit(globals.castlabel.cast_active, (0, 10))
+                    else:
+                        #text_cast = font.render("Cast", True, (0, 0, 0))
+                        self.image.blit(globals.castlabel.cast_disabled, (0, 10))
         #print text_power
         self.image.blit(text_level, (90, -7))
         self.image.blit(text_power, (5, 137))
@@ -1503,7 +1504,9 @@ class Paralyze(Magic):
         Magic.cast(self)
         globals.magic_cards.add(self) #добавляем периодизацию
     def periodical_cast(self):
-        if self.player.id != globals.player.id:
+        print 'PECA'
+        if self.player.id == globals.player.id:
+            print('Принудительное завершение хода.')
             player.finish_turn()
             self.kill()
 class AcidStorm(Magic):
@@ -1778,7 +1781,7 @@ class Revival(Magic):
         for card in self.get_self_cards():
             card.heal(4, card.max_health)
             self.player.heal(2)
-class Bless(Magic): 
+class Bless(Magic): #TODO: restore of health
     def __init__(self):
         self.element = "life"
         self.name = "Bless"

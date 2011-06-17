@@ -33,7 +33,7 @@ def query_(query):
     service = '%08i'%len(query)
     sock.send(service)
     sock.send(query)
-query=query_
+query = lambda x: x
     #print sock.recv(1)
     #return
     #return get_package()62.176.21.105

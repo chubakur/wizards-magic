@@ -45,7 +45,7 @@ import nickname_window
 import thread
 import important_message
 current_folder = os.path.dirname(os.path.abspath(__file__))
-
+globals.current_folder = current_folder
 def server_handler():
     while True:
         gi = sockets.get_package()
@@ -276,8 +276,8 @@ clock = pygame.time.Clock()
 
 #read configuration file
 options.read_configuration()
-globals.bg_sound = pygame.mixer.Sound(current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
-if globals.music == "Y":
+if globals.sound == "Y":
+    globals.bg_sound = pygame.mixer.Sound(current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
     globals.bg_sound.play(-1)
 menu.menu_main()
 
