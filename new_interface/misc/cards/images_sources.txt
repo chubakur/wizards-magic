@@ -54,3 +54,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 49 | fire spikes | xeranas
 50 | efreet | - | http://wtactics.org/ | remaked by xeranas
 51 | paralize | - | http://wtactics.org/
+52 | centour | xeranas
