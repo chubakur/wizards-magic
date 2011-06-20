@@ -267,11 +267,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.image.blit(self.light_image, (10, 50))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
-            if globals.cardofelementsshower.first_part:
-                xshift = 389 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck
-            else:
-                xshift = 389 + (self.position_in_deck - 1) * self.image.get_size()[0] + globals.cardofelementsshower.shift * (self.position_in_deck - 1)
-            yshift = 436
+            xshift = 324 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck + 2 * self.position_in_deck
+            #xshift = 389 + (self.position_in_deck - 1) * self.image.get_size()[0] + globals.cardofelementsshower.shift * (self.position_in_deck - 1)
+            yshift = 431
             self.parent.blit(self.image, (xshift, yshift))
             self.rect = self.image.get_rect()
             self.rect = self.rect.move(xshift, yshift)
@@ -1441,11 +1439,8 @@ class Magic(pygame.sprite.Sprite):
         self.image.blit(text_level, (90, -7))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
-            if globals.cardofelementsshower.first_part:
-                xshift = 389 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck
-            else:
-                xshift = 389 + (self.position_in_deck - 1) * self.image.get_size()[0] + globals.cardofelementsshower.shift * (self.position_in_deck - 1)
-            yshift = 436
+            xshift = 324 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck + 2 * self.position_in_deck
+            yshift = 431
             self.parent.blit(self.image, (xshift, yshift))
             self.rect = self.image.get_rect()
             self.rect = self.rect.move(xshift, yshift)

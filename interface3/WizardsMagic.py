@@ -176,16 +176,16 @@ def start_game(cli=False):
     #globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока
     # 0 1 2 3 4   //Расположение
     # 5 6 7 8 9
-    globals.cardbox0 = cardbox.Cardbox((32, 44), globals.player1, 0) #0 место на поле
-    globals.cardbox1 = cardbox.Cardbox((187, 44), globals.player1, 1) #1 место на поле
-    globals.cardbox2 = cardbox.Cardbox((341, 44), globals.player1, 2) #2 место на поле
-    globals.cardbox3 = cardbox.Cardbox((497, 44), globals.player1, 3) #3 место на поле
-    globals.cardbox4 = cardbox.Cardbox((651, 44), globals.player1, 4) #4 место на поле
-    globals.cardbox5 = cardbox.Cardbox((32, 248), globals.player2, 5) #5 место на поле
-    globals.cardbox6 = cardbox.Cardbox((187, 248), globals.player2, 6) #6 место на поле
-    globals.cardbox7 = cardbox.Cardbox((341, 248), globals.player2, 7) #7 место на поле
-    globals.cardbox8 = cardbox.Cardbox((497, 248), globals.player2, 8) #8 место на поле
-    globals.cardbox9 = cardbox.Cardbox((651, 248), globals.player2, 9) #9 место на поле
+    globals.cardbox0 = cardbox.Cardbox((22, 46), globals.player1, 0) #0 место на поле
+    globals.cardbox1 = cardbox.Cardbox((172, 46), globals.player1, 1) #1 место на поле
+    globals.cardbox2 = cardbox.Cardbox((322, 46), globals.player1, 2) #2 место на поле
+    globals.cardbox3 = cardbox.Cardbox((472, 46), globals.player1, 3) #3 место на поле
+    globals.cardbox4 = cardbox.Cardbox((622, 46), globals.player1, 4) #4 место на поле
+    globals.cardbox5 = cardbox.Cardbox((22, 238), globals.player2, 5) #5 место на поле
+    globals.cardbox6 = cardbox.Cardbox((172, 238), globals.player2, 6) #6 место на поле
+    globals.cardbox7 = cardbox.Cardbox((322, 238), globals.player2, 7) #7 место на поле
+    globals.cardbox8 = cardbox.Cardbox((472, 238), globals.player2, 8) #8 место на поле
+    globals.cardbox9 = cardbox.Cardbox((622, 238), globals.player2, 9) #9 место на поле
     globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
     for tcardbox in globals.cardboxes:
         tcardbox.normal_rect = tcardbox.rect.copy()
@@ -212,12 +212,12 @@ def start_game(cli=False):
     globals.life_element_button = elementbutton.LifeElementButton((191, 427))
     globals.death_element_button = elementbutton.DeathElementButton((236, 427))
     #Кнопки завершения хода первого и второго игрока.
-    completethecoursebutton.CompleteTheCourseButton((760, 430))
+    completethecoursebutton.CompleteTheCourseButton((758, 378))
     #Окна выбора карты стихии
     globals.cardofelementsshower = cardsofelementshower.CardsOfElementShower()
     #стрелочки для сдвига карт в колоде
-    globals.leftarrow = cardsofelementshower.LeftArrow((356, 489))
-    globals.rightarrow = cardsofelementshower.RightArrow((739, 491))
+    #globals.leftarrow = cardsofelementshower.LeftArrow((356, 489))
+    #globals.rightarrow = cardsofelementshower.RightArrow((739, 491))
     if not cli:
         globals.gameinformationpanel.display('Battle Started')
         globals.cli = False
