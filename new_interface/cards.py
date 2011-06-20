@@ -442,10 +442,10 @@ class Demon(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/fire/demon.gif')
         Prototype.__init__(self)
     def cast_action(self):
-        self.play_cast_sound()
         if self.parent.player.earth_mana:
             self.parent.player.earth_mana -= 1
             self.parent.player.fire_mana += 2
+            self.play_cast_sound()
             self.used_cast = True
         #Не получает повреждения от заклинаний огня и земли
         #cast: владелец теряет один элемент земли и получает 2 огня
