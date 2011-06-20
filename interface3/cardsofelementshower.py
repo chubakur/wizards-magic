@@ -2,8 +2,6 @@
 import globals
 import os
 import pygame
-current_folder = os.path.dirname(os.path.abspath(__file__))
-
 #globals.cards_of_element_shower_element содержит стихию
 class CardsOfElementShower(pygame.sprite.Sprite):
     #Не прототип!

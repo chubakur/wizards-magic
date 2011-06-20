@@ -13,7 +13,19 @@ class Cardbox(pygame.sprite.Sprite):
         self.player = player #ссылка на игрока
         self.opposite = False
         self.image = pygame.image.load(current_folder+'/misc/cardbox_bg.gif').convert_alpha()
-        self.light_image = pygame.image.load(current_folder+'/misc/cardbox-activated.gif').convert_alpha()
+        #self.light_image = pygame.image.load(current_folder+'/misc/cardbox-activated.gif').convert_alpha()
+        self.animation_point = 0
+        self.light_images = []
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac1.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac2.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac3.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac4.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac5.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac6.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac7.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac8.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac9.gif').convert_alpha())
+        self.light_images.append(pygame.image.load(current_folder+'/misc/animated_cardbox/ac10.gif').convert_alpha())
         self.surface_backup = self.image.copy()
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         self.card = self.player
@@ -27,6 +39,10 @@ class Cardbox(pygame.sprite.Sprite):
         return globals.cardboxes[opposite_position]
     def draw(self):
         #self.image = self.surface_backup.copy()
+        self.light_image = self.light_images[self.animation_point]
+        self.animation_point += 1
+        if self.animation_point > len(self.light_images) - 1:
+            self.animation_point = 0
         if self.light:
             self.image.blit(self.light_image,(0,0))
             if not self.opposite:
