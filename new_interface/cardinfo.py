@@ -24,19 +24,23 @@ class CardInfo(pygame.sprite.Sprite):
     def draw(self):
         self.text = self.card.info
         if self.card.type == "warrior_card":
-            self.text += "Spells: "
+            self.text += "\nSpells: "
             if not self.card.spells:
                 self.text += "None"
             else:
                 for spell in self.card.spells:
                     self.text += spell.name + " ; "
         self.image = self.surface_backup.copy()
-        rows = len(self.text) / self.symbols_in_row
-        if len(self.text) % self.symbols_in_row:
-            rows += 1
-        for row in xrange(0, rows):
-            text = globals.font.render(self.text[row * self.symbols_in_row:self.symbols_in_row + row * self.symbols_in_row]+"-", True, (255, 255, 255))
-            self.image.blit(text, (0, self.distance_between_rows * row))
+        self.text = self.text.split('\n')
+        last_y_offset = 0
+        for ptext in self.text:
+            rows = len(ptext) / self.symbols_in_row
+            if len(ptext) % self.symbols_in_row:
+                rows += 1
+            for row in xrange(0, rows):
+                text = globals.font.render(ptext[row * self.symbols_in_row:self.symbols_in_row * ( 1 + row)], True, (255, 255, 255))
+                self.image.blit(text, (0, last_y_offset + self.distance_between_rows * row))
+            last_y_offset = last_y_offset + self.distance_between_rows * rows
         globals.background.blit(self.image, self.rect)
     def update(self):
         self.draw()

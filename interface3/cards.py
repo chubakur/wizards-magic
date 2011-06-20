@@ -284,7 +284,7 @@ class Nixie(Prototype):
         self.health = 10
         self.cast = True
         self.image = pygame.image.load(current_folder+'/misc/cards/water/nixie.gif')
-        self.info = "Causes 200% of damage to fire creatures. Gives owner 1 Water in the beginning of owner's turn. Casting Sea of Sacred increases owner's Water by 1 and reduces Fire by 1."
+        self.info = "Causes 200% of damage to fire creatures. Gives owner 1 Water in the beginning of owner's turn. \nCasting Sea of Sacred increases owner's Water by 1 and reduces Fire by 1."
         Prototype.__init__(self)
     def attack(self):
         if self.moves_alive:
@@ -316,7 +316,7 @@ class Hydra(Prototype):
         self.cast = True
         self.focus_cast = True
         self.health = 29
-        self.info = "Attacks both adjacent slots. Reduces owner`s Water by 2 every turn. CAST: Consumes friendly unit, receiving up to 50% of his health."
+        self.info = "Attacks both adjacent slots. Reduces owner`s Water by 2 every turn. \nCAST: Consumes friendly unit, receiving up to 50% of his health."
         self.image = pygame.image.load(current_folder+'/misc/cards/water/hydra.gif')
         Prototype.__init__(self)
     def attack(self):
@@ -374,7 +374,7 @@ class Leviathan(Prototype):
         self.cast = False
         self.health = 37
         self.image = pygame.image.load(current_folder+'/misc/cards/water/leviathan.gif')
-        self.info = "When attacking, each enemy creature suffers 1 damage in addition to standard attack. Casting Curing heals owner for 4. In exchange, owner loses 1 Water. Cannot be cast if owner's Water less than 6."
+        self.info = "When attacking, each enemy creature suffers 1 damage in addition to standard attack. \nCasting Curing heals owner for 4. In exchange, owner loses 1 Water. Cannot be cast if owner's Water less than 6."
         Prototype.__init__(self)
 class IceGuard(Prototype):
     def __init__(self):        
@@ -408,7 +408,7 @@ class IceWizard(Prototype):
         self.name = "IceWizard"        
         self.element = "water"
         self.level = 10
-        self.info = "Increases Water by 2 every turn. Suffers 200% damage from fire. All damage from Water equal to 1. CAST: Casting Healing Water heals owner equal to 2*Water points. Owner loses all Water."
+        self.info = "Increases Water by 2 every turn. Suffers 200% damage from fire. All damage from Water equal to 1. \nCAST: Casting Healing Water heals owner equal to 2*Water points. Owner loses all Water."
         self.power = 4
         self.cast = True
         self.health = 22
@@ -434,7 +434,7 @@ class Demon(Prototype):
         self.element = "fire"
         self.level = 5
         self.power = 2
-        self.info = "Doesn`t suffer from Fire and Earth spells. CAST: Whenever Demon casts Fire Bleed owner loses 1 Earth and receives 2 Fire elements."
+        self.info = "Doesn`t suffer from Fire and Earth spells. \nCAST: Whenever Demon casts Fire Bleed owner loses 1 Earth and receives 2 Fire elements."
         self.cast = True
         self.health = 12
         self.image = pygame.image.load(current_folder+'/misc/cards/fire/demon.gif')
@@ -451,7 +451,7 @@ class Devil(Prototype):
     def __init__(self):        
         self.name = "Devil"        
         self.element = "fire"
-        self.info = "Damage from Water is multiplied by 2. Whenever Devil dies, owner suffers 10 damage. CAST: Sacrificing owner`s Fire creature gives 3 Fire to the owner, also healing owner by this amount."
+        self.info = "Damage from Water is multiplied by 2. Whenever Devil dies, owner suffers 10 damage. \nCAST: Sacrificing owner`s Fire creature gives 3 Fire to the owner, also healing owner by this amount."
         self.level = 6
         self.power = 4
         self.cast = True
@@ -555,7 +555,7 @@ class Efreet(Prototype):
         self.power = 6
         self.cast = False
         self.health = 33
-        self.info = "Whenever any creature attacks Efreet, that creature suffers half of damage send back (same applies to Fire Shield spell). Uppon summoning, all enemy Water creatures suffer 6 damage. CAST: Casts Fire Shield on any owner`s creature. Costs 2 Fire. Fire Shield burns creature from inside, damaging it for 2 points per turn, unless it`s a Fire creature."
+        self.info = "Whenever any creature attacks Efreet, that creature suffers half of damage send back (same applies to Fire Shield spell). Uppon summoning, all enemy Water creatures suffer 6 damage. \nCAST: Casts Fire Shield on any owner`s creature. Costs 2 Fire. Fire Shield burns creature from inside, damaging it for 2 points per turn, unless it`s a Fire creature."
         self.image = pygame.image.load(current_folder+'/misc/cards/fire/efreet.gif')
         Prototype.__init__(self)
     def summon(self):
@@ -576,7 +576,7 @@ class Vulcan(Prototype):
         self.level = 12
         self.power = 1
         self.cast = True
-        self.info = "Fire Elemental. Immune to harmful Fire spells. When summoned, enemy player loses 3 Fire, and opposed Elemental unit suffers 9 damage. Attack equal to owner`s Fire + 3. CAST: Casts Volcano Explode. Vulcan dies, but every unit on field suffers damage equal to 50% of Vulcan`s health."
+        self.info = "Fire Elemental. Immune to harmful Fire spells. When summoned, enemy player loses 3 Fire, and opposed Elemental unit suffers 9 damage. Attack equal to owner`s Fire + 3. \nCAST: Casts Volcano Explode. Vulcan dies, but every unit on field suffers damage equal to 50% of Vulcan`s health."
         self.health = 27
         self.image = pygame.image.load(current_folder+'/misc/cards/fire/vulcan.gif')
         Prototype.__init__(self)
@@ -641,7 +641,7 @@ class Fairy(Prototype):
     def __init__(self):        
         self.name = "Fairy"        
         self.element = "air"
-        self.info = "Increases its attack by 1 for each creature, killed on a field. CAST: Enslave Mind forces strongest enemy creature to attack it`s owner. Costs 1 Air."
+        self.info = "Increases its attack by 1 for each creature, killed on a field. \nCAST: Enslave Mind forces strongest enemy creature to attack it`s owner. Costs 1 Air."
         self.level = 3
         self.power = 3
         self.cast = True
@@ -709,7 +709,7 @@ class Zeus(Prototype):
         self.power = 3
         self.cast = False
         self.health = 24
-        self.info = "Owner receives 1 air element for each enemy creature, killed by Zeus. CAST: Strikes Lighting into choosen creature. Costs 1 Air and inflicts 8 damage. Cannot strike creatures of level 7 and highter."
+        self.info = "Owner receives 1 air element for each enemy creature, killed by Zeus. \nCAST: Strikes Lighting into choosen creature. Costs 1 Air and inflicts 8 damage. Cannot strike creatures of level 7 and highter."
         self.image = pygame.image.load(current_folder+'/misc/cards/air/zeus.gif')
         Prototype.__init__(self)
     def attack(self):
@@ -724,7 +724,7 @@ class Gargoyle(Prototype):
     def __init__(self):        
         self.name = "Gargoyle"        
         self.element = "air"
-        self.info = "Suffers no damage from Earth and Air spells. CAST: Casts Petrification on self, as effect turns to stone. In stone form Gargoyle reduces damage done to it by 2 . Owner loses 3 Air and 1 Earth."
+        self.info = "Suffers no damage from Earth and Air spells. \nCAST: Casts Petrification on self, as effect turns to stone. In stone form Gargoyle reduces damage done to it by 2 . Owner loses 3 Air and 1 Earth."
         self.level = 5
         self.power = 4
         self.cast = True
@@ -759,7 +759,7 @@ class Manticore(Prototype):
     def __init__(self):        
         self.name = "Manticore"        
         self.element = "air"
-        self.info = "Attacks casters with additional 3 damage. Only suffers 50% damage from spells. CAST: Casts Memory Loss. Target enemy creature permanently loses ability to cast. Costs 2 Air."
+        self.info = "Attacks casters with additional 3 damage. Only suffers 50% damage from spells. \nCAST: Casts Memory Loss. Target enemy creature permanently loses ability to cast. Costs 2 Air."
         self.level = 7
         self.power = 5
         self.cast = True
@@ -808,7 +808,7 @@ class Titan(Prototype):
         self.level = 11
         self.power = 7
         self.cast = True
-        self.info = "When summoned, enemy loses 3 Air. Titan`s attack is increased by 1 for each Air creature in play. CAST: Casts Thunder Fist. All enemy Earth creatures suffer 3 damage. Owner loses 1 Air."
+        self.info = "When summoned, enemy loses 3 Air. Titan`s attack is increased by 1 for each Air creature in play. \nCAST: Casts Thunder Fist. All enemy Earth creatures suffer 3 damage. Owner loses 1 Air."
         self.health = 28
         self.image = pygame.image.load(current_folder+'/misc/cards/air/titan.gif')
         Prototype.__init__(self)
@@ -835,7 +835,7 @@ class Satyr(Prototype):
         self.level = 2
         self.power = 3
         self.cast = True
-        self.info = "Increases Earth by 1 every turn. CAST: Once Satyr casts Dissolve, it dies and creature in the opposed slot suffers 5 damage. If there`s no creature, damage dealt to enemy player."
+        self.info = "Increases Earth by 1 every turn. \nCAST: Once Satyr casts Dissolve, it dies and creature in the opposed slot suffers 5 damage. If there`s no creature, damage dealt to enemy player."
         self.health = 10
         self.image = pygame.image.load(current_folder+'/misc/cards/earth/satyr.gif')
         Prototype.__init__(self)
@@ -891,7 +891,7 @@ class ForestSpirit(Prototype):
         self.name = "ForestSpirit"        
         self.element = "earth"
         self.level = 3
-        self.info = "Damage from all non-magical attacks and abilities equal to 1. CAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
+        self.info = "Damage from all non-magical attacks and abilities equal to 1. \nCAST: Casts Youth of Forest, increasing owner player`s health by 5. Costs two Earth elements."
         self.power = 2
         self.cast = True
         self.health = 3
@@ -915,7 +915,7 @@ class Centaur(Prototype):
         self.name = "Centaur"        
         self.element = "earth"
         self.level = 6
-        self.info = "Attacks the same turn he was summoned(No summon sickness). CAST: Strikes magic arrow into enemy player, dealing 3 damage. Costs 1 Earth."
+        self.info = "Attacks the same turn he was summoned(No summon sickness). \nCAST: Strikes magic arrow into enemy player, dealing 3 damage. Costs 1 Earth."
         self.power = 5
         self.cast = True
         self.health = 14
@@ -935,7 +935,7 @@ class Elemental(Prototype):
         self.level = 13
         self.power = 1
         self.cast = False
-        self.info = "Attack equal to owner`s Earth. Increases Earth by 2 every turn. Fire spells deal additional 10 damage. CAST: Casts Stone Skin onto owner`s creature. That creature gain 1 point of defence from all attacks greater than 1."
+        self.info = "Attack equal to owner`s Earth. Increases Earth by 2 every turn. Fire spells deal additional 10 damage. \nCAST: Casts Stone Skin onto owner`s creature. That creature gain 1 point of defence from all attacks greater than 1."
         self.health = 45
         self.image = pygame.image.load(current_folder+'/misc/cards/earth/elemental.gif')
         Prototype.__init__(self)
@@ -952,7 +952,7 @@ class Ent(Prototype):
         self.element = "earth"        
         self.level = 7
         self.power = 3
-        self.info = "Attacks opposed unit and enemy player at the same time. Casts Entangle Roots, damaging each enemy unit for 1 and losing 2 points of own health."
+        self.info = "Attacks opposed unit and enemy player at the same time. \nCasts Entangle Roots, damaging each enemy unit for 1 and losing 2 points of own health."
         self.cast = True
         self.health = 22
         self.image = pygame.image.load(current_folder+'/misc/cards/earth/ent.gif')
@@ -1000,7 +1000,7 @@ class Paladin(Prototype):
     def __init__(self):        
         self.name = "Paladin"
         self.element = "life"
-        self.info = "Brings 300% of damage to undead creatures. CAST: Casts Exorcism. Destroys any undead, but suffers 10 damage himself. Owner also loses 2 Life as a cost of this holy casting."
+        self.info = "Brings 300% of damage to undead creatures. \nCAST: Casts Exorcism. Destroys any undead, but suffers 10 damage himself. Owner also loses 2 Life as a cost of this holy casting."
         self.cast = True
         self.focus_cast = True
         self.level = 8
@@ -1041,7 +1041,7 @@ class Pegasus(Prototype):
         self.level = 6
         self.power = 6
         self.health = 15
-        self.info = "When summoned, each owner`s creature is healed for 3. Also, it destroys harmful spell effects from each of them. CAST: Holy Strike deals 5 damage to a target creature. If it is undead creature, Pegasus also suffer 3 damage homself. Costs 2 Life."
+        self.info = "When summoned, each owner`s creature is healed for 3. Also, it destroys harmful spell effects from each of them. \nCAST: Holy Strike deals 5 damage to a target creature. If it is undead creature, Pegasus also suffer 3 damage homself. Costs 2 Life."
         self.cast = True
         self.focus_cast = True
         self.image = pygame.image.load(current_folder+'/misc/cards/life/pegasus.gif')
@@ -1080,7 +1080,7 @@ class Unicorn(Prototype):
         self.level = 9
         self.power = 8
         self.cast = False
-        self.info = "Unicorn reduces damage from spells to owner's creatures by 50%. Cures poison from owner's creatures. Casts Unicorn Aura. This Aura destroys useful spell effects from enemy creatures. Costs 2 Life."
+        self.info = "Unicorn reduces damage from spells to owner's creatures by 50%. Cures poison from owner's creatures. \nCasts Unicorn Aura. This Aura destroys useful spell effects from enemy creatures. Costs 2 Life."
         self.health = 25
         self.image = pygame.image.load(current_folder+'/misc/cards/life/unicorn.gif')
         Prototype.__init__(self)
@@ -1089,7 +1089,7 @@ class Apostate(Prototype):
         self.name = "Apostate"
         self.element = "life"        
         self.level = 5
-        self.info = "Steals 2 owner's Life and gives owner 1 Death in the beginning of owner's turn. Serves Death. Once cast, Apostate permanently turns into a Banshee. Banshee restores only 1/2 of normal health."
+        self.info = "Steals 2 owner's Life and gives owner 1 Death in the beginning of owner's turn. \nServes Death. Once cast, Apostate permanently turns into a Banshee. Banshee restores only 1/2 of normal health."
         self.cast = True
         self.power = 4
         self.health = 14
@@ -1198,7 +1198,7 @@ class Ghost(Prototype):
     def __init__(self):        
         self.name = "Ghost"
         self.element = "death"
-        self.info = "Whenever attacked by a creature, suffers 50% less damage, and owner suffers other 50% damage. When suffers from spell, Ghost recieves 200% of normal damage. Casts Bloody Ritual. As a result, owner loses 5 health, but receives one Death."
+        self.info = "Whenever attacked by a creature, suffers 50% less damage, and owner suffers other 50% damage. When suffers from spell, Ghost recieves 200% of normal damage. \nCasts Bloody Ritual. As a result, owner loses 5 health, but receives one Death."
         self.level = 3
         self.cast = True
         self.power = 3
@@ -1242,7 +1242,7 @@ class Werewolf(Prototype):
         self.element = "death"
         self.level = 6
         self.power = 6
-        self.info = "When dies, becomes a ghost. CAST: Casts Blood Rage on self. Strikes twice as hard this turn, but owner loses 3 Death points on casting."
+        self.info = "When dies, becomes a ghost. \nCAST: Casts Blood Rage on self. Strikes twice as hard this turn, but owner loses 3 Death points on casting."
         self.health = 16
         self.image = pygame.image.load(current_folder+'/misc/cards/death/werewolf.gif')
         Prototype.__init__(self)
@@ -1289,7 +1289,7 @@ class Banshee(Prototype):
 class GrimReaper(Prototype):
     def __init__(self):                
         self.name = "GrimReaper"
-        self.info = "Whenever creature dies, increases owner`s Death by one. CAST: Consumes target enemy creature of level 3 or less. Owner player loses 3 Death elements."
+        self.info = "Whenever creature dies, increases owner`s Death by one. \nCAST: Consumes target enemy creature of level 3 or less. Owner player loses 3 Death elements."
         self.element = "death"
         self.level = 12
         self.power = 8
@@ -1320,7 +1320,7 @@ class Darklord(Prototype):
     def __init__(self):        
         self.name = "Darklord"
         self.element = "death"
-        self.info = "Whenever creature dies, Darklord heals owner for 3 and regenerates self for 2. Steal Spell steals all spell effects from any enemy creature, DarkLord receives these spells. Owner loses 1 Death."
+        self.info = "Whenever creature dies, Darklord heals owner for 3 and regenerates self for 2. \nSteal Spell steals all spell effects from any enemy creature, DarkLord receives these spells. Owner loses 1 Death."
         self.level = 8
         self.power = 4
         self.cast = False
@@ -1335,7 +1335,7 @@ class Lich(Prototype):
         self.name = "Lich"
         self.element = "death"        
         self.level = 10
-        self.info = "When summoned,deals 10 damage to creature in the opposite slot and two adjacent slots. Attacks Life units with additionial 5 damage. CAST:Casts Death Bolt, hitting enemy player with 7 of damage. Owner loses 5 Death. If owner`s Death becomes zero, he suffers 10 damage himself."
+        self.info = "When summoned,deals 10 damage to creature in the opposite slot and two adjacent slots. Attacks Life units with additionial 5 damage. \nCAST:Casts Death Bolt, hitting enemy player with 7 of damage. Owner loses 5 Death. If owner`s Death becomes zero, he suffers 10 damage himself."
         self.cast = False
         self.power = 7
         self.health = 18
