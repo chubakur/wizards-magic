@@ -235,7 +235,6 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.killed += 1
     def turn(self):
         self.power = self.default_power
-        self.used_cast = False
         self.moves_alive += 1
         self.update()
         #print 1
