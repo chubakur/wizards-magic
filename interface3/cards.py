@@ -668,7 +668,7 @@ class Fairy(Prototype):
                     max = card.power
                     max_link = card
             if max_link:
-                self.parent.player.enemy.damage(card.power, card)
+                self.parent.player.enemy.damage(max_link.power, max_link)
         #Атака увеличивается на 1 за каждого убитого
         #КАСТ. Сильнейшая карта врага атакует своего героя. 1 воздух.
 class Phoenix(Prototype):

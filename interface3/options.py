@@ -6,6 +6,7 @@ import ConfigParser
 import os.path
 from widgets import TxtInput, CheckBox
 import menu
+#TODO: enable/disable animation option
 def launcher():
     #Something ,what we need to change after reset configuration
     globals.bg_sound.stop()
