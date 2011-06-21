@@ -94,6 +94,9 @@ class ElementButton(pygame.sprite.Sprite):
     def onmouseout(self):
         pass
     def onmousedown(self):
+        globals.selected_card = False
+        for cardbox in globals.cardboxes:
+            cardbox.light = False
         pygame.mixer.music.stop()
         if self.element != globals.selected_elem:
             globals.selected_elem = self.element
