@@ -568,6 +568,8 @@ class Efreet(Prototype):
         if not cast:
             Prototype.damage(self, damage, enemy, cast)
             Prototype.damage(enemy, damage / 2, self, cast)
+        else:
+            Prototype.damage(self, damage, enemy, cast)
 class Vulcan(Prototype):
     def __init__(self):        
         self.name = "Vulcan"        
@@ -1578,7 +1580,7 @@ class Fireball(Magic):
         Magic.cast(self)
         enemy_cards = self.get_enemy_cards()
         for card in enemy_cards:
-            card.damage(self.player.fire_mana + self.level + 3, self)
+            card.damage(self.player.fire_mana + self.level + 3, self, True)
 class FireSpikes(Magic):
     def __init__(self):
         self.element = "fire"
