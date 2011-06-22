@@ -153,6 +153,7 @@ def start_game(cli=False):
     #globals.background = globals.background.convert()
     #globals.background = pygame.Surface(globals.screen.get_size())
     globals.background = globals.background.convert_alpha()
+    globals.cards_of_element_shower_element = "water"
     #globals.background.fill((0, 0, 0))
     background_backup = globals.background.copy()
     #font.set_bold(0)

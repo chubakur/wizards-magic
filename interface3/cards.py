@@ -1466,7 +1466,7 @@ class Poison(Magic):
         if self.cards: #если еще остались карты, на которые надо действовать
             if self.player.id != globals.player.id: #если начался вражеский ход
                 for card in self.cards:
-                    card.damage(1, self) #раним карту
+                    card.damage(1, self, True) #раним карту
         else: #если кпд магии будет 0
             self.kill() #прекращаем действие магии
         #P.S. неувязочка в алгоритме таки. Карта выкидывается из группы, только если карта её убьет. Если карту убьет другая карта, то эта карта останется в памяти магии , что заставит её работать с КПД 0
@@ -1486,7 +1486,7 @@ class SeaJustice(Magic):
         Magic.cast(self)
         enemy_cards = self.get_enemy_cards() #берем список вражеских карт
         for card in enemy_cards:
-            card.damage(card.power, self)
+            card.damage(card.power, self, True)
 class Paralyze(Magic):
     def __init__(self):
         self.element = "water"
@@ -1535,7 +1535,7 @@ class AcidStorm(Magic):
         if not e_cards_immune:
             cards += e_cards
         for card in cards:
-            card.damage(16, self)
+            card.damage(16, self, True)
         #предварительный перевод
         #каждое существо на поле получает 16 повреждения. Если игрок(какой ? ) имеет посейдона на поле, то его карты остаются нетронутыми.
 class IceBolt(Magic):
@@ -1548,8 +1548,8 @@ class IceBolt(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        self.player.enemy.damage((self.player.water_mana + self.level) / 2, self)
-        self.player.damage(6, self)
+        self.player.enemy.damage((self.player.water_mana + self.level) / 2, self, True)
+        self.player.damage(6, self, True)
         self.player.water_mana = 0
         #наносится урон 10+Water/2 вражескому игроку . Игроку, кто кастовал урон 6.
 class Armageddon(Magic):
@@ -1565,9 +1565,9 @@ class Armageddon(Magic):
         enemy_cards = self.get_enemy_cards()
         self_cards = self.get_self_cards()
         for card in enemy_cards + self_cards:
-            card.damage(25, self)
-        self.player.damage(25, self)
-        self.player.enemy.damage(25, self)
+            card.damage(25, self, True)
+        self.player.damage(25, self, True)
+        self.player.enemy.damage(25, self, True)
 class Fireball(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1592,7 +1592,7 @@ class FireSpikes(Magic):
     def cast(self):
         Magic.cast(self)
         for card in self.get_enemy_cards():
-            card.damage(3, self)
+            card.damage(3, self, True)
 class FlamingArrow(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1605,9 +1605,9 @@ class FlamingArrow(Magic):
         Magic.cast(self)
         diff = self.player.fire_mana + self.level - self.player.enemy.fire_mana
         if diff > 0:
-            self.player.enemy.damage(diff * 2, self)
+            self.player.enemy.damage(diff * 2, self, True)
         else:
-            self.player.enemy.damage(1, self)
+            self.player.enemy.damage(1, self, True)
 class RitualFlame(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1657,7 +1657,7 @@ class ChainLightning(Magic):
         air_mana = self.player.air_mana + self.level
         power = air_mana + 2
         for card in self.get_enemy_cards():
-            card.damage(power, self)
+            card.damage(power, self, True)
             power -= 2
 class Plague(Magic):
     def __init__(self):
@@ -1735,7 +1735,7 @@ class Earthquake(Magic):
         else:
             cards = self.get_enemy_cards() + self.get_self_cards()
         for card in cards:
-            card.damage(15, self)
+            card.damage(15, self, True)
 class Quicksands(Magic):
     def __init__(self):
         self.element = "earth"
@@ -1793,7 +1793,7 @@ class Bless(Magic): #TODO: restore of health
                 card.set_power(card.power + 1)
                 self.cards.append(card)
             else:
-                card.damage(10, self)
+                card.damage(10, self, True)
         globals.magic_cards.add(self)
     def periodical_cast(self):
         if self.cards: #if has cards
@@ -1828,9 +1828,9 @@ class LifeSacrifice(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        power = self.player.life_mana + self.level
-        self.player.damage(power, self)
-        self.player.enemy.damage(power * 2, self)
+        power = self.player.life_mana + self.level #life_mana - count of Life ; level - cast this spell, because mana decreased before spell activated.
+        self.player.damage(power, self, True)
+        self.player.enemy.damage(power * 2, self, True)
 class Purify(Magic):
     def __init__(self):
         self.element = "life"
@@ -1850,10 +1850,10 @@ class Purify(Magic):
             for e_card in self.get_enemy_cards():
                 opp_card = globals.cardboxes[e_card.get_attack_position()].card
                 if opp_card.name != 'player': #if card in opposed slot exist
-                    e_card.damage(4, self)
+                    e_card.damage(4, self, True)
                     opp_card.heal(4, opp_card.max_health)
                 else:
-                    e_card.damage(4, self)
+                    e_card.damage(4, self, True)
         else:
             return
 
@@ -1901,7 +1901,7 @@ class CoverOfDarkness(Magic):
             if card.element == "death":
                 card.heal(5, card.max_health)
             else:
-                card.damage(13, self)
+                card.damage(13, self, True)
 class Curse(Magic): 
     def __init__(self):
         self.element = "death"
@@ -1936,10 +1936,10 @@ class StealLife(Magic):
         Magic.cast(self)
         death_mana = globals.player.death_mana + self.level
         if death_mana < 8:
-            globals.player.enemy.damage(5, self)
+            globals.player.enemy.damage(5, self, True)
             globals.player.heal(5)
         else:
-            globals.player.enemy.damage(death_mana + 5, self)
+            globals.player.enemy.damage(death_mana + 5, self, True)
             globals.player.heal(death_mana + 5)
 class TotalWeakness(Magic):
     def __init__(self):
