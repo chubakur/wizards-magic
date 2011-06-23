@@ -1493,18 +1493,17 @@ class Paralyze(Magic):
         self.name = "Paralyze"
         self.level = 10
         self.image = pygame.image.load(current_folder+'/misc/cards/water/paralyze.gif')
-        self.info = "Vasya nakakal v shtani!"
+        self.info = "Your enemy will automatically compelete a his turn."
         Magic.__init__(self)
         #противник пропускает ход
     def cast(self):
         Magic.cast(self)
+        self.nt = False
         globals.magic_cards.add(self) #добавляем периодизацию
     def periodical_cast(self):
-        print 'PECA'
-        if self.player.id == globals.player.id:
-            print('Принудительное завершение хода.')
-            player.finish_turn()
-            self.kill()
+        self.kill()
+        player.switch_position()
+        player.finish_turn()
 class AcidStorm(Magic):
     def __init__(self):
         self.element = "water"
