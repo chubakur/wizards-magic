@@ -1502,7 +1502,7 @@ class Paralyze(Magic):
         globals.magic_cards.add(self) #добавляем периодизацию
     def periodical_cast(self):
         self.kill()
-        player.switch_position()
+        #player.switch_position()
         player.finish_turn()
 class AcidStorm(Magic):
     def __init__(self):

@@ -119,7 +119,7 @@ def server_handler():
             player.me_finish_turn()
         elif gi['action'] == 'card':
             #print gi
-            #if gi['position'] == 0:
+            #if gi['position'] == 0:      http://www.linux.org.ru/
                 #cardbox = globals.cardbox0
             if gi['type'] == 'warrior':
                 exec("tmp_card = cards." + gi['card'] + "()")
@@ -257,12 +257,12 @@ def start_game(cli=False):
         globals.screen.blit(globals.background, (0, 0))
         #globals.background.fill((0,0,0))
         globals.background = background_backup.copy()
-        if len(globals.animations_running) == False and globals.attack_started:
+        if len(globals.animations_running) == False and len(globals.attack_started):
             if not globals.cli:
                 player.switch_position()
         for animation_running in globals.animations_running:
             animation_running.run()
-            if globals.attack_started and len(globals.cards_attacking) == False:
+            if len(globals.attack_started) and len(globals.cards_attacking) == False:
                 if not globals.cli:
                   player.switch_position()
         pygame.display.flip()

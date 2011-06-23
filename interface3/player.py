@@ -88,12 +88,14 @@ class Player2(Player):
         self.id = 2
         Player.__init__(self)
 def switch_position():
-    globals.attack_started = False
+    #globals.attack_started = False
+    globals.attack_started.pop()
     for cardbox in globals.cardboxes:
         cardbox.opposite = not cardbox.opposite
 def me_finish_turn():
     #Добавляем ману другому игроку.
-    globals.attack_started = True
+    #globals.attack_started = True
+    globals.attack_started.append(True)
     globals.player.enemy.water_mana += 1
     globals.player.enemy.fire_mana += 1
     globals.player.enemy.air_mana += 1
