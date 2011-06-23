@@ -597,7 +597,7 @@ class Vulcan(Prototype):
     def cast_action(self):
         hp = self.health
         for card in self.get_enemy_cards() + self.get_self_cards():
-            card.damage(int(floor(hp / 2.0)), self)
+            card.damage(int(floor(hp / 2.0)), self, True)
         self.die()
 class Cerberus(Prototype):
     def __init__(self):        
@@ -669,7 +669,7 @@ class Fairy(Prototype):
                     max = card.power
                     max_link = card
             if max_link:
-                self.parent.player.enemy.damage(max_link.power, max_link)
+                self.parent.player.enemy.damage(max_link.power, max_link, True)
         #Атака увеличивается на 1 за каждого убитого
         #КАСТ. Сильнейшая карта врага атакует своего героя. 1 воздух.
 class Phoenix(Prototype):
@@ -824,7 +824,7 @@ class Titan(Prototype):
             self.parent.player.air_mana -= 1
             for enemy_card in self.get_enemy_cards():
                 if enemy_card.element == "earth":
-                    enemy_card.damage(3, self)
+                    enemy_card.damage(3, self, True)
 #    def enemy_die(self): #Перепутал способность
 #        Prototype.enemy_die(self)
 #        self.power+=1
@@ -849,7 +849,7 @@ class Satyr(Prototype):
             attack_position = self.parent.position + 5 #Id - блока, куда атаковать
         else:
             attack_position = self.parent.position-5
-        globals.cardboxes[attack_position].card.damage(5, self)
+        globals.cardboxes[attack_position].card.damage(5, self, True)
         self.die()
 class Golem(Prototype):
     def __init__(self):        
@@ -926,7 +926,7 @@ class Centaur(Prototype):
     def cast_action(self):
         if self.parent.player.earth_mana:
             self.play_cast_sound()
-            self.parent.player.enemy.damage(3, self)
+            self.parent.player.enemy.damage(3, self, True)
             self.parent.player.earth_mana -= 1
             self.used_cast = True
 class Elemental(Prototype):
@@ -963,13 +963,13 @@ class Ent(Prototype):
             e_card = globals.cardboxes[self.get_attack_position()].card
             Prototype.attack(self)
             if e_card.name != 'player':
-                self.parent.player.enemy.damage(self.power, self)
+                self.parent.player.enemy.damage(self.power, self, True)
         e_card = None
     def cast_action(self):
         for card in self.get_enemy_cards():
-            card.damage(1, self)
+            card.damage(1, self, True)
         self.used_cast = True
-        self.damage(2, self)
+        self.damage(2, self, True)
 class Echidna(Prototype):
     def __init__(self):        
         self.name = "Echidna"
@@ -1024,7 +1024,7 @@ class Paladin(Prototype):
                     self.used_cast = True
                     globals.cast_focus = False
                     target.die()
-                    self.damage(10, self)
+                    self.damage(10, self, True)
                     self.parent.player.life_mana -= 2
                     self.play_cast_sound()
                     for card in self.get_enemy_cards(): #отключаем подсветку
@@ -1060,10 +1060,10 @@ class Pegasus(Prototype):
         if target.name != "player": #если мы кликнули по карте, а не пустому боксу
             if target.parent.player.id != self.parent.player.id: #если карта чужая( Убивать своих не хорошо)
                 if target.element == "death": #если стихия карты - смерть
-                    target.damage(5, self) #наносим урон ей
-                    self.damage(3, self) # и себе
+                    target.damage(5, self, True) #наносим урон ей
+                    self.damage(3, self, True) # и себе
                 else: #если любой другой стихии
-                    target.damage(5, self) #наносим урон ей
+                    target.damage(5, self, True) #наносим урон ей
                 self.used_cast = True #отмечаем, что заклинание уже использовано
                 globals.cast_focus = False #отключаем фокус-каст
                 self.parent.player.life_mana -= 2 # отнимаем ману
