@@ -6,9 +6,13 @@
 import pygame
 import globals
 
+animations_running = []
+cards_attacking = []
+cards_dying = []
+
 class Animation():
     def __init__(self, image, origin = [0,0]):
-        self.image = image #The image to move
+        self.image = image.copy() #The source image
         self.origin = origin #The origin
         self.position = [self.origin[0],self.origin[1]]
         self.path = [(0,0)] #The path that must follow the animation
@@ -23,25 +27,18 @@ class Animation():
         self.distance_y = self.path[0][1] - self.origin[1]
         self.step_x = self.distance_x*1.0/self.speed
         self.step_y = self.distance_y*1.0/self.speed
-        self.additional_groups = [] 
+        self.additional_groups = []
+        self.alpha = 255
+        self.fade_step = 5
     def move(self):
         self.mode = 'move'
         
         milestone = self.path_trace
-        #print "milestone", milestone
-        #print "len(path)", len(self.path)
         self.distance_x = self.path[milestone][0] - self.origin[0]
         self.distance_y = self.path[milestone][1] - self.origin[1]
         self.step_x = self.distance_x/self.speed
         self.step_y = self.distance_y/self.speed
-        #print self.position
-        #print type(self.position)
-        #print "stepX",self.step_x
-        #print "stepY",self.step_y
-        #print "origin", self.origin
-        #print "position", self.position
-        #print "path", self.path[milestone]
-        
+
         if self.step_x > 0:
             reach_target_x = (self.position[0] >= self.path[milestone][0])
         else:
@@ -50,12 +47,10 @@ class Animation():
             reach_target_y = (self.position[1] >= self.path[milestone][1])
         else:
             reach_target_y = (self.position[1] <= self.path[milestone][1])
-        #print "reach x", reach_target_x
-        #print "reach y", reach_target_y        
+
         if not reach_target_x: self.position[0] = self.position[0] + self.step_x
         if not reach_target_y: self.position[1] = self.position[1] + self.step_y
         if reach_target_x and reach_target_y:
-            #print "entra aqui"
             if (self.position[0] != self.path[milestone][0]) or (self.position[1] != self.path[milestone][1]):
                 self.position= [self.path[milestone][0],self.path[milestone][1]]            
             if milestone == len(self.path)-1:
@@ -63,18 +58,24 @@ class Animation():
                 for item in self.additional_groups:
                     item.remove(self)
             else:
-                #print "entra en else final"
                 self.origin = self.path[milestone]
                 self.path_trace = self.path_trace + 1
-                #print "self.path_trace", self.path_trace
-            
 
     def evolution(self, image, origin):
         pass
     def rotation (self):
         pass
-    def fade_out(self, image, origin):
-        pass
+
+    def fade_out(self):
+        self.mode = 'fade_out'
+        self.alpha -= self.fade_step
+        self.image.set_alpha(self.alpha)
+
+        if self.alpha <= 0:
+            globals.animations_running.remove(self)
+            for item in self.additional_groups:
+                item.remove(self)
+
     def fade_in(self, image, origin):
         pass
     def zoom_in(self, image, origin, destiny, maxsize):
@@ -97,7 +98,10 @@ class CustomAnimation(Animation):
         self.additional_groups = [globals.cards_attacking]
         globals.cards_attacking.append(self) 
         self.move()
-
+    def dying(self):
+        self.additional_groups = [globals.cards_dying]
+        globals.cards_dying.append(self)
+        self.fade_out()
 # Class Animation:
 # Implements a class for generics animations of objects.
 # Properties:
