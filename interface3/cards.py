@@ -899,12 +899,10 @@ class ForestSpirit(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/earth/forest_spirit.gif')
         Prototype.__init__(self)
     def damage(self, damage, enemy, cast=False):
-        self.health -= 1
-        self.update()
-        if self.health <= 0:
-            self.die()
-            return 1
-        return 0
+        if not cast:
+            Prototype.damage(self,1,enemy,cast)
+        else:
+            Prototype.damage(self,damage,enemy,cast)
     def cast_action(self):
         if self.parent.player.earth_mana >= 2:
             self.parent.player.earth_mana -= 2
