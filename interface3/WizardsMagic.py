@@ -28,6 +28,8 @@ from pygame.locals import *
 import sys
 import os
 import player
+if pygame.version.vernum < (1, 9, 1):
+    import copy
 import globals
 import elementbutton
 import cards
@@ -189,8 +191,12 @@ def start_game(cli=False):
     globals.cardbox9 = cardbox.Cardbox((622, 238), globals.player2, 9) #9 место на поле
     globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
     for tcardbox in globals.cardboxes:
-        tcardbox.normal_rect = tcardbox.rect.copy()
-        tcardbox.opposite_rect = tcardbox.get_opposite_cardbox().rect.copy()
+        if pygame.version.vernum < (1, 9, 1):
+            tcardbox.normal_rect = copy.deepcopy(tcardbox.rect)
+            tcardbox.opposite_rect = copy.deepcopy(tcardbox.get_opposite_cardbox().rect)
+        else:
+            tcardbox.normal_rect = tcardbox.rect.copy()
+            tcardbox.opposite_rect = tcardbox.get_opposite_cardbox().rect.copy()
     #playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
     #exec('Cardbox((640,301),2)')
     #ElementsWindow((0,0),actionpanel1)
