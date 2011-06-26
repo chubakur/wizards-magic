@@ -55,3 +55,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 50 | efreet | - | http://wtactics.org/ | remaked by xeranas
 51 | paralize | - | http://wtactics.org/
 52 | centour | xeranas
+53 | firelord | vidas sinkunas | - | colored by xeranas
+54 | titan | vidas sinkunas | - | -
