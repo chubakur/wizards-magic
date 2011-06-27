@@ -263,7 +263,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.image.blit(text_power, (5, 137))
         self.image.blit(text_health, (90, 137))
         if self.light:
-            self.image.blit(self.light_image, (10, 50))
+            self.image.blit(self.light_image, (-10, -10))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
             xshift = 324 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck + 2 * self.position_in_deck
