@@ -30,6 +30,7 @@ import os
 import player
 if pygame.version.vernum < (1, 9, 1):
     import copy
+import animations
 import globals
 import elementbutton
 import cards
@@ -263,10 +264,10 @@ def start_game(cli=False):
         globals.screen.blit(globals.background, (0, 0))
         #globals.background.fill((0,0,0))
         globals.background = background_backup.copy()
-        if len(globals.animations_running) == False and len(globals.attack_started):
+        if len(animations.animations_running) == False and len(globals.attack_started):
             if not globals.cli:
                 player.switch_position()
-        for animation_running in globals.animations_running:
+        for animation_running in animations.animations_running:
             animation_running.run()
             if len(globals.attack_started) and len(globals.cards_attacking) == False:
                 if not globals.cli:

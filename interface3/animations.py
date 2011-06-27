@@ -12,6 +12,7 @@ cards_dying = []
 
 class Animation():
     def __init__(self, image, origin = [0,0]):
+        animations_running.append(self) #Adding to current running animations
         self.image = image.copy() #The source image
         self.origin = origin #The origin
         self.position = [self.origin[0],self.origin[1]]
@@ -54,7 +55,7 @@ class Animation():
             if (self.position[0] != self.path[milestone][0]) or (self.position[1] != self.path[milestone][1]):
                 self.position= [self.path[milestone][0],self.path[milestone][1]]            
             if milestone == len(self.path)-1:
-                globals.animations_running.remove(self)
+                animations_running.remove(self)
                 for item in self.additional_groups:
                     item.remove(self)
             else:
@@ -72,7 +73,7 @@ class Animation():
         self.image.set_alpha(self.alpha)
 
         if self.alpha <= 0:
-            globals.animations_running.remove(self)
+            animations_running.remove(self)
             for item in self.additional_groups:
                 item.remove(self)
 
