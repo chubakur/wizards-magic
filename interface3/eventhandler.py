@@ -66,8 +66,8 @@ class Event_handler():
                     item.onmousedown()
                     return
                 if item.type == "warrior_card": #Карта в колоде! Карта на поле в cardbox
-                    exec('selected_card_0 = cards.' + item.name + '()') #Переменной selected_card_0 присваиваем новый объект
-                    globals.selected_card = selected_card_0 # из локальной в глобальную
+                    #exec('selected_card_0 = cards.' + item.name + '()') #Переменной selected_card_0 присваиваем новый объект
+                    globals.selected_card = cards.links_to_cards[item.name]() # из локальной в глобальную
                     if globals.player.id == 1:
                         for cardbox in globals.cardboxes[0:5]:
                             if globals.player.action_points:
@@ -82,10 +82,13 @@ class Event_handler():
                     if not globals.player.action_points: #если уже ходил
                         globals.gameinformationpanel.display("You've already made a move.")
                         return
-                    exec('selected_card = cards.' + item.name + '()') #в переменную selected_card засовываем одну такую карту
-                    exec('available_mana = globals.player.' + selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                    selected_card = cards.links_to_cards[item.name]()
+                    #exec('selected_card = cards.' + item.name + '()') #в переменную selected_card засовываем одну такую карту
+                    #exec('available_mana = globals.player.' + selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                    available_mana = globals.player.mana[selected_card.element]
                     if available_mana >= selected_card.level:
-                        exec('globals.player.' + selected_card.element + '_mana -= ' + str(selected_card.level)) #Отнимаем ману
+                        #exec('globals.player.' + selected_card.element + '_mana -= ' + str(selected_card.level)) #Отнимаем ману
+                        globals.player.mana[selected_card.element] -= selected_card.level
                         globals.player.action_points = False #ставим запись, что ход сделан
                         selected_card.player = globals.player
                         sockets.query({"action":"card","card":selected_card.name,"type":"magic"})
@@ -126,7 +129,8 @@ class Event_handler():
                         for cardbox in globals.cardboxes:
                             cardbox.light = False
                         #Выводим карту
-                        exec('available_mana = globals.player.' + globals.selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                        #exec('available_mana = globals.player.' + globals.selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                        available_mana = globals.player.mana[globals.selected_card.element]
                         if available_mana < globals.selected_card.level:
                             globals.gameinformationpanel.display("Not enough mana.")
                             return
@@ -138,7 +142,8 @@ class Event_handler():
                         item.card.field = True
                         item.card.summon() #функция которая хранит описание действий при выводе карты
                         globals.player.action_points = False
-                        exec('globals.player.' + globals.selected_card.element + '_mana -= ' + str(globals.selected_card.level)) #Отнимаем ману
+                        #exec('globals.player.' + globals.selected_card.element + '_mana -= ' + str(globals.selected_card.level)) #Отнимаем ману
+                        globals.player.mana[globals.selected_card.element] -= globals.selected_card.level
                         #globals.cards_in_deck.empty() #очищаем группу карты в колоде
                         if item.player.id == 1:
                             globals.ccards_1.add(item.card)

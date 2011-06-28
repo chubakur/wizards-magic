@@ -122,7 +122,7 @@ def server_handler():
             player.me_finish_turn()
         elif gi['action'] == 'card':
             #print gi
-            #if gi['position'] == 0:      http://www.linux.org.ru/
+            #if gi['position'] == 0:
                 #cardbox = globals.cardbox0
             if gi['type'] == 'warrior':
                 exec("tmp_card = cards." + gi['card'] + "()")

@@ -14,11 +14,15 @@ class ElementShower(pygame.sprite.Sprite):
     def draw(self):
         #self.image = self.surface_backup.copy()
         if not globals.cli:
-            exec("text = self.font.render(str(globals.player.enemy" + "." + self.element + "_mana),True,"+self.color+")")
+            text = self.font.render(str(globals.player.enemy.mana[self.element]),True,self.color)
         else:
             if not globals.player_id:
                 return
-            exec("text = self.font.render(str(globals.player"+str(globals.player_id)+".enemy" + "." + self.element + "_mana),True,"+self.color+")")
+            #exec("text = self.font.render(str(globals.player"+str(globals.player_id)+".enemy" + "." + self.element + "_mana),True,"+self.color+")")
+            if globals.player_id == 1:
+                text = self.font.render(str(globals.player2.mana[self.element]),True,self.color)
+            else:
+                text = self.font.render(str(globals.player1.mana[self.element]),True,self.color)
         #self.image.blit(text, (2, 9))
         globals.background.blit(text, self.rect)
     def update(self):
@@ -27,14 +31,14 @@ class WaterElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'water'
-        self.color = "(255,255,255)"
+        self.color = (255,255,255)
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         globals.interface.add(self)
 class FireElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'fire'
-        self.color = "(255,255,255)"
+        self.color = (255,255,255)
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -42,7 +46,7 @@ class AirElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'air'
-        self.color = "(255,255,255)"
+        self.color = (255,255,255)
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -50,7 +54,7 @@ class EarthElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'earth'
-        self.color = "(255,255,255)"
+        self.color = (255,255,255)
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -58,7 +62,7 @@ class LifeElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'life'
-        self.color = "(255,255,255)"
+        self.color = (255,255,255)
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -66,7 +70,7 @@ class DeathElementShower(ElementShower):
     def __init__(self, rect):
         ElementShower.__init__(self)
         self.element = 'death'
-        self.color = "(255,255,255)"
+        self.color = (255,255,255)
         self.rect = self.init_text.get_rect().move((rect[0], rect[1]))
         ElementShower.__init__(self)
         globals.interface.add(self)
@@ -80,11 +84,16 @@ class ElementButton(pygame.sprite.Sprite):
     def draw(self):
         self.image = self.surface_backup.copy()
         if not globals.cli:
-            exec("text = self.font.render(str(globals.player" + "." + self.element + "_mana),True,"+self.color+")")
+            #exec("text = self.font.render(str(globals.player" + "." + self.element + "_mana),True,"+self.color+")")
+            text = self.font.render(str(globals.player.mana[self.element]),True,self.color)
         else:
             if not globals.player_id:
                 return
-            exec("text = self.font.render(str(globals.player"+ str(globals.player_id ) + "." + self.element + "_mana),True,"+self.color+")")
+            if globals.player_id == 1:
+                text = self.font.render(str(globals.player1.mana[self.element]), True, self.color)
+            else:
+                text = self.font.render(str(globals.player2.mana[self.element]), True, self.color)
+            #exec("text = self.font.render(str(globals.player"+ str(globals.player_id ) + "." + self.element + "_mana),True,"+self.color+")")
         self.image.blit(text, (12, 17))
         globals.background.blit(self.image, self.rect)
     def update(self):
@@ -119,7 +128,7 @@ class WaterElementButton(ElementButton):
         self.image_normal = pygame.image.load(current_folder+'/misc/water_icon.gif').convert_alpha()
         self.image_pressed = pygame.image.load(current_folder+'/misc/water_icon_selected.gif').convert_alpha()
         self.image = self.image_pressed
-        self.color = '(255,255,255)'
+        self.color = (255,255,255)
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         ElementButton.__init__(self)
         globals.interface.add(self)
@@ -129,7 +138,7 @@ class FireElementButton(ElementButton):
         self.image_normal = pygame.image.load(current_folder+'/misc/fire_icon.gif').convert_alpha()
         self.image_pressed = pygame.image.load(current_folder+'/misc/fire_icon_selected.gif').convert_alpha()
         self.image = self.image_normal
-        self.color = '(255,255,255)'
+        self.color = (255,255,255)
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         ElementButton.__init__(self)
         globals.interface.add(self)
@@ -139,7 +148,7 @@ class AirElementButton(ElementButton):
         self.image_normal = pygame.image.load(current_folder+'/misc/air_icon.gif').convert_alpha()
         self.image_pressed = pygame.image.load(current_folder+'/misc/air_icon_selected.gif').convert_alpha()
         self.image = self.image_normal
-        self.color = '(255,255,255)'
+        self.color = (255,255,255)
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         ElementButton.__init__(self)
         globals.interface.add(self)
@@ -149,7 +158,7 @@ class EarthElementButton(ElementButton):
         self.image_normal = pygame.image.load(current_folder+'/misc/earth_icon.gif').convert_alpha()
         self.image_pressed = pygame.image.load(current_folder+'/misc/earth_icon_selected.gif').convert_alpha()
         self.image = self.image_normal
-        self.color = '(255,255,255)'
+        self.color = (255,255,255)
         self.surface_backup = self.image.copy()
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         ElementButton.__init__(self)
@@ -160,7 +169,7 @@ class LifeElementButton(ElementButton):
         self.image_normal = pygame.image.load(current_folder+'/misc/life_icon.gif').convert_alpha()
         self.image_pressed = pygame.image.load(current_folder+'/misc/life_icon_selected.gif').convert_alpha()
         self.image = self.image_normal
-        self.color = '(255,255,255)'
+        self.color = (255,255,255)
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         ElementButton.__init__(self)
         globals.interface.add(self)
@@ -170,7 +179,7 @@ class DeathElementButton(ElementButton):
         self.image_normal = pygame.image.load(current_folder+'/misc/death_icon.gif').convert_alpha()
         self.image_pressed = pygame.image.load(current_folder+'/misc/death_icon_selected.gif').convert_alpha()
         self.image = self.image_normal
-        self.color = '(255,255,255)'
+        self.color = (255,255,255)
         self.rect = self.image.get_rect().move((rect[0], rect[1]))
         ElementButton.__init__(self)
         globals.interface.add(self)

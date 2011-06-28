@@ -9,12 +9,15 @@ current_folder = os.path.dirname(os.path.abspath(__file__))
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
+
+
 water_cards_deck = ["Nixie", "Hydra", "Waterfall", "Leviathan", "IceGuard", "Poseidon", "IceWizard", "Poison", "SeaJustice", "Paralyze", "AcidStorm", "IceBolt"]
 fire_cards_deck = ["Demon", "Devil", "Firelord", "RedDrake", "Efreet", "Salamander", "Vulcan", "Cerberus", "Armageddon", "Fireball", "FireSpikes", "FlamingArrow", "RitualFlame"]
 air_cards_deck = ["Phoenix", "Zeus", "Fairy", "Nymph", "Gargoyle", "Manticore", "Titan", "Plague", "Spellbreaker", "BlackWind", "ChainLightning"]
 earth_cards_deck = ["Satyr", "Golem", "Dryad", "Centaur", "Elemental", "Ent", "Echidna", "ForestSpirit", "AbsoluteDefence", "Earthquake", "Quicksands", "Restructure", "Revival"]
 life_cards_deck = ["Priest", "Paladin", "Pegasus", "Unicorn", "Apostate", "MagicHealer", "Chimera", "Bless", "GodsWrath", "LifeSacrifice", "Purify", "Rejuvenation"]
 death_cards_deck = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Banshee", "Darklord", "Lich", "ChaosVortex", "CoverOfDarkness", "Curse", "StealLife", "TotalWeakness"]
+
 #water_cards = list([c for c in water_cards_deck])
 #fire_cards = list([c for c in fire_cards_deck]) 
 #air_cards = list([c for c in air_cards_deck]) 
@@ -296,9 +299,9 @@ class Nixie(Prototype):
             return
     def cast_action(self):
         self.play_cast_sound()
-        if self.parent.player.fire_mana:
-            self.parent.player.fire_mana -= 1
-            self.parent.player.water_mana += 1
+        if self.parent.player.mana['fire']:
+            self.parent.player.mana['fire'] -= 1
+            self.parent.player.mana['water'] += 1
             self.used_cast = True
         #Наносит картам элемента огня урон 200%
         #КАСТ:уменьшает ману огня на 1, увеличивает ману воды на 1
@@ -326,9 +329,9 @@ class Hydra(Prototype):
             return
     def turn(self):
         Prototype.turn(self)
-        self.parent.player.water_mana -= 2
-        if self.parent.player.water_mana < 0:
-            self.parent.player.water_mana = 0
+        self.parent.player.mana['water'] -= 2
+        if self.parent.player.mana['water'] < 0:
+            self.parent.player.mana['water'] = 0
     def cast_action(self):
         Prototype.cast_action(self)
         for card in self.get_self_cards():
@@ -357,7 +360,7 @@ class Waterfall(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        self.power = self.parent.player.water_mana
+        self.power = self.parent.player.mana['water']
         if not self.power:
             self.power = 1
 class Leviathan(Prototype):
@@ -411,7 +414,7 @@ class IceWizard(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        self.parent.player.water_mana += 2
+        self.parent.player.mana['water'] += 2
     def damage(self, damage, enemy, cast=False):
         if enemy.element == 'fire':
             Prototype.damage(self, damage * 2, enemy)
@@ -420,8 +423,8 @@ class IceWizard(Prototype):
         else:
             Prototype.damage(self, damage, enemy)
     def cast_action(self):
-        water = self.parent.player.water_mana
-        self.parent.player.water_mana = 0
+        water = self.parent.player.mana['water']
+        self.parent.player.mana['water'] = 0
         self.parent.player.heal(water * 2)
 class Demon(Prototype):
     def __init__(self):        
@@ -435,9 +438,9 @@ class Demon(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/fire/demon.gif')
         Prototype.__init__(self)
     def cast_action(self):
-        if self.parent.player.earth_mana:
-            self.parent.player.earth_mana -= 1
-            self.parent.player.fire_mana += 2
+        if self.parent.player.mana['earth']:
+            self.parent.player.mana['earth'] -= 1
+            self.parent.player.mana['fire'] += 2
             self.play_cast_sound()
             self.used_cast = True
         #Не получает повреждения от заклинаний огня и земли
@@ -477,7 +480,7 @@ class Devil(Prototype):
                         self.play_cast_sound()
                         self.used_cast = True
                         globals.cast_focus = False
-                        self.parent.player.fire_mana += 3
+                        self.parent.player.mana['fire'] += 3
                         self.parent.player.heal(target.health)
                         target.die()
                         for card in self.get_self_cards():
@@ -516,8 +519,8 @@ class Firelord(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        self.parent.player.fire_mana += 1
-        self.parent.player.enemy.fire_mana += 1
+        self.parent.player.mana['fire'] += 1
+        self.parent.player.enemy.mana['fire'] += 1
     def die(self):
         self.parent.player.damage(8, self)
         self.parent.player.enemy.damage(8, self)
@@ -579,17 +582,17 @@ class Vulcan(Prototype):
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
-        self.set_power(self.parent.player.fire_mana - self.level + 3)
-        if self.parent.player.enemy.fire_mana >= 3:
-            self.parent.player.enemy.fire_mana -= 3
+        self.set_power(self.parent.player.mana['fire'] - self.level + 3)
+        if self.parent.player.enemy.mana['fire'] >= 3:
+            self.parent.player.enemy.mana['fire'] -= 3
         else:
-            self.parent.player.enemy.fire_mana = 0
+            self.parent.player.enemy.mana['fire'] = 0
         opp_card = globals.cardboxes[self.get_attack_position()].card
         if opp_card.name != 'player':
             opp_card.damage(9, self)
     def turn(self):
         Prototype.turn(self)
-        self.set_power(self.parent.player.fire_mana + 3)
+        self.set_power(self.parent.player.mana['fire'] + 3)
     def cast_action(self):
         hp = self.health
         for card in self.get_enemy_cards() + self.get_self_cards():
@@ -632,7 +635,7 @@ class Nymph(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        self.parent.player.air_mana += 1
+        self.parent.player.mana['air'] += 1
         #Каждый ход владелец получает дополнительно 1 воздух
 class Fairy(Prototype):
     def __init__(self):        
@@ -654,9 +657,9 @@ class Fairy(Prototype):
         self.power = self.default_power
         self.update()
     def cast_action(self):
-        if self.parent.player.air_mana:
+        if self.parent.player.mana['air']:
             self.used_cast = True
-            self.parent.player.air_mana -= 1
+            self.parent.player.mana['air'] -= 1
             self.play_cast_sound()
             max = 0
             max_link = False
@@ -714,7 +717,7 @@ class Zeus(Prototype):
             attack_position = self.get_attack_position()
             kill = globals.cardboxes[attack_position].card.damage(self.power, self)
             if kill:
-                self.parent.player.air_mana += 1
+                self.parent.player.mana['air'] += 1
         else:
             return
 class Gargoyle(Prototype):
@@ -743,10 +746,10 @@ class Gargoyle(Prototype):
         else:
             Prototype.damage(self, damage, enemy)
     def cast_action(self):
-        if self.parent.player.air_mana >= 3 and self.parent.player.earth_mana:
+        if self.parent.player.mana['air'] >= 3 and self.parent.player.mana['earth']:
             self.play_cast_sound()
-            self.parent.player.air_mana -= 3
-            self.parent.player.earth_mana -= 1
+            self.parent.player.mana['air'] -= 3
+            self.parent.player.mana['earth'] -= 1
             self.used_cast = True
             self.stone = True
     def turn(self):
@@ -776,7 +779,7 @@ class Manticore(Prototype):
                 globals.cardboxes[attack_position].card.damage(self.power, self)
             self.run_attack_animation()
     def cast_action(self):
-        if self.parent.player.air_mana >= 2: #if player have mana for cast
+        if self.parent.player.mana['air'] >= 2: #if player have mana for cast
             Prototype.cast_action(self) #activating focus-cast
             for card in self.get_enemy_cards():
                 if card.cast: #if it`s caster
@@ -788,7 +791,7 @@ class Manticore(Prototype):
                     target.cast = False #target now can`t cast
                     self.used_cast = True #This means, that this card cast already
                     globals.cast_focus = False #focus-cast off
-                    self.parent.player.air_mana -= 2 #decrease player`s mana. It is payment for this action.
+                    self.parent.player.mana['air'] -= 2 #decrease player`s mana. It is payment for this action.
                     self.play_cast_sound() #play cast sound
                     for card in self.get_enemy_cards(): #disable lighting
                         card.light_switch(False)
@@ -811,13 +814,13 @@ class Titan(Prototype):
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
-        self.parent.player.enemy.air_mana -= 3
-        if self.parent.player.enemy.air_mana < 0:
-            self.parent.player.enemy.air_mana = 0
+        self.parent.player.enemy.mana['air'] -= 3
+        if self.parent.player.enemy.mana['air'] < 0:
+            self.parent.player.enemy.mana['air'] = 0
     def cast_action(self):
         self.play_cast_sound()
-        if self.parent.player.air_mana:
-            self.parent.player.air_mana -= 1
+        if self.parent.player.mana['air']:
+            self.parent.player.mana['air'] -= 1
             for enemy_card in self.get_enemy_cards():
                 if enemy_card.element == "earth":
                     enemy_card.damage(3, self, True)
@@ -838,7 +841,7 @@ class Satyr(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        self.parent.player.earth_mana += 1
+        self.parent.player.mana['earth'] += 1
     def cast_action(self):
         self.play_cast_sound()
         if self.parent.position < 5:
@@ -860,7 +863,7 @@ class Golem(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        if self.parent.player.earth_mana < 3:
+        if self.parent.player.mana['earth'] < 3:
             self.damage(3, self)
         else:
             self.heal(3, self.max_health)
@@ -900,8 +903,8 @@ class ForestSpirit(Prototype):
         else:
             Prototype.damage(self,damage,enemy,cast)
     def cast_action(self):
-        if self.parent.player.earth_mana >= 2:
-            self.parent.player.earth_mana -= 2
+        if self.parent.player.mana['earth'] >= 2:
+            self.parent.player.mana['earth'] -= 2
             self.used_cast = True
             self.play_cast_sound()
             self.parent.player.heal(5)
@@ -918,10 +921,10 @@ class Centaur(Prototype):
         Prototype.__init__(self)
         self.moves_alive = 1
     def cast_action(self):
-        if self.parent.player.earth_mana:
+        if self.parent.player.mana['earth']:
             self.play_cast_sound()
             self.parent.player.enemy.damage(3, self, True)
-            self.parent.player.earth_mana -= 1
+            self.parent.player.mana['earth'] -= 1
             self.used_cast = True
 class Elemental(Prototype):
     def __init__(self):        
@@ -936,11 +939,11 @@ class Elemental(Prototype):
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
-        self.set_power(self.parent.player.earth_mana - self.level)
+        self.set_power(self.parent.player.mana['earth'] - self.level)
     def turn(self):
         Prototype.turn(self)
-        self.parent.player.earth_mana += 2
-        self.set_power(self.parent.player.earth_mana)
+        self.parent.player.mana['earth'] += 2
+        self.set_power(self.parent.player.mana['earth'])
 class Ent(Prototype):
     def __init__(self):        
         self.name = "Ent"
@@ -964,6 +967,7 @@ class Ent(Prototype):
             card.damage(1, self, True)
         self.used_cast = True
         self.damage(2, self, True)
+        self.play_cast_sound()
 class Echidna(Prototype):
     def __init__(self):        
         self.name = "Echidna"
@@ -988,9 +992,9 @@ class Priest(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        if self.parent.player.death_mana >= 2:
-            self.parent.player.death_mana -= 2
-            self.parent.player.life_mana += 2
+        if self.parent.player.mana['death'] >= 2:
+            self.parent.player.mana['death'] -= 2
+            self.parent.player.mana['life'] += 2
 class Paladin(Prototype):
     def __init__(self):        
         self.name = "Paladin"
@@ -1005,7 +1009,7 @@ class Paladin(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/life/paladin.gif')
         Prototype.__init__(self)
     def cast_action(self):
-        if self.parent.player.life_mana >= 2: #если хватает маны, то активируем фокус
+        if self.parent.player.mana['life'] >= 2: #если хватает маны, то активируем фокус
             Prototype.cast_action(self)
             for card in self.get_enemy_cards():
                 if card.element == "death":
@@ -1019,7 +1023,7 @@ class Paladin(Prototype):
                     globals.cast_focus = False
                     target.die()
                     self.damage(10, self, True)
-                    self.parent.player.life_mana -= 2
+                    self.parent.player.mana['life'] -= 2
                     self.play_cast_sound()
                     for card in self.get_enemy_cards(): #отключаем подсветку
                         card.light_switch(False)
@@ -1046,7 +1050,7 @@ class Pegasus(Prototype):
         for card in self.get_self_cards():
             card.heal(3, card.max_health)
     def cast_action(self):
-        if self.parent.player.life_mana >= 2: # если хватает маны
+        if self.parent.player.mana['life'] >= 2: # если хватает маны
             Prototype.cast_action(self) #включаем фокус-каст
             for card in self.get_enemy_cards(): #включаем подсветку
                 card.light_switch(True)
@@ -1060,7 +1064,7 @@ class Pegasus(Prototype):
                     target.damage(5, self, True) #наносим урон ей
                 self.used_cast = True #отмечаем, что заклинание уже использовано
                 globals.cast_focus = False #отключаем фокус-каст
-                self.parent.player.life_mana -= 2 # отнимаем ману
+                self.parent.player.mana['life'] -= 2 # отнимаем ману
                 self.play_cast_sound() #играем звук
                 for card in self.get_enemy_cards(): #отключаем подсветку
                     card.light_switch(False)
@@ -1092,11 +1096,11 @@ class Apostate(Prototype):
         Prototype.__init__(self)
     def turn(self):
         Prototype.turn(self)
-        if self.parent.player.life_mana >= 2:
-            self.parent.player.life_mana -= 2
+        if self.parent.player.mana['life'] >= 2:
+            self.parent.player.mana['life'] -= 2
         else:
-            self.parent.player.life_mana = 0
-        self.parent.player.death_mana += 1
+            self.parent.player.mana['life'] = 0
+        self.parent.player.mana['death'] += 1
     def cast_action(self):
         card = Banshee()
         card.parent = self.parent
@@ -1207,7 +1211,7 @@ class Ghost(Prototype):
         else:
             Prototype.damage(self, damage * 2, enemy, True)
     def cast_action(self):
-        self.parent.player.death_mana += 1
+        self.parent.player.mana['death'] += 1
         self.parent.player.health -= 5
         self.used_cast = True
         self.play_cast_sound()
@@ -1254,9 +1258,9 @@ class Werewolf(Prototype):
         else:
             globals.ccards_2.add(self.parent.card)
     def cast_action(self):
-        if self.parent.player.death_mana >= 3:
+        if self.parent.player.mana['death'] >= 3:
             self.used_cast = True
-            self.parent.player.death_mana -= 3
+            self.parent.player.mana['death'] -= 3
             self.power *= 2
 class Banshee(Prototype):
     def __init__(self):
@@ -1294,7 +1298,7 @@ class GrimReaper(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/death/grim_reaper.gif')
         Prototype.__init__(self)
     def cast_action(self):
-        if self.parent.player.death_mana >= 3:
+        if self.parent.player.mana['death'] >= 3:
             Prototype.cast_action(self)
             for card in self.get_enemy_cards():
                 if card.level <= 3:
@@ -1303,7 +1307,7 @@ class GrimReaper(Prototype):
         if target.name != 'player': #if it is real card!
             if self.parent.player.id != target.parent.player.id:
                 self.play_cast_sound()
-                self.parent.player.death_mana -= 3
+                self.parent.player.mana['death'] -= 3
                 target.die()
                 self.used_cast = True
                 globals.cast_focus = False
@@ -1541,9 +1545,9 @@ class IceBolt(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        self.player.enemy.damage(10 + (self.player.water_mana + self.level) / 2, self, True)
+        self.player.enemy.damage(10 + (self.player.mana['water'] + self.level) / 2, self, True)
         self.player.damage(6, self, True)
-        self.player.water_mana = 0
+        self.player.mana['water'] = 0
         #наносится урон 10+Water/2 вражескому игроку . Игроку, кто кастовал урон 6.
 class Armageddon(Magic):
     def __init__(self):
@@ -1573,7 +1577,7 @@ class Fireball(Magic):
         Magic.cast(self)
         enemy_cards = self.get_enemy_cards()
         for card in enemy_cards:
-            card.damage(self.player.fire_mana + self.level + 3, self, True)
+            card.damage(self.player.mana['fire'] + self.level + 3, self, True)
 class FireSpikes(Magic):
     def __init__(self):
         self.element = "fire"
@@ -1596,7 +1600,7 @@ class FlamingArrow(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        diff = self.player.fire_mana + self.level - self.player.enemy.fire_mana
+        diff = self.player.mana['fire'] + self.level - self.player.enemy.mana['fire']
         if diff > 0:
             self.player.enemy.damage(diff * 2, self, True)
         else:
@@ -1647,7 +1651,7 @@ class ChainLightning(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        air_mana = self.player.air_mana + self.level
+        air_mana = self.player.mana['air'] + self.level
         power = air_mana + 2
         for card in self.get_enemy_cards():
             card.damage(power, self, True)
@@ -1722,7 +1726,7 @@ class Earthquake(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        earth_mana = self.player.earth_mana + self.level
+        earth_mana = self.player.mana['earth'] + self.level
         if earth_mana > 12:
             cards = self.get_enemy_cards()
         else:
@@ -1809,7 +1813,7 @@ class GodsWrath(Magic):
         for card in cards:
             if card.element == "death":
                 card.die()
-                self.player.life_mana += 3
+                self.player.mana['life'] += 3
                 self.player.heal(1)
 class LifeSacrifice(Magic):
     def __init__(self):
@@ -1821,7 +1825,7 @@ class LifeSacrifice(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        power = self.player.life_mana + self.level #life_mana - count of Life ; level - cast this spell, because mana decreased before spell activated.
+        power = self.player.mana['life'] + self.level #mana['life'] - count of Life ; level - cast this spell, because mana decreased before spell activated.
         self.player.damage(power, self, True)
         self.player.enemy.damage(power * 2, self, True)
 class Purify(Magic):
@@ -1860,11 +1864,11 @@ class Rejuvenation(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        life_mana = globals.player.life_mana + self.level
+        life_mana = globals.player.mana['life'] + self.level
         globals.player.heal(life_mana * 3)
         for card in self.get_self_cards():
             card.heal(3, card.max_health)
-        globals.player.life_mana = 0
+        globals.player.mana['life'] = 0
 class ChaosVortex(Magic):
     def __init__(self):
         self.element = "death"
@@ -1876,7 +1880,7 @@ class ChaosVortex(Magic):
     def cast(self):
         Magic.cast(self)
         cards = self.get_enemy_cards() + self.get_self_cards()
-        self.player.death_mana += len(cards)
+        self.player.mana['death'] += len(cards)
         for card in cards:
             card.die()
 class CoverOfDarkness(Magic):
@@ -1905,18 +1909,18 @@ class Curse(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        if globals.player.enemy.water_mana:
-            globals.player.enemy.water_mana -= 1
-        if globals.player.enemy.fire_mana:
-            globals.player.enemy.fire_mana -= 1
-        if globals.player.enemy.air_mana:
-            globals.player.enemy.air_mana -= 1
-        if globals.player.enemy.earth_mana:
-            globals.player.enemy.earth_mana -= 1
-        if globals.player.enemy.life_mana:
-            globals.player.enemy.life_mana -= 1
-        if globals.player.enemy.death_mana:
-            globals.player.enemy.death_mana -= 1
+        if globals.player.enemy.mana['water']:
+            globals.player.enemy.mana['water'] -= 1
+        if globals.player.enemy.mana['fire']:
+            globals.player.enemy.mana['fire'] -= 1
+        if globals.player.enemy.mana['air']:
+            globals.player.enemy.mana['air'] -= 1
+        if globals.player.enemy.mana['earth']:
+            globals.player.enemy.mana['earth'] -= 1
+        if globals.player.enemy.mana['life']:
+            globals.player.enemy.mana['life'] -= 1
+        if globals.player.enemy.mana['death']:
+            globals.player.enemy.mana['death'] -= 1
 class StealLife(Magic):
     def __init__(self):
         self.element = "death"
@@ -1927,7 +1931,7 @@ class StealLife(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        death_mana = globals.player.death_mana + self.level
+        death_mana = globals.player.mana['death'] + self.level
         if death_mana < 8:
             globals.player.enemy.damage(5, self, True)
             globals.player.heal(5)
@@ -1948,3 +1952,5 @@ class TotalWeakness(Magic):
         for card in cards:
             card.default_power = int(floor(card.power / 2.0))
             card.set_power(int(floor(card.power / 2.0)))
+
+links_to_cards = {"Nixie":Nixie, "Hydra":Hydra, "Waterfall":Waterfall, "Leviathan":Leviathan, "IceGuard":IceGuard, "Poseidon":Poseidon, "IceWizard":IceWizard, "Poison":Poison, "SeaJustice":SeaJustice, "Paralyze":Paralyze, "AcidStorm":AcidStorm, "IceBolt":IceBolt, "Demon":Demon, "Devil":Devil, "Firelord":Firelord, "RedDrake":RedDrake, "Efreet":Efreet, "Salamander":Salamander, "Vulcan":Vulcan, "Cerberus":Cerberus, "Armageddon":Armageddon, "Fireball":Fireball, "FireSpikes":FireSpikes, "FlamingArrow":FlamingArrow, "RitualFlame":RitualFlame, "Phoenix":Phoenix, "Zeus":Zeus, "Fairy":Fairy, "Nymph":Nymph, "Gargoyle":Gargoyle, "Manticore":Manticore, "Titan":Titan ,"Plague":Plague, "Spellbreaker":Spellbreaker, "BlackWind":BlackWind, "ChainLightning":ChainLightning, "Satyr":Satyr, "Golem":Golem, "Dryad":Dryad, "Centaur":Centaur, "Elemental":Elemental, "Ent":Ent, "Echidna":Echidna, "ForestSpirit":ForestSpirit, "AbsoluteDefence":AbsoluteDefence, "Earthquake":Earthquake, "Quicksands":Quicksands, "Restructure":Restructure, "Revival":Revival ,"Priest":Priest, "Paladin":Paladin, "Pegasus":Pegasus, "Unicorn":Unicorn, "Apostate":Apostate, "MagicHealer":MagicHealer, "Chimera":Chimera, "Bless":Bless, "GodsWrath":GodsWrath, "LifeSacrifice":LifeSacrifice, "Purify":Purify, "Rejuvenation":Rejuvenation, "Zombie":Zombie, "Vampire":Vampire, "GrimReaper":GrimReaper, "Ghost":Ghost, "Werewolf":Werewolf, "Banshee":Banshee, "Darklord":Darklord, "Lich":Lich, "ChaosVortex":ChaosVortex, "CoverOfDarkness":CoverOfDarkness, "Curse":Curse, "StealLife":StealLife, "TotalWeakness":TotalWeakness}
