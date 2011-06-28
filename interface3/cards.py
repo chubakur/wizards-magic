@@ -259,7 +259,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.image.blit(text_power, (5, 137))
         self.image.blit(text_health, (90, 137))
         if self.light:
-            self.image.blit(self.light_image, (-10, -10))
+            self.image.blit(self.light_image, (5, 5))
         if not self.field: #Рисование в колоде
             self.parent = globals.background
             xshift = 324 + self.position_in_deck * self.image.get_size()[0] + globals.cardofelementsshower.shift * self.position_in_deck + 2 * self.position_in_deck
@@ -1541,7 +1541,7 @@ class IceBolt(Magic):
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)
-        self.player.enemy.damage((self.player.water_mana + self.level) / 2, self, True)
+        self.player.enemy.damage(10 + (self.player.water_mana + self.level) / 2, self, True)
         self.player.damage(6, self, True)
         self.player.water_mana = 0
         #наносится урон 10+Water/2 вражескому игроку . Игроку, кто кастовал урон 6.
