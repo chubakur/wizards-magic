@@ -152,6 +152,7 @@ def server_handler():
             globals.opponent_disconnect = True
             globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
 def start_game(cli=False):
+    globals.attack_started = [True]
     globals.background = pygame.image.load(current_folder+'/misc/bg_sample.gif')
     #globals.background = globals.background.convert()
     #globals.background = pygame.Surface(globals.screen.get_size())
