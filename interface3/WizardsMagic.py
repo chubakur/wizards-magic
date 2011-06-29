@@ -125,7 +125,8 @@ def server_handler():
             #if gi['position'] == 0:
                 #cardbox = globals.cardbox0
             if gi['type'] == 'warrior':
-                exec("tmp_card = cards." + gi['card'] + "()")
+                #exec("tmp_card = cards." + gi['card'] + "()")
+                tmp_card = cards.links_to_cards[gi['card']]()
                 exec("globals.cardbox" + str(gi['position']) + ".card =  tmp_card")
                 exec("globals.cardbox" + str(gi['position']) + ".card.parent = globals.cardbox" + str(gi['position']))
                 exec("globals.cardbox" + str(gi['position']) + ".card.field = True")
@@ -135,7 +136,8 @@ def server_handler():
                 #exec("globals.ccards_2.add(globals.cardbox"+str(gi['position'])+".card)")
                 #print globals.player.id,tmp_card
             elif gi['type'] == 'magic':
-                exec("tmp_card = cards." + gi['card'] + "()")
+                #exec("tmp_card = cards." + gi['card'] + "()")
+                tmp_card = cards.links_to_cards[gi['card']]()
                 exec('globals.player.' + tmp_card.element + '_mana -= ' + str(tmp_card.level)) #Отнимаем ману
                 globals.player.action_points = False #ставим запись, что ход сделан
                 tmp_card.player = globals.player

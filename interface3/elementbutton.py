@@ -8,21 +8,20 @@ current_folder = os.path.dirname(os.path.abspath(__file__))
 class ElementShower(pygame.sprite.Sprite):
     def __init__(self):
         self.type = 'outer'
-        self.font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
-        self.init_text = self.font.render('',False,(0,0,0))
+        self.init_text = globals.font2.render('',False,(0,0,0))
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
         #self.image = self.surface_backup.copy()
         if not globals.cli:
-            text = self.font.render(str(globals.player.enemy.mana[self.element]),True,self.color)
+            text = globals.font2.render(str(globals.player.enemy.mana[self.element]),True,self.color)
         else:
             if not globals.player_id:
                 return
             #exec("text = self.font.render(str(globals.player"+str(globals.player_id)+".enemy" + "." + self.element + "_mana),True,"+self.color+")")
             if globals.player_id == 1:
-                text = self.font.render(str(globals.player2.mana[self.element]),True,self.color)
+                text = globals.font2.render(str(globals.player2.mana[self.element]),True,self.color)
             else:
-                text = self.font.render(str(globals.player1.mana[self.element]),True,self.color)
+                text = globals.font2.render(str(globals.player1.mana[self.element]),True,self.color)
         #self.image.blit(text, (2, 9))
         globals.background.blit(text, self.rect)
     def update(self):
@@ -79,20 +78,19 @@ class ElementButton(pygame.sprite.Sprite):
         #Это прототип!
         self.type = 'button'
         self.surface_backup = self.image.copy()
-        self.font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
         pygame.sprite.Sprite.__init__(self)
     def draw(self):
         self.image = self.surface_backup.copy()
         if not globals.cli:
             #exec("text = self.font.render(str(globals.player" + "." + self.element + "_mana),True,"+self.color+")")
-            text = self.font.render(str(globals.player.mana[self.element]),True,self.color)
+            text = globals.font2.render(str(globals.player.mana[self.element]),True,self.color)
         else:
             if not globals.player_id:
                 return
             if globals.player_id == 1:
-                text = self.font.render(str(globals.player1.mana[self.element]), True, self.color)
+                text = globals.font2.render(str(globals.player1.mana[self.element]), True, self.color)
             else:
-                text = self.font.render(str(globals.player2.mana[self.element]), True, self.color)
+                text = globals.font2.render(str(globals.player2.mana[self.element]), True, self.color)
             #exec("text = self.font.render(str(globals.player"+ str(globals.player_id ) + "." + self.element + "_mana),True,"+self.color+")")
         self.image.blit(text, (12, 17))
         globals.background.blit(self.image, self.rect)
@@ -109,6 +107,7 @@ class ElementButton(pygame.sprite.Sprite):
         pygame.mixer.music.stop()
         if self.element != globals.selected_elem:
             globals.selected_elem = self.element
+            #self.default()
             exec('globals.'+globals.cards_of_element_shower_element+'_element_button.default()')
             globals.cards_in_deck.empty()
             globals.cards_of_element_shower_element = self.element

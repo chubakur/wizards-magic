@@ -13,7 +13,9 @@ magic_cards = pygame.sprite.Group() #Использующаяся магия #Ma
 card_info_group = pygame.sprite.Group() #  Группа, которая содержит спрайт, содержащий панель вывода информации о карте
 information_group = pygame.sprite.Group() #Группа, содержащая панель вывода игровой информации
 menu_group = pygame.sprite.Group() # menu items
-font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
+#font = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
+font = pygame.font.Font(current_folder+"/misc/Neocyr.ttf", 15)
+font2 = pygame.font.Font(current_folder+"/misc/Domestic_Manners.ttf", 15)
 #print pygame.font.match_font('Arial')
 cards_of_element_shower_element = "water" #какой элемент показывать #Any element to show
 selected_card = False #Выбранная карта #Selected Card

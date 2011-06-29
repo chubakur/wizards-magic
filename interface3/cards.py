@@ -246,9 +246,9 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.health = max_health
         self.update()
     def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        text_level = globals.font.render(str(self.level), True, self.font_color)
-        text_power = globals.font.render(str(self.power), True, self.font_color)
-        text_health = globals.font.render(str(self.health), True, self.font_color)
+        text_level = globals.font2.render(str(self.level), True, self.font_color)
+        text_power = globals.font2.render(str(self.power), True, self.font_color)
+        text_health = globals.font2.render(str(self.health), True, self.font_color)
         self.image = self.surface_backup.copy()
         if self.cast:
             if self.field:
@@ -1435,7 +1435,7 @@ class Magic(pygame.sprite.Sprite):
     def periodical_cast(self):
         pass
     def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
-        text_level = globals.font.render(str(self.level), True, self.font_color)
+        text_level = globals.font2.render(str(self.level), True, self.font_color)
         self.image = self.surface_backup.copy()
         self.image.blit(text_level, (90, -7))
         if not self.field: #Рисование в колоде
