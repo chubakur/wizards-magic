@@ -1460,7 +1460,9 @@ class Poison(Magic):
         Magic.cast(self)
         self.cards = self.get_enemy_cards() #берем "слепок" вражеских карт, которые будем травить
         for card in self.cards:
-            card.spells.append(self) #говорим карте чтобы она начала креститься
+            if card.element != "death":
+                card.spells.append(self) #говорим карте чтобы она начала креститься
+                card.damage(1,self,True)
         globals.magic_cards.add(self) #добавляем периодизацию        
     def periodical_cast(self):
         if self.cards: #если еще остались карты, на которые надо действовать
@@ -1823,7 +1825,7 @@ class LifeSacrifice(Magic):
         self.name = "LifeSacrifice"
         self.level = 8
         self.image = pygame.image.load(current_folder+'/misc/cards/life/life_sacrifice.gif')
-        self.info = _("Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act.")
+        self.info = _("Owner loses health equal to his Life. Enemy suffers damage, double of this amount. Sacrificing is the true loving act.")
         Magic.__init__(self)
     def cast(self):
         Magic.cast(self)

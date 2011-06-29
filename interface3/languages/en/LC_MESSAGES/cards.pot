@@ -215,8 +215,8 @@ msgstr "All owner's creatures Blessed: receive +1 to attack, restore 1 point of 
 msgid "All undead on a field are destroyed. Owner receives 3 Life and 1 health for each destroyed creature. The great day of The Lord is near and coming quickly. That day will be a day of Wrath, a day of distress and anguish."
 msgstr "All undead on a field are destroyed. Owner receives 3 Life and 1 health for each destroyed creature. The great day of The Lord is near and coming quickly. That day will be a day of Wrath, a day of distress and anguish."
 
-msgid "Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
-msgstr "Owner loses health equal to his $Life. ^Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
+msgid "Owner loses health equal to his Life. Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
+msgstr "Owner loses health equal to his Life. Enemy suffers damage, double of this amount. Sacrificing is the true loving act."
 
 msgid "If owner has Life creatures in play, heals owner for 5 and steals 4 health from each enemy creature, giving them to opposed owner's creature. Only pure souls can use God's blessings."
 msgstr "If owner has Life creatures in play, heals owner for 5 and steals 4 health from each enemy creature, giving them to opposed owner's creature. Only pure souls can use God's blessings."
