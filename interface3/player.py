@@ -100,6 +100,12 @@ class Player(): #Прототип игрока
             earth_cards_for_sort[i][1].position_in_deck = i
             life_cards_for_sort[i][1].position_in_deck = i
             death_cards_for_sort[i][1].position_in_deck = i
+        del water_cards_for_sort
+        del fire_cards_for_sort
+        del air_cards_for_sort
+        del earth_cards_for_sort
+        del life_cards_for_sort
+        del death_cards_for_sort
 class Player1(Player):
     def __init__(self):
         self.id = 1
