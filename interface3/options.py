@@ -9,7 +9,10 @@ import menu
 #TODO: enable/disable animation option
 def launcher():
     #Something ,what we need to change after reset configuration
-    globals.bg_sound.stop()
+    try:
+        globals.bg_sound.stop()
+    except AttributeError:
+        globals.bg_sound = pygame.mixer.Sound(globals.current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
     if globals.music == "Y":
         globals.bg_sound.play(-1)
 def save():

@@ -287,8 +287,8 @@ clock = pygame.time.Clock()
 
 #read configuration file
 options.read_configuration()
-globals.bg_sound = pygame.mixer.Sound(current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
 if globals.music == "Y":
+    globals.bg_sound = pygame.mixer.Sound(current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
     globals.bg_sound.play(-1)
 menu.menu_main()
 
