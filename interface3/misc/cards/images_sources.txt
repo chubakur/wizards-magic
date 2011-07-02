@@ -58,3 +58,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 53 | firelord | vidas sinkunas | - | colored by xeranas
 54 | titan | vidas sinkunas | - | -
 55 | phoenix | xeranas
+56 | quicksands | xeranas
