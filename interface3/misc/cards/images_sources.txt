@@ -59,3 +59,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 54 | titan | vidas sinkunas | - | -
 55 | phoenix | xeranas
 56 | quicksands | xeranas
+57 | restructure | xeranas
