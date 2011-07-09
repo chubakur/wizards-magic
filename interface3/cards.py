@@ -360,11 +360,15 @@ class Waterfall(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/water/waterfall.gif')
         self.info = _("One of the toughest Elementals. Health itself for 3 whenever any player casts water spell of summons water creature. Attack equal to owner`s Water.")
         Prototype.__init__(self)
-    def turn(self):
-        Prototype.turn(self)
-        self.power = self.parent.player.mana['water']
-        if not self.power:
-            self.power = 1
+    #def turn(self):
+    #    Prototype.turn(self)
+    #    self.power = self.parent.player.mana['water']
+    #    if not self.power:
+    #        self.power = 1
+    def update(self):
+        Prototype.update(self)
+        if self.field:
+            self.power = self.parent.player.mana['water']
 class Leviathan(Prototype):
     def __init__(self):        
         self.name = "Leviathan"
@@ -592,14 +596,18 @@ class Vulcan(Prototype):
         opp_card = globals.cardboxes[self.get_attack_position()].card
         if opp_card.name != 'player':
             opp_card.damage(9, self)
-    def turn(self):
-        Prototype.turn(self)
-        self.set_power(self.parent.player.mana['fire'] + 3)
+   # def turn(self):
+    #    Prototype.turn(self)
+     #   self.set_power(self.parent.player.mana['fire'] + 3)
     def cast_action(self):
         hp = self.health
         for card in self.get_enemy_cards() + self.get_self_cards():
             card.damage(int(floor(hp / 2.0)), self, True)
         self.die()
+    def update(self):
+        Prototype.update(self)
+        if self.field:
+            self.power = self.parent.player.mana['fire'] + 3
 class Cerberus(Prototype):
     def __init__(self):        
         self.name = "Cerberus"        
@@ -1259,6 +1267,7 @@ class Werewolf(Prototype):
             globals.ccards_1.add(self.parent.card)
         else:
             globals.ccards_2.add(self.parent.card)
+        card.update()
     def cast_action(self):
         if self.parent.player.mana['death'] >= 3:
             self.used_cast = True
@@ -1709,6 +1718,8 @@ class AbsoluteDefenceSpirit(Prototype):
         self.element = card.element
         self.power = card.power
         self.health = card.health
+        self.field = False
+        self.position_in_deck = card.position_in_deck
         self.image = card.image
         self.card = card
         self.cast = card.cast
