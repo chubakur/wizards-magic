@@ -153,7 +153,7 @@ def server_handler():
         elif gi['action'] == "opponent_disconnect":
             globals.opponent_disconnect = True
             globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
-def start_game(cli=False):
+def start_game(cli=False,ai=True):
     globals.attack_started = [True]
     globals.background = pygame.image.load(current_folder+'/misc/bg_sample.gif')
     #globals.background = globals.background.convert()
@@ -173,6 +173,8 @@ def start_game(cli=False):
     globals.player2 = player.Player2()
     globals.player1.enemy = globals.player2
     globals.player2.enemy = globals.player1
+    if ai:
+        globals.player2.ai = True
     globals.player = globals.player1
     ###############################################################################################################
     #ACTIONS

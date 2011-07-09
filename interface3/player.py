@@ -6,6 +6,7 @@ import random
 import globals
 import sockets
 import pygame
+import ai
 current_folder = os.path.dirname(os.path.abspath(__file__))
 
 class Player(): #Прототип игрока
@@ -16,6 +17,7 @@ class Player(): #Прототип игрока
         self.get_cards()
         self.mana = {}
         self.get_mana()
+        self.ai = False
         self.cards_generated = False
     def damage(self, damage, enemy, cast = False):
         self.health -= damage
@@ -160,6 +162,21 @@ def me_finish_turn():
             card.turn()
         for card in globals.ccards_1:
             card.additional_turn_action()
+    if globals.player.ai:
+        cb = ai.select_cardbox()
+        if cb:
+            c = ai.select_card()
+            #print 'SELECTED',c
+            cb.card = c()
+            cb.card.field = True
+            globals.player.mana[cb.card.element] -= cb.card.level
+            cb.card.parent = cb
+            if globals.player.id == 1:
+                globals.ccards_1.add(cb.card)
+            else:
+                globals.ccards_2.add(cb.card)
+            cb.card.summon()
+        finish_turn()
 def finish_turn():
     me_finish_turn()
     sockets.query({"action":"switch_turn"})

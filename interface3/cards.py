@@ -245,6 +245,14 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.health > max_health:
             self.health = max_health
         self.update()
+    def ai(self,type='summon'):
+        if type == 'summon':
+            if globals.player.mana[self.element] >= self.level:
+                return float(self.level)/globals.player.mana[self.element]
+            else:
+                return 0
+        elif type=='cast':
+            return 0
     def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = globals.font2.render(str(self.level), True, self.font_color)
         text_power = globals.font2.render(str(self.power), True, self.font_color)
@@ -1443,6 +1451,14 @@ class Magic(pygame.sprite.Sprite):
         return cards
     def periodical_cast(self):
         pass
+    def ai(self,type='summon'):
+        if type == 'summon':
+            if globals.player.mana[self.element] >= self.level:
+                return float(self.level)/globals.player.mana[self.element]
+            else:
+                return  0
+        elif type == 'cast':
+            return 0
     def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = globals.font2.render(str(self.level), True, self.font_color)
         self.image = self.surface_backup.copy()
