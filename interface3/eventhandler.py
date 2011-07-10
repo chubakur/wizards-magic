@@ -24,6 +24,7 @@ class Event_handler():
         self.onmouse_element = False
     def event(self, event):
         if event.type == QUIT:
+            return 0
             if not globals.opponent_disconnect:
                 sockets.query({"action":"bye","player_id":globals.player_id})
             else:

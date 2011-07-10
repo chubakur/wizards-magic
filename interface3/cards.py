@@ -9,7 +9,7 @@ current_folder = os.path.dirname(os.path.abspath(__file__))
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-t = gettext.translation('cards', current_folder+'/languages', languages=['en'])
+t = gettext.translation('cards', current_folder+'/languages', languages=['ru'])
 _ = t.ugettext
 t.install()
 
@@ -245,13 +245,13 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         if self.health > max_health:
             self.health = max_health
         self.update()
-    def ai(self,type='summon'):
+    def ai(self,type='summon',enemy=None):
         if type == 'summon':
             if globals.player.mana[self.element] >= self.level:
-                return float(self.level)/globals.player.mana[self.element]
+                return globals.player.mana[self.element]/float(self.level)
             else:
                 return 0
-        elif type=='cast':
+        elif type == 'cast':
             return 0
     def update(self): #Field - True если рисовать на поле, false - если рисовать в таблице выбора
         text_level = globals.font2.render(str(self.level), True, self.font_color)
@@ -294,6 +294,17 @@ class Nixie(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/water/nixie.gif')
         self.info = _("Causes 200% of damage to fire creatures. Gives owner 1 Water in the beginning of owner's turn. \nCasting Sea of Sacred increases owner's Water by 1 and reduces Fire by 1.")
         Prototype.__init__(self)
+    def ai(self,type='summon',enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+                if enemy.name != 'player':
+                    if enemy.element == 'fire':
+                        eff += 2
+            return eff
+        elif type == 'cast':
+            return 0
     def attack(self):
         if self.moves_alive:
             attack_position = self.get_attack_position()
@@ -399,6 +410,17 @@ class IceGuard(Prototype):
         self.health = 19
         self.image = pygame.image.load(current_folder+'/misc/cards/water/ice_guard.gif')
         Prototype.__init__(self)
+    def ai(self,type='summon',enemy=None):
+        if type is 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+                if enemy.name != 'player':
+                    if enemy.element == 'fire':
+                        eff = 0.01
+            return eff
+        elif type == 'cast':
+            return 0
     def damage(self, damage, enemy, cast=False):
         if enemy.element == "fire":
             Prototype.damage(self, damage*2, enemy, cast)
@@ -701,6 +723,17 @@ class Phoenix(Prototype):
         self.recovered = 0 #Восстанавливалась ли карта
         self.image = pygame.image.load(current_folder+'/misc/cards/air/phoenix.gif')
         Prototype.__init__(self)
+    def ai(self,type='summon',enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+                if enemy.name != 'player':
+                    if enemy.element == 'fire':
+                        eff += 2
+            return eff
+        elif type == 'cast':
+            return 0
     def damage(self, damage, enemy, cast=False):
         self.health -= damage
         self.update()
@@ -1026,6 +1059,17 @@ class Paladin(Prototype):
         self.health = 20
         self.image = pygame.image.load(current_folder+'/misc/cards/life/paladin.gif')
         Prototype.__init__(self)
+    def ai(self,type='summon',enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element] / float(self.level)
+                if enemy.name != 'player':
+                    if enemy.element == 'death':
+                        eff += 2
+            return eff
+        elif type == 'cast':
+            return 0
     def cast_action(self):
         if self.parent.player.mana['life'] >= 2: #если хватает маны, то активируем фокус
             Prototype.cast_action(self)
@@ -1172,6 +1216,7 @@ class MagicHealerChakra(Prototype):
         self.power = 0
         self.health = 10
         self.owner = owner
+        self.field = True
         self.image = pygame.image.load(current_folder+'/misc/cards/life/magic_healer.gif')
         Prototype.__init__(self)
     def die(self):
@@ -1451,10 +1496,10 @@ class Magic(pygame.sprite.Sprite):
         return cards
     def periodical_cast(self):
         pass
-    def ai(self,type='summon'):
+    def ai(self,type='summon',enemy=None):
         if type == 'summon':
             if globals.player.mana[self.element] >= self.level:
-                return float(self.level)/globals.player.mana[self.element]
+                return globals.player.mana[self.element]/float(self.level)
             else:
                 return  0
         elif type == 'cast':
@@ -1734,8 +1779,8 @@ class AbsoluteDefenceSpirit(Prototype):
         self.element = card.element
         self.power = card.power
         self.health = card.health
-        self.field = False
-        self.position_in_deck = card.position_in_deck
+        self.field = True
+        #self.position_in_deck = card.position_in_deck
         self.image = card.image
         self.card = card
         self.cast = card.cast

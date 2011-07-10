@@ -24,7 +24,7 @@ def select_cardbox():
     e_strongest = None
     e_strongest_power = 0
     if not len(e_cardboxes):
-        return 0
+        return s_cardboxes[0]
     while True:
         for cardbox in e_cardboxes:
             if cardbox.card.power > e_strongest_power:
@@ -39,7 +39,7 @@ def select_cardbox():
                 return  e_strongest_cardbox.get_opposite_cardbox()
         else:
             return s_cardboxes[0]
-def select_card():
+def select_card(enemy_card):
     player = globals.player
     self_cards = player.water_cards.values() + player.fire_cards.values() + player.air_cards.values() + player.earth_cards.values() + player.life_cards.values() + player.death_cards.values()
     random.shuffle(self_cards)
@@ -47,8 +47,8 @@ def select_card():
     max_eff = 0
     for card in self_cards:
         if card.type is 'warrior_card':
-            eff = card.ai()
-            if eff>max_eff:
+            eff = card.ai('summon',enemy_card)
+            if eff>=max_eff:
                 max_eff = eff
                 item = card
     return item.__class__

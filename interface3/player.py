@@ -23,6 +23,7 @@ class Player(): #Прототип игрока
         self.health -= damage
         if self.health <= 0:
             globals.gameinformationpanel.display("Game Over!")
+            globals.stage = False
     def heal(self, health):
         self.health += health
     def get_mana(self):
@@ -165,7 +166,7 @@ def me_finish_turn():
     if globals.player.ai:
         cb = ai.select_cardbox()
         if cb:
-            c = ai.select_card()
+            c = ai.select_card(cb.card)
             #print 'SELECTED',c
             cb.card = c()
             cb.card.field = True
