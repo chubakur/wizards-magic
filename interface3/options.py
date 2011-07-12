@@ -23,7 +23,7 @@ def save():
             config.set('WizardsMagic', item.key, item.text)
         if item.type=='checkbox':
             config.set('WizardsMagic', item.key, (item.value and 'Y' or 'N'))
-    configfile=open('wizardsmagic.cfg', 'wb')
+    configfile=open(globals.current_folder + '/wizardsmagic.cfg', 'wb')
     config.write(configfile)
     configfile.close()
     read_configuration()
@@ -35,7 +35,7 @@ def cancel():
 
 def read_configuration():
     config = ConfigParser.ConfigParser()
-    config.read('wizardsmagic.cfg')
+    config.read(globals.current_folder + '/wizardsmagic.cfg')
 
     try:
         globals.music = config.get('WizardsMagic', 'music')
@@ -84,9 +84,9 @@ def options_main():
     ''' display options menu '''
 
     globals.menu_group.empty()
-    globals.background = pygame.image.load('misc/menu_bg.jpg').convert_alpha()
+    globals.background = pygame.image.load(globals.current_folder + '/misc/menu_bg.jpg').convert_alpha()
     globals.background_backup = globals.background.copy()
-    globals.menu_bg = pygame.image.load('misc/menu_selections_bg.jpg').convert_alpha()
+    globals.menu_bg = pygame.image.load(globals.current_folder + '/misc/menu_selections_bg.jpg').convert_alpha()
     menupos = globals.menu_bg.get_rect()
     menupos.centerx = globals.background.get_rect().centerx -2 # '-2' hack due lazy designer :)
     menupos.centery = globals.background.get_rect().centery -1 # '-1' hack due lazy designer :)
@@ -94,7 +94,7 @@ def options_main():
 
     #Configuration file:
     #create default configuration file
-    if not os.path.isfile('wizardsmagic.cfg'):
+    if not os.path.isfile(globals.current_folder + '/wizardsmagic.cfg'):
         config = ConfigParser.RawConfigParser()
         config.add_section('WizardsMagic')
         config.set('WizardsMagic', 'music', 'Y')
@@ -104,13 +104,12 @@ def options_main():
         config.set('WizardsMagic', 'port', '7712')
         config.set('WizardsMagic', 'ai', 'Y')
         config.set('WizardsMagic', 'animation', 'Y')
-        configfile = open('wizardsmagic.cfg', 'wb')
+        configfile = open(globals.current_folder + '/wizardsmagic.cfg', 'wb')
         config.write(configfile)
         configfile.close()
 
     #read configuration file
     read_configuration()
-
     option1 = CheckBox(2,"MUSIC:", (globals.music == 'Y'), key="music")
     option1 = CheckBox(1,"SOUNDS:", (globals.sound == 'Y'), key="sound")
     option0 = CheckBox(0, "ANIMATION:", (globals.animation == 'Y'), key='animation')

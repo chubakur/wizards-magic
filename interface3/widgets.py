@@ -20,7 +20,7 @@ class TxtInput(pygame.sprite.Sprite):
         self.type = 'txtinput'
         self.color = (255,255,255)
         self.color_disable = (95,245,244)
-        self.font = pygame.font.Font("misc/DroidSans.ttf", 18)
+        self.font = pygame.font.Font(globals.current_folder + "/misc/DroidSans.ttf", 18)
         self.pos = pos
         self.label = label
         self.text = text[:length]
@@ -141,7 +141,7 @@ class CheckBox(pygame.sprite.Sprite):
         self.type = 'checkbox'
         self.color = (255,255,255)
         self.color_disable = (95,245,244)
-        self.font = pygame.font.Font("misc/DroidSans.ttf", 18)
+        self.font = pygame.font.Font(globals.current_folder + "/misc/DroidSans.ttf", 18)
         self.pos = pos
         self.label = label
         self.value = value
@@ -153,8 +153,8 @@ class CheckBox(pygame.sprite.Sprite):
         else:
             self.label_image = self.font.render(self.label,True,(self.color_disable))
         self.label_rect = self.label_image.get_rect()
-        self.value_on = pygame.image.load('misc/checkbox_on.gif').convert()
-        self.value_off = pygame.image.load('misc/checkbox_off.gif').convert()
+        self.value_on = pygame.image.load(globals.current_folder + '/misc/checkbox_on.gif').convert()
+        self.value_off = pygame.image.load(globals.current_folder + '/misc/checkbox_off.gif').convert()
         if value:
             self.value_image = self.value_on
         else:
@@ -220,8 +220,8 @@ def main():
     globals.background.fill((250, 250, 250))
 
     ti = TxtInput(0,"SOUND","192.168.111.255","",5)
-    globals.background = pygame.image.load('misc/menu_bg.jpg').convert_alpha()
-    globals.menu_bg = pygame.image.load('misc/menu_selections_bg.jpg').convert_alpha()
+    globals.background = pygame.image.load(globals.current_folder + '/misc/menu_bg.jpg').convert_alpha()
+    globals.menu_bg = pygame.image.load(globals.current_folder + '/misc/menu_selections_bg.jpg').convert_alpha()
     menupos = globals.menu_bg.get_rect()
     menupos.centerx = globals.background.get_rect().centerx -2 # '-2' hack due lazy designer :)
     menupos.centery = globals.background.get_rect().centery -1 # '-1' hack due lazy designer :)
