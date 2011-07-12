@@ -51,13 +51,13 @@ def read_configuration():
             globals.sound = "Y"
     except:
         globals.sound = "Y"
-    try:
-        globals.ai = config.get('WizardsMagic', 'ai')
-        globals.ai = globals.ai.upper()
-        if not globals.ai in "YN":
-            globals.ai = "Y"
-    except:
-        globals.ai = "Y"
+    #try:
+    #    globals.ai = config.get('WizardsMagic', 'ai')
+    #    globals.ai = globals.ai.upper()
+    #    if not globals.ai in "YN":
+    #        globals.ai = "Y"
+    #except:
+    #    globals.ai = "Y"
     try:
         globals.nick = config.get('WizardsMagic', 'nick')
     except:
@@ -102,7 +102,7 @@ def options_main():
         config.set('WizardsMagic', 'nick', 'myname')
         config.set('WizardsMagic', 'server', '127.0.0.1')
         config.set('WizardsMagic', 'port', '7712')
-        config.set('WizardsMagic', 'ai', 'Y')
+        #config.set('WizardsMagic', 'ai', 'Y')
         config.set('WizardsMagic', 'animation', 'Y')
         configfile = open(globals.current_folder + '/wizardsmagic.cfg', 'wb')
         config.write(configfile)
@@ -116,7 +116,7 @@ def options_main():
     option2 = TxtInput(3,"NICK:", globals.nick, 8, key="nick")
     option3 = TxtInput(4,"SERVER:", globals.server, 15, key="server")
     option4 = TxtInput(5,"PORT:", globals.port, 5, key="port")
-    option5 = CheckBox(6, "AI:", (globals.ai == 'Y'), key="ai")
+    #option5 = CheckBox(6, "AI:", (globals.ai == 'Y'), key="ai")
     option6 = menu.MenuButton(-1, "SAVE", "options.save()", loc=(70, menupos.height-50))
     option7 = menu.MenuButton(-1, "CANCEL", "options.cancel()", loc=(160, menupos.height-50))
     globals.menu_group.update()

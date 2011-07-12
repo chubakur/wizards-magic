@@ -316,7 +316,8 @@ while 1:
         if globals.cli: 
             start_game(1)
         else:
-            start_game(ai=(globals.ai == 'Y'))
+            start_game(ai=globals.ai)
+            #start_game(ai=(globals.ai == 'Y'))
         globals.clean()
         menu.menu_main()
 
