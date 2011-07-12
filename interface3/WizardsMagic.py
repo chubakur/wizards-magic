@@ -237,8 +237,14 @@ def start_game(cli=False,ai=False):
         globals.cli = False
         sockets.query = lambda x: x
     else:
-       globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
-       sockets.connect()
+       val = sockets.connect()
+       if not val:
+           globals.gameinformationpanel.display('Cant connect to server.')
+           menu.menu_main()
+           globals.stage = False
+           return 0
+       else:
+           globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
        sockets.query = sockets.query_
        globals.cli = True
        thread.start_new_thread(server_handler, ())

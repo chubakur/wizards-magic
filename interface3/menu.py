@@ -7,7 +7,9 @@ import globals
 from pygame.locals import *
 import options
 current_folder = os.path.dirname(os.path.abspath(__file__))
-
+#t = gettext.translation('interface', current_folder+'/languages', languages=['ru'])
+#_ = t.ugettext
+#t.install()
 
 class MenuButton(pygame.sprite.Sprite):
     ''' menu item '''
@@ -80,7 +82,7 @@ def clean_question():
     globals.gameinformationpanel.show=False
 
 def menu_esc_question():
-    globals.gameinformationpanel.display("  You are leaving the game. Are you sure? (Y/N)", persistent=True)
+    globals.gameinformationpanel.display(_("  You are leaving the game. Are you sure? (Y/N)"), persistent=True)
     globals.question=True
     globals.answer=""
     globals.answer_cmd="menu.menu_esc()"

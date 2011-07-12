@@ -17,8 +17,11 @@ def connect():
     port = globals.port
     print host,port
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((host, int(port)))
-    print "CONNECTED"
+    try:
+        sock.connect((host, int(port)))
+    except:
+        return 0
+    return 1
 def get_package():
     #print "SERVICE:"
     #print service_package
