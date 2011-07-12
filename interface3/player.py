@@ -17,6 +17,7 @@ class Player(): #Прототип игрока
         self.get_cards()
         self.mana = {}
         self.get_mana()
+        self.element = "none"
         self.ai = False
         self.cards_generated = False
     def damage(self, damage, enemy, cast = False):

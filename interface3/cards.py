@@ -198,6 +198,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         pass
     def card_died(self, card): #when any card dies
         pass
+    def spell_used(self, spell):
+        pass
     def summon(self): # когда призывают
         self.play_summon_sound()
         for card in self.get_self_cards() + self.get_enemy_cards():
@@ -411,7 +413,7 @@ class IceGuard(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/water/ice_guard.gif')
         Prototype.__init__(self)
     def ai(self,type='summon',enemy=None):
-        if type is 'summon':
+        if type == 'summon':
             eff = 0
             if globals.player.mana[self.element] >= self.level:
                 eff = globals.player.mana[self.element]/float(self.level)
@@ -448,6 +450,17 @@ class IceWizard(Prototype):
         self.health = 22
         self.image = pygame.image.load(current_folder+'/misc/cards/water/ice_wizard.gif')
         Prototype.__init__(self)
+    def ai(self,type='summon',enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+                if enemy.name != 'player':
+                    if enemy.element == 'fire':
+                        eff = 0.01
+            return eff
+        elif type == 'cast':
+            return 0
     def turn(self):
         Prototype.turn(self)
         self.parent.player.mana['water'] += 2
@@ -496,6 +509,17 @@ class Devil(Prototype):
     def die(self):
         self.parent.player.damage(10, self)
         Prototype.die(self)
+    def ai(self,type='summon',enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+                if enemy.name != 'player':
+                    if enemy.element == 'water':
+                        eff = 0.01
+            return eff
+        elif type == 'cast':
+            return 0
     def damage(self, damage, enemy, cast=False):
         if enemy.element == "water":
             Prototype.damage(self, damage * 2, enemy)
@@ -542,6 +566,16 @@ class RedDrake(Prototype):
             return
         else:
             Prototype.damage(self, damage, enemy)
+    def ai(self, type='summon', enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+                if enemy.element == 'fire':
+                    eff += 2
+            return eff
+        elif type == 'cast':
+            return 0
 class Firelord(Prototype):
     def __init__(self):        
         self.name = "Firelord"        
@@ -990,11 +1024,11 @@ class Elemental(Prototype):
         Prototype.__init__(self)
     def summon(self):
         Prototype.summon(self)
-        self.set_power(self.parent.player.mana['earth'] - self.level)
+        self.set_power(self.parent.player.mana[self.element] - self.level)
     def turn(self):
         Prototype.turn(self)
         self.parent.player.mana['earth'] += 2
-        self.set_power(self.parent.player.mana['earth'])
+        self.set_power(self.parent.player.mana[self.element])
 class Ent(Prototype):
     def __init__(self):        
         self.name = "Ent"
@@ -1046,6 +1080,11 @@ class Priest(Prototype):
         if self.parent.player.mana['death'] >= 2:
             self.parent.player.mana['death'] -= 2
             self.parent.player.mana['life'] += 2
+    def spell_used(self, spell):
+        if spell.element == 'death' and spell.player is self.parent.player:
+            self.parent.player.mana['life'] -= 3
+            if self.parent.player.mana['life'] < 0:
+                self.parent.player.mana['life'] = 0
 class Paladin(Prototype):
     def __init__(self):        
         self.name = "Paladin"
@@ -1163,6 +1202,15 @@ class Apostate(Prototype):
         else:
             self.parent.player.mana['life'] = 0
         self.parent.player.mana['death'] += 1
+    def ai(self, type='summon',enemy=None):
+        if type == 'summon':
+            eff = 0
+            if globals.player.mana[self.element] >= self.level:
+                eff = globals.player.mana[self.element]/float(self.level)
+            return eff
+        elif type == 'cast':
+            if enemy.power >= self.health and enemy.moves_alive == True:
+                self.cast_action()
     def cast_action(self):
         card = Banshee()
         card.parent = self.parent
@@ -1494,6 +1542,9 @@ class Magic(pygame.sprite.Sprite):
                 if cardbox.card.name != "player":
                     cards.append(cardbox.card)
         return cards
+    def spell_speaker(self): #This function tell to each card on game field about spell using.
+        for card in self.get_enemy_cards() + self.get_self_cards():
+            card.spell_used(self)
     def periodical_cast(self):
         pass
     def ai(self,type='summon',enemy=None):

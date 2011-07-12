@@ -154,7 +154,7 @@ def server_handler():
         elif gi['action'] == "opponent_disconnect":
             globals.opponent_disconnect = True
             globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
-def start_game(cli=False,ai=True):
+def start_game(cli=False,ai=False):
     globals.attack_started = [True]
     globals.background = pygame.image.load(current_folder+'/misc/bg_sample.gif')
     #globals.background = globals.background.convert()
@@ -270,6 +270,12 @@ def start_game(cli=False,ai=True):
         globals.screen.blit(globals.background, (0, 0))
         #globals.background.fill((0,0,0))
         globals.background = background_backup.copy()
+        if globals.animation == "N":
+            for item in animations.animations_running + animations.cards_attacking + animations.cards_dying:
+                del item
+            animations.animations_running = []
+            animations.cards_attacking = []
+            animations.cards_dying = []
         if len(animations.animations_running) == False and len(globals.attack_started):
             if not globals.cli:
                 player.switch_position()
@@ -310,7 +316,7 @@ while 1:
         if globals.cli: 
             start_game(1)
         else:
-            start_game()
+            start_game(ai=(globals.ai == 'Y'))
         globals.clean()
         menu.menu_main()
 

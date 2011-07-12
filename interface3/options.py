@@ -52,6 +52,13 @@ def read_configuration():
     except:
         globals.sound = "Y"
     try:
+        globals.ai = config.get('WizardsMagic', 'ai')
+        globals.ai = globals.ai.upper()
+        if not globals.ai in "YN":
+            globals.ai = "Y"
+    except:
+        globals.ai = "Y"
+    try:
         globals.nick = config.get('WizardsMagic', 'nick')
     except:
         globals.nick = "myname"
@@ -66,7 +73,13 @@ def read_configuration():
         globals.port = str(globals.port)
     except:
         globals.port = "7712"
-
+    try:
+        globals.animation = config.get('WizardsMagic', 'animation')
+        globals.animation = globals.animation.upper()
+        if not globals.animation in "YN":
+            globals.animation = "Y"
+    except:
+        globals.animation = "Y"
 def options_main(): 
     ''' display options menu '''
 
@@ -89,6 +102,8 @@ def options_main():
         config.set('WizardsMagic', 'nick', 'myname')
         config.set('WizardsMagic', 'server', '127.0.0.1')
         config.set('WizardsMagic', 'port', '7712')
+        config.set('WizardsMagic', 'ai', 'Y')
+        config.set('WizardsMagic', 'animation', 'Y')
         configfile = open('wizardsmagic.cfg', 'wb')
         config.write(configfile)
         configfile.close()
@@ -96,12 +111,14 @@ def options_main():
     #read configuration file
     read_configuration()
 
-    option1 = CheckBox(0,"MUSIC:", (globals.music == 'Y'), key="music")
+    option1 = CheckBox(2,"MUSIC:", (globals.music == 'Y'), key="music")
     option1 = CheckBox(1,"SOUNDS:", (globals.sound == 'Y'), key="sound")
-    option2 = TxtInput(2,"NICK:", globals.nick, 8, key="nick")
-    option3 = TxtInput(3,"SERVER:", globals.server, 15, key="server")
-    option4 = TxtInput(4,"PORT:", globals.port, 5, key="port")
-    option5 = menu.MenuButton(-1, "SAVE", "options.save()", loc=(70, menupos.height-50))
-    option6 = menu.MenuButton(-1, "CANCEL", "options.cancel()", loc=(160, menupos.height-50))
+    option0 = CheckBox(0, "ANIMATION:", (globals.animation == 'Y'), key='animation')
+    option2 = TxtInput(3,"NICK:", globals.nick, 8, key="nick")
+    option3 = TxtInput(4,"SERVER:", globals.server, 15, key="server")
+    option4 = TxtInput(5,"PORT:", globals.port, 5, key="port")
+    option5 = CheckBox(6, "AI:", (globals.ai == 'Y'), key="ai")
+    option6 = menu.MenuButton(-1, "SAVE", "options.save()", loc=(70, menupos.height-50))
+    option7 = menu.MenuButton(-1, "CANCEL", "options.cancel()", loc=(160, menupos.height-50))
     globals.menu_group.update()
 

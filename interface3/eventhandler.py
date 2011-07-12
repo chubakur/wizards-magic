@@ -94,6 +94,7 @@ class Event_handler():
                         selected_card.player = globals.player
                         sockets.query({"action":"card","card":selected_card.name,"type":"magic"})
                         selected_card.cast() #вызываем магию, периодизация делается уже внутри класса, путем добавления в группу globals.magic_cards
+                        selected_card.spell_speaker()
                         #Закрываем колоду
                         for cardbox in globals.cardboxes:
                             cardbox.light = False

@@ -24,7 +24,10 @@ def select_cardbox():
     e_strongest = None
     e_strongest_power = 0
     if not len(e_cardboxes):
-        return s_cardboxes[0]
+        if len(s_cardboxes):
+            return s_cardboxes[0]
+        else:
+            return 0
     while True:
         for cardbox in e_cardboxes:
             if cardbox.card.power > e_strongest_power:
@@ -38,7 +41,10 @@ def select_cardbox():
             else:
                 return  e_strongest_cardbox.get_opposite_cardbox()
         else:
-            return s_cardboxes[0]
+            if len(s_cardboxes):
+                return s_cardboxes[0]
+            else:
+                return 0
 def select_card(enemy_card):
     player = globals.player
     self_cards = player.water_cards.values() + player.fire_cards.values() + player.air_cards.values() + player.earth_cards.values() + player.life_cards.values() + player.death_cards.values()
