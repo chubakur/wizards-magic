@@ -61,3 +61,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 56 | quicksands | xeranas
 57 | restructure | xeranas
 58 | cerberus | vidas sinkunas | - | colored by xeranas
+59 | armegeddon | xeranas
