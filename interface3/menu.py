@@ -100,6 +100,7 @@ def menu_esc():
 def menu_startsinglegame():
     ''' function called after the user click start menu item'''
     globals.stage=1
+    globals.cli = False
     globals.ai = True
     globals.gameinformationpanel.show=False
 def menu_startgame_onserver():
