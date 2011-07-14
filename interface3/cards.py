@@ -9,7 +9,7 @@ current_folder = os.path.dirname(os.path.abspath(__file__))
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-t = gettext.translation('cards', current_folder+'/languages', languages=['ru'])
+t = gettext.translation('cards', current_folder+'/languages', languages=['en'])
 _ = t.ugettext
 t.install()
 
