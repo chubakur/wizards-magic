@@ -28,6 +28,7 @@ import pygame
 from pygame.locals import *
 import sys
 import os
+import cards
 import time
 import player
 if pygame.version.vernum < (1, 9, 1):
@@ -35,7 +36,6 @@ if pygame.version.vernum < (1, 9, 1):
 import animations
 import globals
 import elementbutton
-import cards
 import cardinfo
 import cardsofelementshower
 import completethecoursebutton
