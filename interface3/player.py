@@ -10,7 +10,7 @@ import ai
 current_folder = os.path.dirname(os.path.abspath(__file__))
 
 class Player(): #Прототип игрока
-    def __init__(self):
+    def __init__(self, cli=False):
         self.health = 50
         self.name = "player"
         self.action_points = True #Ходил игрок, или нет
@@ -19,6 +19,7 @@ class Player(): #Прототип игрока
         self.get_mana()
         self.element = "none"
         self.ai = False
+        self.cli = cli
         self.cards_generated = False
     def damage(self, damage, enemy, cast = False):
         self.health -= damage
@@ -39,6 +40,8 @@ class Player(): #Прототип игрока
                 self.mana[manas[mana_id]] = rand
             else:
                 self.mana[manas[mana_id]] = 25 - sum
+    def get_mana_count(self): #просмотр кол-ва маны
+        return [self.mana['water'], self.mana['fire'], self.mana['air'], self.mana['earth'], self.mana['life'], self.mana['death']]
     def get_cards(self):
         self.water_cards = {}
         self.fire_cards = {}

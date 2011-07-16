@@ -10,7 +10,7 @@ except ImportError:
     print 'SIMPLEJSON'
 #host = "drakmail.ru"
 #port = 7712
-sock = socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 def connect():
     global sock
     host = globals.server
@@ -25,12 +25,19 @@ def connect():
 def get_package():
     #print "SERVICE:"
     #print service_package
-    MSGLEN, answ = int( sock.recv(8) ), ''
+    try: 
+        MSGLEN, answ = int( sock.recv(8) ), ''
+    except ValueError: #empty string (socked closed?)
+        return dict(action='value_error')
+    except socket.error:
+        return dict(action='socket_error')
+        
     while len(answ)<MSGLEN: answ += sock.recv(MSGLEN - len(answ))
         #return answ
     print "GET_PACKAGE RETURN"
     print answ
     return json.loads(answ)
+
 def query_(query):
     query = json.dumps(query)
     service = '%08i'%len(query)

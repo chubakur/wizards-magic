@@ -14,7 +14,7 @@ class GameInformationPanel(pygame.sprite.Sprite):
         self.rect = (globals.screen.get_size()[0] / 2-self.image.get_size()[0] / 2, globals.screen.get_size()[1] / 2-self.image.get_size()[1] / 2)
         self.show = False
         self.text = ""
-        self.auto_hide_time = 0.7
+        self.auto_hide_time = 3
         self.timer = threading.Timer(self.auto_hide_time, self.hide)
         globals.information_group.add(self)
     def draw(self):

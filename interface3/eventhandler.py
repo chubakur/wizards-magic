@@ -5,6 +5,7 @@ import cards
 import sys
 import os
 import sockets
+import socket
 import menu
 from pygame.locals import *
 current_folder = os.path.dirname(os.path.abspath(__file__))
@@ -24,16 +25,28 @@ class Event_handler():
         self.onmouse_element = False
     def event(self, event):
         if event.type == QUIT:
-            return 0
-            if not globals.opponent_disconnect:
-                sockets.query({"action":"bye","player_id":globals.player_id})
-            else:
-                sockets.query({"action":"bbye"})
-            sys.exit(0)
+#            return 0
+#            if not globals.opponent_disconnect:
+#                sockets.query({"action":"bye","player_id":globals.player_id})
+#            else:
+#                sockets.query({"action":"bbye"})
+#            sys.exit(0)
+            menu.exit_program()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 if not globals.question:
-                    menu.menu_esc_question()
+		    if not 'importantmessage' in globals.__dict__: 
+			menu.menu_esc_question()
+		    else: #handle ESC key when display importantmessage
+			if globals.cli: 
+			    if not globals.opponent_disconnect:
+				sockets.query({"action":"bye","player_id":globals.player_id})
+			    else:
+				sockets.query({"action":"bbye"})
+			globals.information_group.remove(globals.importantmessage)
+			del globals.importantmessage
+			globals.stage = 0
+			globals.cli = False
                     return
                 else:
                     menu.clean_question()

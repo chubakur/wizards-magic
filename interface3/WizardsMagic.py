@@ -28,6 +28,7 @@ import pygame
 from pygame.locals import *
 import sys
 import os
+import time
 import player
 if pygame.version.vernum < (1, 9, 1):
     import copy
@@ -51,7 +52,8 @@ import important_message
 current_folder = os.path.dirname(os.path.abspath(__file__))
 globals.current_folder = current_folder
 def server_handler():
-    while True:
+    handling = True
+    while handling:
         gi = sockets.get_package()
         #si = sock.recv(256)
         #print 'si'
@@ -152,8 +154,48 @@ def server_handler():
                    # if not item.card.used_cast: # если еще не кастовали
                              #  item.card.cast_action()
         elif gi['action'] == "opponent_disconnect":
+            handling = False
             globals.opponent_disconnect = True
             globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
+            time.sleep(3)
+            for s in globals.information_group.sprites(): 
+		if type(s) == important_message.MessageWindow: 
+		    globals.information_group.remove(s)
+            del globals.importantmessage
+            globals.stage = 0
+            globals.cli = False
+        elif gi['action'] == "server_close":
+            handling = False
+            globals.importantmessage = important_message.MessageWindow('Sorry, server is closing.')
+            time.sleep(3)
+            for s in globals.information_group.sprites(): 
+		if type(s) == important_message.MessageWindow: 
+		    globals.information_group.remove(s)
+	    del globals.importantmessage
+            globals.stage = 0
+            globals.cli = False
+        elif gi['action'] == "value_error":
+            handling = False
+            globals.importantmessage = important_message.MessageWindow('Socket error. String Null')
+            time.sleep(3)
+            for s in globals.information_group.sprites(): 
+		if type(s) == important_message.MessageWindow: 
+		    globals.information_group.remove(s)
+            del globals.importantmessage
+            globals.stage = 0
+            globals.cli = False
+        elif gi['action'] == "socket_error":
+            handling = False
+            globals.importantmessage = important_message.MessageWindow('Socket error.')
+            time.sleep(3)
+            for s in globals.information_group.sprites(): 
+		if type(s) == important_message.MessageWindow: 
+		    globals.information_group.remove(s)
+            del globals.importantmessage
+            globals.stage = 0
+            globals.cli = False
+    sockets.sock.close()
+            
 def start_game(cli=False,ai=False):
     globals.attack_started = [True]
     globals.background = pygame.image.load(current_folder+'/misc/bg_sample.gif')
@@ -237,19 +279,19 @@ def start_game(cli=False,ai=False):
         globals.cli = False
         sockets.query = lambda x: x
     else:
-       val = sockets.connect()
-       if not val:
-           globals.gameinformationpanel.display('Cant connect to server.')
-           menu.menu_main()
-           globals.stage = False
-           return 0
-       else:
-           globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
-       sockets.query = sockets.query_
-       globals.cli = True
-       thread.start_new_thread(server_handler, ())
+        val = sockets.connect()
+        if not val:
+            globals.gameinformationpanel.display('Cant connect to server.')
+            menu.menu_main()
+            globals.stage = False
+            return 0
+        else:
+            globals.importantmessage = important_message.MessageWindow('We are waiting for another player')
+        sockets.query = sockets.query_
+        globals.cli = True
+        thread.start_new_thread(server_handler, ())
     if not globals.cli:
-       player.switch_position()
+        player.switch_position()
     #********************************************************************************
     globals.screen.blit(globals.background, (0, 0))
     globals.panels.update()
@@ -289,7 +331,7 @@ def start_game(cli=False,ai=False):
             animation_running.run()
             if len(globals.attack_started) and len(globals.cards_attacking) == False:
                 if not globals.cli:
-                  player.switch_position()
+                    player.switch_position()
         pygame.display.flip()
         clock.tick(50)
 

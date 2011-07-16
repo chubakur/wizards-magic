@@ -3,6 +3,9 @@
 import pygame
 import sys
 import os
+import time
+import socket
+import WizardsMagicServer
 import globals
 from pygame.locals import *
 import options
@@ -92,7 +95,7 @@ def menu_esc():
     ''' function called after the user press ESC key and answer question '''
     if globals.answer.upper()=='Y':
         if globals.stage==0:
-            sys.exit(0)
+            exit_program()
         elif globals.stage<=2:
             globals.stage=0
     clean_question()
@@ -103,6 +106,13 @@ def menu_startsinglegame():
     globals.cli = False
     globals.ai = True
     globals.gameinformationpanel.show=False
+def menu_startserver():
+    ''' function called after the user click Start Server item '''
+    if not globals.server_thread: 
+	globals.server_thread = WizardsMagicServer.Server()
+	globals.server_thread.start()
+	globals.gameinformationpanel.display("  Server listening on "+globals.port+" TCP port")
+		
 def menu_startgame_onserver():
     ''' finction called after the user click Connect to Server item '''
     globals.cli = True
@@ -132,10 +142,10 @@ def menu_main():
 
     globals.menu_group.empty()
     menu1 = MenuButton(0,"Single Player","menu_startsinglegame()")
-    menu2 = MenuButton(1,"Start Server","",enabled=False)
+    menu2 = MenuButton(1,"Start Server","menu_startserver()")
     menu3 = MenuButton(2,"Multiplayer","menu_multiplayer()")
     menu4 = MenuButton(3,"Options","menu_options()")
-    menu5 = MenuButton(5,"Quit","menu_esc_question()")
+    menu5 = MenuButton(6,"Quit","menu_esc_question()")
 
     globals.menu_group.update()
     #globals.background_backup = globals.background.copy()
@@ -153,3 +163,19 @@ def menu_multiplayer():
     MenuButton(3,"Cancel","menu_main()")
 
     globals.menu_group.update()
+def exit_program():
+    ''' handle a clean exit of threads '''
+    globals.running = False
+    if globals.cli: 
+	if not globals.opponent_disconnect:
+	    sockets.query({"action":"bye","player_id":globals.player_id})
+	else:
+	    sockets.query({"action":"bbye"})
+    if globals.server_thread: 
+	time.sleep(2) #wait for connect threads close itself
+	#unblock server thread
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+	sock.connect(("127.0.0.1", int(globals.port)))
+	sock.close()
+	globals.server_thread.join(5)
+    sys.exit(0)

@@ -25,6 +25,7 @@ player = None
 player1 = None
 player2 = None
 player_id = 0
+players = [[]]  #массив игроки. ID элемента - id игры .Элемент 0 - 1 игрок , элемент 1 - второй игрок
 opponent_disconnect = False
 #Каст с выбором цели
 cast_focus = False #включен ли режим
@@ -42,6 +43,8 @@ answer = "" #buffer to store key strokes
 answer_maxchar = 0 # max number of characters we are waiting for
 answer_cmd = "" #function to execute when stoke ENTER
 itemfocus = None #input object with focus
+running = True #while true, signal to threads that main is still running
+server_thread = None #server thread object
 
 #configuration global variables
 music = 'Y' #enable background music
@@ -51,18 +54,6 @@ server = "" # ip server for network game
 port = "" # port to connect to/serve network game
 
 def clean():
-    cards_of_element_shower_element = "water" #какой элемент показывать
-    selected_card = False #Выбранная карта
-    screen = None
-    player = None
-    player1 = None
-    player2 = None
-    #Каст с выбором цели
-    cast_focus = False #включен ли режим
-    cast_focus_wizard = None # ссылка на кастующий объект ( не цель ! )
-    question=False # when true disable all events but key stroke
-    answer="" #buffer to store key strokes
-    answer_cmd="" #function to execute when stoke ENTER
 
     panels.empty()
     interface.empty()
