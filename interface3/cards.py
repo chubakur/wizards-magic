@@ -243,7 +243,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.killed += 1
     def turn(self):
         self.power = self.default_power
-        self.moves_alive += 1
+        #self.moves_alive += 1
         self.update()
         #print 1
         #print self.playerscards[self.parent.player.id-1].sprites() # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.

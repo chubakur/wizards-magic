@@ -151,6 +151,7 @@ def me_finish_turn():
             spell.periodical_cast()
         for card in globals.ccards_2:
             card.turn()
+            card.moves_alive += 1
         for card in globals.ccards_2:
             card.additional_turn_action()
     else:
@@ -165,6 +166,7 @@ def me_finish_turn():
             spell.periodical_cast()
         for card in globals.ccards_1:
             card.turn()
+            card.moves_alive += 1
         for card in globals.ccards_1:
             card.additional_turn_action()
     if globals.player.ai:
