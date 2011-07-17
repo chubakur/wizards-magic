@@ -63,3 +63,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 58 | cerberus | vidas sinkunas | - | colored by xeranas
 59 | armegeddon | xeranas
 60 | zeus | vidas sinkunas | - | -
+61 | leviathan | xeranas
