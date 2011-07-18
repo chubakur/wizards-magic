@@ -3,13 +3,22 @@ import pygame.sprite
 import animations
 import os
 import gettext
+import options
+import pygame
+from math import *
+import globals
+import player
 current_folder = os.path.dirname(os.path.abspath(__file__))
 #from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 __author__ = "chubakur"
 __date__ = "$13.02.2011 18:46:32$"
-t = gettext.translation('cards', current_folder+'/languages', languages=['en'])
+try:
+    t = gettext.translation('cards', current_folder+'/languages', languages=[globals.language])
+except AttributeError:
+    options.read_configuration()
+    t = gettext.translation('cards', current_folder+'/languages', languages=[globals.language])
 _ = t.ugettext
 t.install()
 
@@ -25,11 +34,7 @@ death_cards_deck = ["Zombie", "Vampire", "GrimReaper", "Ghost", "Werewolf", "Ban
 #air_cards = list([c for c in air_cards_deck]) 
 #earth_cards = list([c for c in earth_cards_deck]) 
 #life_cards = list([c for c in life_cards_deck]) 
-#death_cards = list([c for c in death_cards_deck]) 
-import pygame
-from math import *
-import globals
-import player
+#death_cards = list([c for c in death_cards_deck])
 pygame.font.init()
 font = pygame.font.Font(None, 25)
 class CastLabel(pygame.sprite.Sprite):
@@ -238,7 +243,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
         self.killed += 1
     def turn(self):
         self.power = self.default_power
-        self.moves_alive += 1
+        #self.moves_alive += 1
         self.update()
         #print 1
         #print self.playerscards[self.parent.player.id-1].sprites() # Функция, которая вызывается каждый ход. Например для ледяного голема, у которого отнимаются жизни каждый ход.

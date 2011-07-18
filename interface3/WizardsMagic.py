@@ -28,6 +28,7 @@ import pygame
 from pygame.locals import *
 import sys
 import os
+import cards
 import time
 import player
 if pygame.version.vernum < (1, 9, 1):
@@ -35,7 +36,6 @@ if pygame.version.vernum < (1, 9, 1):
 import animations
 import globals
 import elementbutton
-import cards
 import cardinfo
 import cardsofelementshower
 import completethecoursebutton
@@ -162,7 +162,9 @@ def server_handler():
             globals.stage = 0
             globals.cli = False
     sockets.sock.close()
-            
+def load_and_start_bg_music():
+    globals.bg_sound = pygame.mixer.Sound(current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
+    globals.bg_sound.play(-1)
 def start_game(cli=False,ai=False):
     globals.attack_started = [True]
     globals.background = pygame.image.load(current_folder+'/misc/bg_sample.gif')
@@ -312,8 +314,7 @@ clock = pygame.time.Clock()
 #read configuration file
 options.read_configuration()
 if globals.music == "Y":
-    globals.bg_sound = pygame.mixer.Sound(current_folder+'/misc/sounds/11_the_march_of_the_goblins__tobias_steinmann.ogg')
-    globals.bg_sound.play(-1)
+    thread.start_new_thread(load_and_start_bg_music,())
 menu.menu_main()
 
 globals.event_handler = eventhandler.Event_handler()

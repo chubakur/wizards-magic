@@ -23,6 +23,7 @@ def save():
             config.set('WizardsMagic', item.key, item.text)
         if item.type=='checkbox':
             config.set('WizardsMagic', item.key, (item.value and 'Y' or 'N'))
+    config.set('WizardsMagic','language',globals.language)
     configfile=open(globals.current_folder + '/wizardsmagic.cfg', 'wb')
     config.write(configfile)
     configfile.close()
@@ -80,6 +81,16 @@ def read_configuration():
             globals.animation = "Y"
     except:
         globals.animation = "Y"
+    try:
+        globals.language
+    except:
+        try:
+            globals.language = config.get('WizardsMagic', 'language')
+            globals.language = globals.language.lower()
+            if not globals.language in ['ru','en']:
+                globals.language = 'en'
+        except:
+            globals.language = 'en'
 def options_main(): 
     ''' display options menu '''
 
@@ -102,6 +113,7 @@ def options_main():
         config.set('WizardsMagic', 'nick', 'myname')
         config.set('WizardsMagic', 'server', '127.0.0.1')
         config.set('WizardsMagic', 'port', '7712')
+        config.set('WizardsMagic', 'language', 'en')
         #config.set('WizardsMagic', 'ai', 'Y')
         config.set('WizardsMagic', 'animation', 'Y')
         configfile = open(globals.current_folder + '/wizardsmagic.cfg', 'wb')
@@ -116,6 +128,7 @@ def options_main():
     option2 = TxtInput(3,"NICK:", globals.nick, 8, key="nick")
     option3 = TxtInput(4,"SERVER:", globals.server, 15, key="server")
     option4 = TxtInput(5,"PORT:", globals.port, 5, key="port")
+    option5 = menu.MenuButton(5, "Select language", "menu_select_language()")
     #option5 = CheckBox(6, "AI:", (globals.ai == 'Y'), key="ai")
     option6 = menu.MenuButton(-1, "SAVE", "options.save()", loc=(70, menupos.height-50))
     option7 = menu.MenuButton(-1, "CANCEL", "options.cancel()", loc=(160, menupos.height-50))

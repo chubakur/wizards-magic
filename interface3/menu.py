@@ -128,6 +128,23 @@ def menu_starthotseatgame():
 def menu_options():
     ''' function called after the user click options menu item'''
     options.options_main()
+def select_language(lang):
+    globals.language = lang
+    options.options_main()
+    globals.gameinformationpanel.display('Save settings and restart the game to accept changes')
+def menu_select_language():
+    globals.background = pygame.image.load(current_folder+'/misc/menu_bg.jpg').convert_alpha()
+    globals.background_backup = globals.background.copy()
+    globals.menu_bg = pygame.image.load(current_folder+'/misc/menu_selections_bg.jpg').convert_alpha()
+    menupos = globals.menu_bg.get_rect()
+    menupos.centerx = globals.background.get_rect().centerx -2 # '-2' hack due lazy designer :)
+    menupos.centery = globals.background.get_rect().centery -1 # '-1' hack due lazy designer :)
+    globals.background.blit(globals.menu_bg, menupos)
+    globals.menu_group.empty()
+    MenuButton(0, "English", "select_language('en')")
+    MenuButton(1, "Russian", "select_language('ru')")
+    MenuButton(3, "Back", "options.options_main()")
+    globals.menu_group.update()
 def menu_main(): 
     ''' display Main manu '''
 
