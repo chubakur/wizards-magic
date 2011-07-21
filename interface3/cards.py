@@ -206,6 +206,7 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
     def spell_used(self, spell):
         pass
     def summon(self): # когда призывают
+        #TODO: use something else instead of turn function. 
         self.play_summon_sound()
         for card in self.get_self_cards() + self.get_enemy_cards():
             card.card_summoned(self)
@@ -386,15 +387,11 @@ class Waterfall(Prototype):
         self.image = pygame.image.load(current_folder+'/misc/cards/water/waterfall.gif')
         self.info = _("One of the toughest Elementals. Health itself for 3 whenever any player casts water spell of summons water creature. Attack equal to owner`s Water.")
         Prototype.__init__(self)
-    #def turn(self):
-    #    Prototype.turn(self)
-    #    self.power = self.parent.player.mana['water']
-    #    if not self.power:
-    #        self.power = 1
-    def update(self):
-        Prototype.update(self)
-        if self.field:
-            self.power = self.parent.player.mana['water']
+    def turn(self):
+        Prototype.turn(self)
+        self.power = self.parent.player.mana['water']
+        if not self.power:
+            self.power = 1
 class Leviathan(Prototype):
     def __init__(self):        
         self.name = "Leviathan"
@@ -665,18 +662,14 @@ class Vulcan(Prototype):
         opp_card = globals.cardboxes[self.get_attack_position()].card
         if opp_card.name != 'player':
             opp_card.damage(9, self)
-   # def turn(self):
-    #    Prototype.turn(self)
-     #   self.set_power(self.parent.player.mana['fire'] + 3)
+    def turn(self):
+        Prototype.turn(self)
+        self.set_power(self.parent.player.mana['fire'] + 3)
     def cast_action(self):
         hp = self.health
         for card in self.get_enemy_cards() + self.get_self_cards():
             card.damage(int(floor(hp / 2.0)), self, True)
         self.die()
-    def update(self):
-        Prototype.update(self)
-        if self.field:
-            self.power = self.parent.player.mana['fire'] + 3
 class Cerberus(Prototype):
     def __init__(self):        
         self.name = "Cerberus"        

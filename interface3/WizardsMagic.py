@@ -74,16 +74,16 @@ def server_handler():
             #nickname_window.NicknameWindow((200,10), globals.player1)
             #nickname_window.NicknameWindow((200,400), globals.player2)
             #кидаем ману первому игроку
-	    manas = ["water","fire","air","earth","life","death"]
-	    for i, element in enumerate(manas): 
-		globals.player1.mana[element] = gi['mana'][0][i]
-		globals.player2.mana[element] = gi['mana'][1][i]
+            manas = ["water","fire","air","earth","life","death"]
+            for i, element in enumerate(manas):
+                globals.player1.mana[element] = gi['mana'][0][i]
+                globals.player2.mana[element] = gi['mana'][1][i]
             if globals.player2.cards_generated == 0 and globals.player1.cards_generated == 0:
                 print "Выдаем карты"
-		globals.player1.get_cards(gi['deck_cards'][0])
+                globals.player1.get_cards(gi['deck_cards'][0])
                 globals.player1.cards_generated = True
                 #а теперь второму
-		globals.player2.get_cards(gi['deck_cards'][1])
+                globals.player2.get_cards(gi['deck_cards'][1])
                 globals.player2.cards_generated = True
             globals.information_group.remove(globals.importantmessage)
             del globals.importantmessage
@@ -126,8 +126,8 @@ def server_handler():
             globals.importantmessage = important_message.MessageWindow('Sorry, your opponent was disconnected from game.')
             time.sleep(3)
             for s in globals.information_group.sprites(): 
-		if type(s) == important_message.MessageWindow: 
-		    globals.information_group.remove(s)
+                if type(s) == important_message.MessageWindow:
+                    globals.information_group.remove(s)
             del globals.importantmessage
             globals.stage = 0
             globals.cli = False
@@ -136,9 +136,9 @@ def server_handler():
             globals.importantmessage = important_message.MessageWindow('Sorry, server is closing.')
             time.sleep(3)
             for s in globals.information_group.sprites(): 
-		if type(s) == important_message.MessageWindow: 
-		    globals.information_group.remove(s)
-	    del globals.importantmessage
+                if type(s) == important_message.MessageWindow:
+                    globals.information_group.remove(s)
+            del globals.importantmessage
             globals.stage = 0
             globals.cli = False
         elif gi['action'] == "value_error":
@@ -146,8 +146,8 @@ def server_handler():
             globals.importantmessage = important_message.MessageWindow('Socket error. String Null')
             time.sleep(3)
             for s in globals.information_group.sprites(): 
-		if type(s) == important_message.MessageWindow: 
-		    globals.information_group.remove(s)
+                if type(s) == important_message.MessageWindow:
+                    globals.information_group.remove(s)
             del globals.importantmessage
             globals.stage = 0
             globals.cli = False
@@ -156,8 +156,8 @@ def server_handler():
             globals.importantmessage = important_message.MessageWindow('Socket error.')
             time.sleep(3)
             for s in globals.information_group.sprites(): 
-		if type(s) == important_message.MessageWindow: 
-		    globals.information_group.remove(s)
+                if type(s) == important_message.MessageWindow:
+                    globals.information_group.remove(s)
             del globals.importantmessage
             globals.stage = 0
             globals.cli = False
@@ -275,10 +275,8 @@ def start_game(cli=False,ai=False):
             globals.event_handler.event(event)
         globals.panels.update()
         globals.interface.update()
-        if globals.player.id == 1:
-            globals.ccards_1.update()
-        else:
-            globals.ccards_2.update()
+        globals.ccards_1.update()
+        globals.ccards_2.update()
         globals.cardofelementsshower.update()
         globals.cards_in_deck.update()
         globals.card_info_group.update()
