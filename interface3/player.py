@@ -75,6 +75,9 @@ class Player2(Player):
 def switch_position():
     #globals.attack_started = False
     globals.attack_started.pop()
+    n = globals.nickname1.name
+    globals.nickname1.set_nickname(globals.nickname2.name)
+    globals.nickname2.set_nickname(n)
     for cardbox in globals.cardboxes:
         cardbox.opposite = not cardbox.opposite
 def me_finish_turn():

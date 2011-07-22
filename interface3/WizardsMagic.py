@@ -68,8 +68,10 @@ def server_handler():
                 player.switch_position()
         elif gi['action'] == 'update':
             #Устанавливаем ники
-            globals.player1.nickname = gi['nicknames'][0]
-            globals.player2.nickname = gi['nicknames'][1]
+            #globals.player1.nickname = gi['nicknames'][0]
+            #globals.player2.nickname = gi['nicknames'][1]
+            globals.nickname1.set_nickname(gi['nicknames'][0])
+            globals.nickname2.set_nickname(gi['nicknames'][1])
             #TODO: draw nicknames
             #nickname_window.NicknameWindow((200,10), globals.player1)
             #nickname_window.NicknameWindow((200,400), globals.player2)
@@ -185,8 +187,6 @@ def start_game(cli=False,ai=False):
     globals.player2 = player.Player2()
     globals.player1.enemy = globals.player2
     globals.player2.enemy = globals.player1
-    if ai:
-        globals.player2.ai = True
     globals.player = globals.player1
     ###############################################################################################################
     #ACTIONS
@@ -240,6 +240,11 @@ def start_game(cli=False,ai=False):
     completethecoursebutton.CompleteTheCourseButton((758, 378))
     #Окна выбора карты стихии
     globals.cardofelementsshower = cardsofelementshower.CardsOfElementShower()
+    globals.nickname2 = nickname_window.NicknameWindow((142, 530), 'Guest')
+    globals.nickname1 = nickname_window.NicknameWindow((22, 0), globals.nick)
+    if ai:
+        globals.player2.ai = True
+        globals.nickname2.set_nickname('Computer')
     #стрелочки для сдвига карт в колоде
     #globals.leftarrow = cardsofelementshower.LeftArrow((356, 489))
     #globals.rightarrow = cardsofelementshower.RightArrow((739, 491))
