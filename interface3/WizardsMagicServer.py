@@ -89,7 +89,7 @@ class Connect(threading.Thread):
         #self.id = num_players
         sockets[self.game_id].append(self.sock)
         connections[self.game_id].append(self)
-        self.id = len(globals.players[self.game_id]) - 1
+        self.id = 0
         threading.Thread.__init__(self)
     def send(self, sock, msg):
         msg = json.dumps(msg)
@@ -120,12 +120,12 @@ class Connect(threading.Thread):
                 self.nickname = query['nickname']
                 print "Nick: ", self.nickname
                 globals.players[self.game_id].append(player.Player(self.game_id))
-                id = len(globals.players[self.game_id]) - 1
+                self.id = len(globals.players[self.game_id]) - 1
                 #globals.players[self.game_id][id].id = num_players   
-                globals.players[self.game_id][id].id = len(globals.players[self.game_id])
+                globals.players[self.game_id][self.id].id = len(globals.players[self.game_id])
                 #массив игроки. Элемент 0 - 1 игрок , элемент 1 - второй игрок
                 #Отправляем сообщение , что все прошло Гуд, id игрока
-                self.send(self.sock, {"answ":200, "action":"join","id":globals.players[self.game_id][id].id})
+                self.send(self.sock, {"answ":200, "action":"join","id":globals.players[self.game_id][self.id].id})
                 #if num_players == 2: #когда заходит второй игрок. раздаем карты и ману.
                 if len(globals.players[self.game_id]) == 2 and game_id == self.game_id: 
                     #p_id = 0
