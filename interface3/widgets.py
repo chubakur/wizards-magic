@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-import pygame
+try: 
+    import pygame
+    from pygame.locals import *
+    from pygame import Surface, draw
+    yes_pygame = True
+except ImportError:
+    yes_pygame = False
 import globals
-from pygame.locals import *
-from pygame import Surface, draw
 
 class TxtInput(pygame.sprite.Sprite):
     ''' class handling input box:

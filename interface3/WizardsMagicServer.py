@@ -180,11 +180,6 @@ class Connect(threading.Thread):
                     else:
                         self.send(sockets[self.game_id][1], {"answ":200,"action":"cast","position":query['position'],"target":query['target'],"focus":True})
             elif query['action'] == 'bye':
-                #num_players = 0
-                game_id += 1
-                connections.append([])
-                sockets.append([])
-                globals.players.append([])
                 try:
                     if query['player_id'] == 1:
                         self.send(sockets[self.game_id][1], {"answ":200,"action":"opponent_disconnect"})
@@ -257,11 +252,11 @@ def get_socket():
     return s
 
 def main():
-    print "start"
+    print "Starting server..."
     options.read_configuration()
     socket = get_socket()
     while True:
-        print "waiting for client on "+globals.port
+        print "Waiting for clients on TCP port "+globals.port
         sock, addr = socket.accept()
         Connect(sock, addr).start()
 

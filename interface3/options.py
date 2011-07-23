@@ -1,11 +1,15 @@
-import pygame
+try: 
+    import pygame
+    from pygame.locals import *
+    from widgets import TxtInput, CheckBox
+    import menu
+    yes_pygame = True
+except ImportError:
+    yes_pygame = False
 import sys
 import globals
-from pygame.locals import *
 import ConfigParser
 import os.path
-from widgets import TxtInput, CheckBox
-import menu
 def launcher():
     #Something ,what we need to change after reset configuration
     try:

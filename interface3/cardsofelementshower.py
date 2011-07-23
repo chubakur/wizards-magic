@@ -22,6 +22,7 @@ class CardsOfElementShower(pygame.sprite.Sprite):
         if globals.cli:
             if globals.player_id != globals.player.id:
                 return
-        for card in globals.player.cards[globals.cards_of_element_shower_element]:
-            #exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
-            globals.cards_in_deck.add(globals.player.cards[globals.cards_of_element_shower_element][card])
+        if not globals.cli or  globals.player.cards_generated: 
+            for card in globals.player.cards[globals.cards_of_element_shower_element]:
+                #exec("globals.cards_in_deck.add(globals.player." + card.lower() + ")")
+                globals.cards_in_deck.add(globals.player.cards[globals.cards_of_element_shower_element][card])

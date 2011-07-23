@@ -3,7 +3,11 @@
 # __author__ = "mtsimoni"
 # __date__ = "$25.05.2011 23:17:00$"
 
-import pygame
+try: 
+    import pygame
+    yes_pygame = True
+except ImportError:
+    yes_pygame = False
 import globals
 
 animations_running = []

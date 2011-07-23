@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-import pygame
+try: 
+    import pygame
+    from pygame.locals import *
+    yes_pygame = True
+except ImportError:
+    yes_pygame = False
 import sys
 import os
 import time
@@ -8,7 +13,6 @@ import socket
 import sockets
 import WizardsMagicServer
 import globals
-from pygame.locals import *
 import options
 current_folder = os.path.dirname(os.path.abspath(__file__))
 #t = gettext.translation('interface', current_folder+'/languages', languages=['ru'])
@@ -99,6 +103,12 @@ def menu_esc():
             exit_program()
         elif globals.stage<=2:
             globals.stage=0
+	    if globals.cli: 
+		if not globals.opponent_disconnect:
+		    sockets.query({"action":"bye","player_id":globals.player_id})
+		else:
+		    sockets.query({"action":"bbye"})
+
     clean_question()
 
 def menu_startsinglegame():
