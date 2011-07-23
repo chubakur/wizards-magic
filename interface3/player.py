@@ -5,7 +5,11 @@ import os
 import random
 import globals
 import sockets
-import pygame
+try: 
+    import pygame
+    yes_pygame = True
+except ImportError:
+    yes_pygame = False
 import ai
 current_folder = os.path.dirname(os.path.abspath(__file__))
 
@@ -45,25 +49,38 @@ class Player(): #Прототип игрока
     def get_cards(self, server_cards = None):
         ''' server_cards = list of cards sent from remote server '''
         self.cards = {}
+        tmpcards = {}
         cards_for_sort = {}
+        print server_cards
         for element in ['water', 'fire', 'air', 'earth', 'life', 'death']: 
-            self.cards[element] = {}
+            tmpcards[element] = {}
             cards_for_sort[element] = []
+            print element
             for i in xrange(0, 4):
                 #получаем карту элемента воды
                 if not server_cards: 
                     randnum = random.randint(0, len(globals.games_cards[self.game_id][element])-1)
                     card = globals.games_cards[self.game_id][element][randnum]
-                else:
-                    card = server_cards[element][i]
-                self.cards[element][card] = cards.links_to_cards[card]()
-                cards_for_sort[element].append([self.cards[element][card].level, self.cards[element][card]])
-                if not server_cards: 
                     globals.games_cards[self.game_id][element].remove(card)
-            cards_for_sort[element].sort()
-            for i in xrange(0,4):
-                cards_for_sort[element][i][1].position_in_deck = i
+                else:
+                    print i
+                    card = server_cards[element][i]
+                if self.game_id == 0: 
+                    tmpcards[element][card] = cards.links_to_cards[card]()
+                    cards_for_sort[element].append([tmpcards[element][card].level, tmpcards[element][card]])
+                else: 
+                    tmpcards[element][card] = card
+                    
+            if self.game_id == 0: 
+                cards_for_sort[element].sort()
+                for i in xrange(0,4):
+                    cards_for_sort[element][i][1].position_in_deck = i
+        print tmpcards            
+        self.cards = tmpcards.copy()
+
         del cards_for_sort
+        del tmpcards
+        
 class Player1(Player):
     def __init__(self):
         self.id = 1
