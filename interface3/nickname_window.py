@@ -2,6 +2,7 @@
 # and open the template in the editor.
 import globals
 import pygame
+#TODO: cout as globals.player
 class NicknameWindow(pygame.sprite.Sprite):
     def __init__(self,rect, nickname):
         pygame.sprite.Sprite.__init__(self)

@@ -51,9 +51,18 @@ def select_card(enemy_card):
     random.shuffle(self_cards)
     item = None
     max_eff = 0
-    for card in self_cards:
-        if card.type is 'warrior_card':
-            eff = card.ai('summon',enemy_card)
+    if enemy_card != "player":
+        #If opponent has more of not void  cardboxes
+        for card in self_cards:
+            if card.type is 'warrior_card':
+                eff = card.ai('summon',enemy_card)
+                if eff>=max_eff:
+                    max_eff = eff
+                    item = card
+    else:
+        #if we dont needs on covering opponent card
+        for card in self_cards:
+            eff = card.ai('summon', enemy_card)
             if eff>=max_eff:
                 max_eff = eff
                 item = card
