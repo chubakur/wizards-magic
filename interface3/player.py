@@ -51,11 +51,9 @@ class Player(): #Прототип игрока
         self.cards = {}
         tmpcards = {}
         cards_for_sort = {}
-        print server_cards
         for element in ['water', 'fire', 'air', 'earth', 'life', 'death']: 
             tmpcards[element] = {}
             cards_for_sort[element] = []
-            print element
             for i in xrange(0, 4):
                 #получаем карту элемента воды
                 if not server_cards: 
@@ -63,7 +61,6 @@ class Player(): #Прототип игрока
                     card = globals.games_cards[self.game_id][element][randnum]
                     globals.games_cards[self.game_id][element].remove(card)
                 else:
-                    print i
                     card = server_cards[element][i]
                 if self.game_id == 0: 
                     tmpcards[element][card] = cards.links_to_cards[card]()
@@ -75,7 +72,6 @@ class Player(): #Прототип игрока
                 cards_for_sort[element].sort()
                 for i in xrange(0,4):
                     cards_for_sort[element][i][1].position_in_deck = i
-        print tmpcards            
         self.cards = tmpcards.copy()
 
         del cards_for_sort
