@@ -26,10 +26,7 @@ class Event_handler():
     def event(self, event):
         if event.type == QUIT:
 #            return 0
-#            if not globals.opponent_disconnect:
-#                sockets.query({"action":"bye","player_id":globals.player_id})
-#            else:
-#                sockets.query({"action":"bbye"})
+
 #            sys.exit(0)
             menu.exit_program()
         if event.type == pygame.KEYUP:
