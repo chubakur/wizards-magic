@@ -72,7 +72,7 @@ def clean():
     card_info_group.empty()
     #information_group.empty()
     menu_group.empty()
-    
+
 def playmusic(time=None):
     ''' global function to control music and sounds '''
     ''' time used for fadeout (ms)'''
@@ -99,6 +99,6 @@ def set_element_sound(element):
 
 
 
-    
+
 
 

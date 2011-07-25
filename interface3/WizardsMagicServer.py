@@ -83,8 +83,8 @@ class Connect(threading.Thread):
         global connections
         self.game_id = game_id
         #if players>=2:
-         #   self.sock.send(json.dumps({"answ":100, "players":len(connections[self.game_id])}))
-         #   return
+            #   self.sock.send(json.dumps({"answ":100, "players":len(connections[self.game_id])}))
+            #   return
         #self.game = False
         #self.id = num_players
         sockets[self.game_id].append(self.sock)
@@ -219,7 +219,7 @@ class Connect(threading.Thread):
                 print query['action']
                 self.send(self.sock, {"answ":300})
         self.sock.close()
-        
+
 class Server(threading.Thread):
     socket = None
     def __init__(self):
@@ -243,7 +243,7 @@ class Server(threading.Thread):
 #                    pass
         print "Closing server"
         self.socket.close()
-        
+
 def get_socket():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

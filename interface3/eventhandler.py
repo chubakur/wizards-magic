@@ -35,18 +35,18 @@ class Event_handler():
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 if not globals.question:
-		    if not 'importantmessage' in globals.__dict__:
-			menu.menu_esc_question()
-		    else: #handle ESC key when display importantmessage
-			if globals.cli:
-			    if not globals.opponent_disconnect:
-				sockets.query({"action":"bye","player_id":globals.player_id})
-			    else:
-				sockets.query({"action":"bbye"})
-			globals.information_group.remove(globals.importantmessage)
-			del globals.importantmessage
-			globals.stage = 0
-			globals.cli = False
+                    if not 'importantmessage' in globals.__dict__:
+                        menu.menu_esc_question()
+                    else: #handle ESC key when display importantmessage
+                        if globals.cli:
+                            if not globals.opponent_disconnect:
+                                sockets.query({"action":"bye","player_id":globals.player_id})
+                            else:
+                                sockets.query({"action":"bbye"})
+                        globals.information_group.remove(globals.importantmessage)
+                        del globals.importantmessage
+                        globals.stage = 0
+                        globals.cli = False
                     return
                 else:
                     menu.clean_question()

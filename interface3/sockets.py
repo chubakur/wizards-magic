@@ -31,7 +31,7 @@ def get_package():
         return dict(action='value_error')
     except socket.error:
         return dict(action='socket_error')
-        
+
     while len(answ)<MSGLEN: answ += sock.recv(MSGLEN - len(answ))
         #return answ
     print "GET_PACKAGE RETURN"
@@ -47,4 +47,4 @@ query = lambda x: x
     #print sock.recv(1)
     #return
     #return get_package()62.176.21.105
- 
+

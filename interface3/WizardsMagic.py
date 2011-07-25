@@ -120,8 +120,8 @@ def server_handler():
                 exec('globals.cardbox' + str(gi['position']) + ".card.cast_action()")
             else:#фокус каст
                 exec('globals.cardbox' + str(gi['position']) + ".card.focus_cast_action(" + "globals.cardbox" + str(gi['target']) + ".card)")
-                   # if not item.card.used_cast: # если еще не кастовали
-                             #  item.card.cast_action()
+                    # if not item.card.used_cast: # если еще не кастовали
+                                #  item.card.cast_action()
         elif gi['action'] == "opponent_disconnect":
             handling = False
             globals.opponent_disconnect = True

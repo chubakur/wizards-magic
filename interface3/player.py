@@ -67,7 +67,7 @@ class Player(): #Прототип игрока
                     cards_for_sort[element].append([tmpcards[element][card].level, tmpcards[element][card]])
                 else: 
                     tmpcards[element][card] = card
-                    
+
             if self.game_id == 0: 
                 cards_for_sort[element].sort()
                 for i in xrange(0,4):
@@ -76,7 +76,7 @@ class Player(): #Прототип игрока
 
         del cards_for_sort
         del tmpcards
-        
+
 class Player1(Player):
     def __init__(self):
         self.id = 1
