@@ -207,4 +207,4 @@ def exit_program():
         sock.connect(("127.0.0.1", int(globals.port)))
         sock.close()
         globals.server_thread.join(5)
-        sys.exit(0)
+    sys.exit(0)

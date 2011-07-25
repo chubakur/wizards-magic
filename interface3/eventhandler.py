@@ -26,16 +26,19 @@ class Event_handler():
     def event(self, event):
         if event.type == QUIT:
 #            return 0
-
+#            if not globals.opponent_disconnect:
+#                sockets.query({"action":"bye","player_id":globals.player_id})
+#            else:
+#                sockets.query({"action":"bbye"})
 #            sys.exit(0)
             menu.exit_program()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 if not globals.question:
-		    if not 'importantmessage' in globals.__dict__: 
+		    if not 'importantmessage' in globals.__dict__:
 			menu.menu_esc_question()
 		    else: #handle ESC key when display importantmessage
-			if globals.cli: 
+			if globals.cli:
 			    if not globals.opponent_disconnect:
 				sockets.query({"action":"bye","player_id":globals.player_id})
 			    else:
@@ -54,15 +57,15 @@ class Event_handler():
                 exec(globals.answer_cmd)
                 menu.clean_question()
                 return
-            if globals.itemfocus: 
+            if globals.itemfocus:
                 globals.itemfocus.change(event)
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
                 #global player
                 globals.point.draw(event.pos)
-                if globals.stage==0: 
+                if globals.stage==0:
                     collided = pygame.sprite.spritecollide(globals.point, globals.menu_group, 0)
-                elif globals.stage<=2: 
+                elif globals.stage<=2:
                     collided = pygame.sprite.spritecollide(globals.point, globals.cards_in_deck, 0)
                     if not collided:
                         collided = pygame.sprite.spritecollide(globals.point, globals.interface, 0)
@@ -199,13 +202,13 @@ class Event_handler():
                 if globals.cardinfo.show:
                     globals.cardinfo.show = False
                     globals.card_info_group.empty()
-            else: #1 
+            else: #1
                 for elem in globals.interface:
                     if elem.type == 'button':
                         elem.onmouseup()
         elif event.type == MOUSEMOTION:
             globals.point.draw(event.pos)
-            if globals.stage==0: 
+            if globals.stage==0:
                 collided = pygame.sprite.spritecollide(globals.point, globals.menu_group, 0)
             elif globals.stage<=2:
                 collided = pygame.sprite.spritecollide(globals.point, globals.interface, 0)
