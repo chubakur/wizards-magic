@@ -65,3 +65,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 60 | zeus | vidas sinkunas | - | -
 61 | leviathan | xeranas
 62 | red drake | xeranas
+63 | apostate | - | http://wtactics.org/
+64 | chimera | xeranas
