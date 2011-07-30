@@ -67,3 +67,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 62 | red drake | xeranas
 63 | apostate | - | http://wtactics.org/
 64 | chimera | xeranas
+65 | elemental | vidas sinkunas | - | -
