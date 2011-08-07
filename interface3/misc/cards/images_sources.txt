@@ -68,3 +68,5 @@ Nr | Card Name | Author | Source (URL) | Comment
 63 | apostate | - | http://wtactics.org/
 64 | chimera | xeranas
 65 | elemental | vidas sinkunas | - | -
+66 | revival | - | http://wtactics.org/ | 
+67 | salamander | Emilisha | http://en.wikipedia.org/wiki/File:Feuersalamander_DE.jpg | remaked by xeranas
