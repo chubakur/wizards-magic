@@ -188,13 +188,6 @@ def start_game(cli=False,ai=False):
     globals.player1.enemy = globals.player2
     globals.player2.enemy = globals.player1
     globals.player = globals.player1
-    ###############################################################################################################
-    #ACTIONS
-    ###############################################################################################################
-    #globals.infopanel1 = infopanel.Infopanel((0, 0), globals.player1) #Инициализация панели верхнего игрока
-    #globals.infopanel2 = infopanel.Infopanel((0, 545), globals.player2) #Инициализация панели нижнего игрока
-    #globals.actionpanel1 = actionpanel.Actionpanel((0, 25), globals.player1) #Панель с кнопками верхнего игрока
-    #globals.actionpanel2 = actionpanel.Actionpanel((0, 570), globals.player2) #Панель с кнопками нижнего игрока
     # 0 1 2 3 4   //Расположение
     # 5 6 7 8 9
     globals.cardbox0 = cardbox.Cardbox((22, 46), globals.player1, 0) #0 место на поле
@@ -215,10 +208,6 @@ def start_game(cli=False,ai=False):
         else:
             tcardbox.normal_rect = tcardbox.rect.copy()
             tcardbox.opposite_rect = tcardbox.get_opposite_cardbox().rect.copy()
-    #playerscards = [globals.ccards_1, globals.ccards_2] #Ссылки
-    #exec('Cardbox((640,301),2)')
-    #ElementsWindow((0,0),actionpanel1)
-    #ElementsWindow((0,0),actionpanel2)
     globals.castlabel = cards.CastLabel()
     healthwindow.HealthWindowEnemy((175, 10)) #Окошко здоровья верхнего игрока
     healthwindow.HealthWindow((167, 557)) #Окошко здоровья нижнего игрока

@@ -12,6 +12,7 @@ from options import read_configuration
 from math import *
 import globals
 import player
+import sys
 current_folder = os.path.dirname(os.path.abspath(__file__))
 #from WizardsMagic import cardbox0
 # To change this template, choose Tools | Templates
@@ -235,6 +236,7 @@ if yes_pygame:
         def additional_turn_action(self): # Turn action, but with higher priority.
             return
         def die(self): #Смерть персонажа
+            #print sys.getrefcount(self.image)
             for spell in self.spells:
                 spell.unset(self)
             self.parent.card = self.parent.player #Обнуляем карту в объекте-родителе
@@ -244,7 +246,7 @@ if yes_pygame:
                 card.card_died(self)
             pygame.mixer.music.load(current_folder+'/misc/sounds/card_die.mp3')
             globals.playmusic()
-            self.image = None
+            del self.image
         def enemy_die(self): #когда карта убивает противолежащего юнита
             self.killed += 1
         def turn(self):
@@ -346,10 +348,13 @@ if yes_pygame:
             self.level = 13
             self.power = 5
             self.cast = True
+            print sys.getrefcount(self.cast)
             self.focus_cast = True
             self.health = 29
             self.info = _("Attacks both adjacent slots. Reduces owner`s Water by 2 every turn. \nCAST: Consumes friendly unit, receiving up to 50% of his health.")
+            print sys.getrefcount(self.info)
             self.image = pygame.image.load(current_folder+'/misc/cards/water/hydra.gif')
+            print sys.getrefcount(self.image)
             Prototype.__init__(self)
         def attack(self):
             if self.moves_alive:
@@ -403,11 +408,21 @@ if yes_pygame:
             self.element = "water"
             self.level = 11
             self.power = 6
-            self.cast = False
+            self.cast = True
             self.health = 37
             self.image = pygame.image.load(current_folder+'/misc/cards/water/leviathan.gif')
             self.info = _("When attacking, each enemy creature suffers 1 damage in addition to standard attack. \nCasting Curing heals owner for 4. In exchange, owner loses 1 Water. Cannot be cast if owner's Water less than 6.")
             Prototype.__init__(self)
+        def attack(self):
+            Prototype.attack(self)
+            for card in self.get_enemy_cards():
+                card.damage(1, self, False)
+        def cast_action(self):
+            if self.parent.player.mana['water'] >= 6:
+                self.play_cast_sound()
+                self.parent.player.mana -= 1
+                self.parent.player.heal(4)
+                self.used_cast = True
     class IceGuard(Prototype):
         def __init__(self):
             self.name = "IceGuard"
@@ -1546,6 +1561,7 @@ if yes_pygame:
                         cards.append(cardbox.card)
             return cards
         def spell_speaker(self): #This function tell to each card on game field about spell using.
+            globals.gameinformationpanel.display(self.name)
             for card in self.get_enemy_cards() + self.get_self_cards():
                 card.spell_used(self)
         def periodical_cast(self):

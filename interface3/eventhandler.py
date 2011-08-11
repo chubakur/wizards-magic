@@ -19,18 +19,11 @@ class Point(pygame.sprite.Sprite):
         globals.background.blit(self.image, rect)
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(rect)
-#>>>>>>> other
 class Event_handler():
     def __init__(self):
         self.onmouse_element = False
     def event(self, event):
         if event.type == QUIT:
-#            return 0
-#            if not globals.opponent_disconnect:
-#                sockets.query({"action":"bye","player_id":globals.player_id})
-#            else:
-#                sockets.query({"action":"bbye"})
-#            sys.exit(0)
             menu.exit_program()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
@@ -61,7 +54,6 @@ class Event_handler():
                 globals.itemfocus.change(event)
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
-                #global player
                 globals.point.draw(event.pos)
                 if globals.stage==0:
                     collided = pygame.sprite.spritecollide(globals.point, globals.menu_group, 0)
