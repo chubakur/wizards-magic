@@ -25,6 +25,7 @@ class Player(): #Прототип игрока
         self.element = "none"
         self.ai = False
         self.cards_generated = False
+        self.enemy = None
     def get_self_cards(self):
         return globals.ccards_1.sprites() if self.id == 1 else globals.ccards_2.sprites()
     def damage(self, damage, enemy, cast = False):

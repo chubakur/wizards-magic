@@ -183,6 +183,9 @@ def start_game(cli=False,ai=False):
     globals.games_cards[0]['earth'] = cards.earth_cards_deck[:]
     globals.games_cards[0]['life'] = cards.life_cards_deck[:] 
     globals.games_cards[0]['death'] = cards.death_cards_deck[:]
+    if globals.player1: 
+        globals.player1.enemy = None
+        globals.player2.enemy = None
     globals.player1 = player.Player1()
     globals.player2 = player.Player2()
     globals.player1.enemy = globals.player2
@@ -201,6 +204,7 @@ def start_game(cli=False,ai=False):
     globals.cardbox8 = cardbox.Cardbox((472, 238), globals.player2, 8) #8 место на поле
     globals.cardbox9 = cardbox.Cardbox((622, 238), globals.player2, 9) #9 место на поле
     globals.cardboxes = [globals.cardbox0, globals.cardbox1, globals.cardbox2, globals.cardbox3, globals.cardbox4, globals.cardbox5, globals.cardbox6, globals.cardbox7, globals.cardbox8, globals.cardbox9] #Ссылки на объекты
+
     for tcardbox in globals.cardboxes:
         if pygame.version.vernum < (1, 9, 1):
             tcardbox.normal_rect = copy.deepcopy(tcardbox.rect)
