@@ -70,3 +70,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 65 | elemental | vidas sinkunas | - | -
 66 | revival | - | http://wtactics.org/ | 
 67 | salamander | Emilisha | http://en.wikipedia.org/wiki/File:Feuersalamander_DE.jpg | remaked by xeranas
+68 | unicorn | Bingo pajama bee | http://commons.wikimedia.org/wiki/File:Invisible_Pink_Unicorn.png | remaked by xeranas
