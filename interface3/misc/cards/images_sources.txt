@@ -73,3 +73,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 68 | unicorn | Bingo pajama bee | http://commons.wikimedia.org/wiki/File:Invisible_Pink_Unicorn.png | remaked by xeranas
 69 | hydra | xeranas
 70 | satyr | vidas sinkunas | - | colored by xeranas
+71 | poseidon | xeranas
