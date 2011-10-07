@@ -250,6 +250,8 @@ class Prototype(pygame.sprite.Sprite): #Прототип карты воина
             self.rect = self.rect.move(xshift, yshift)
         else:
             self.parent.image.blit(self.image, (0, 0))
+    def owner_get_damage(self, damage): #Function call when card`s owner get damage
+        pass
 class Nixie(Prototype):
     def __init__(self):        
         self.name = "Nixie"
@@ -351,7 +353,7 @@ class Leviathan(Prototype):
         Prototype.__init__(self)
 class IceGuard(Prototype):
     def __init__(self):        
-        self.name = "IceGuard" 
+        self.name = "IceGuard"
         self.element = "water"
         self.level = 5
         self.info = "Reduces all damage done to owner by 50%. Suffers 200% damage from fire."
@@ -360,6 +362,13 @@ class IceGuard(Prototype):
         self.health = 19
         self.image = pygame.image.load('misc/cards/water/ice_guard.gif')
         Prototype.__init__(self)
+    def damage(self, damage, enemy, cast=False):
+        if enemy.element == "fire":
+            Prototype.damage(self, damage*2, enemy, cast)
+        else:
+            Prototype.damage(self, damage, enemy, cast)
+    def owner_get_damage(self, damage):
+        self.parent.player.heal(damage/2)
 class Poseidon(Prototype):
     def __init__(self):        
         self.name = "Poseidon"        
@@ -843,7 +852,7 @@ class Dryad(Prototype):
         self.info = "Adjacent owner creatures attack increases by 1, and if it`s Earth creature, by 2 whenever anyone casts Earth spell of summons Earth creature."
         self.image = pygame.image.load('misc/cards/earth/dryad.gif')
         Prototype.__init__(self)
-    def additional_turn_action(self):
+    def additional_turn_action(self):F
         ids = self.get_adjacent_position()
         if ids:
             for id in ids:
@@ -942,9 +951,16 @@ class Echidna(Prototype):
         self.power = 7
         self.cast = False
         self.health = 26
+        self.poisoned = []
         self.info = "When attacks, poisons her target. This target will lose 2 health every turn. In the beginning og owner`s turn, Echidna hits all poisoned creatures for 1."
         self.image = pygame.image.load('misc/cards/earth/echidna.gif')
         Prototype.__init__(self)
+    def attack(self):
+        Prototype.attack(self)
+        if not globals.cardboxes(self.get_attack_position()).card in self.poisoned:
+            self.poisoned.append(globals.cardboxes(self.get_attack_position()).card)
+class EchidnaPoison(Magic):
+    pass
 class Priest(Prototype):
     def __init__(self):        
         self.name = "Priest"        

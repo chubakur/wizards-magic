@@ -29,6 +29,8 @@ class Player(): #Прототип игрока
     def get_self_cards(self):
         return globals.ccards_1.sprites() if self.id == 1 else globals.ccards_2.sprites()
     def damage(self, damage, enemy, cast = False):
+        for card in self.get_self_cards():
+            card.owner_gets_damage(damage)
         self.health -= damage
         if self.health <= 0:
             globals.gameinformationpanel.display("Game Over!")

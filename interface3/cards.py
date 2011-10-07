@@ -298,6 +298,8 @@ if yes_pygame:
                 self.rect = self.rect.move(xshift, yshift)
             else:
                 self.parent.image.blit(self.image, (0, 0))
+        def owner_gets_damage(self,damage):
+            pass
     class Nixie(Prototype):
         def __init__(self):
             self.name = "Nixie"
@@ -450,6 +452,8 @@ if yes_pygame:
                 Prototype.damage(self, damage*2, enemy, cast)
             else:
                 Prototype.damage(self, damage, enemy, cast)
+        def owner_gets_damage(self,damage):
+            self.parent.player.heal(damage/2)
     class Poseidon(Prototype):
         def __init__(self):
             self.name = "Poseidon"
