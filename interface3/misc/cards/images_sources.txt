@@ -74,3 +74,4 @@ Nr | Card Name | Author | Source (URL) | Comment
 69 | hydra | xeranas
 70 | satyr | vidas sinkunas | - | colored by xeranas
 71 | poseidon | xeranas
+72 | rejuvenation | - | http://wtactics.org/
