@@ -851,6 +851,7 @@ class Satyr(Prototype):
         else:
             attack_position = self.parent.position-5
         globals.cardboxes[attack_position].card.damage(5, self)
+
         self.die()
 class Golem(Prototype):
     def __init__(self):        

@@ -97,16 +97,18 @@ class Event_handler():
                         for cardbox in globals.cardboxes:
                             cardbox.light = False
                         #Выводим карту
-                        exec('available_mana = globals.player.' + globals.selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                        #exec('available_mana = globals.player.' + globals.selected_card.element + '_mana') # Вычисляем сколько маны у нас есть. Значение помещаем в локальную переменную available_mana
+                        available_mana = globals.player.mana[globals.selected_card.element]
                         if available_mana < globals.selected_card.level:
                             globals.gameinformationpanel.display("Not enough mana.")
                             return
                         item.card = globals.selected_card
                         item.card.parent = item
-                        #item.card.cardboxes = cardboxes
+                        #item.card.cardboxes = card boxes
                         #item.card.playerscards = playerscards
                         item.card.field = True
                         item.card.summon() #функция которая хранит описание действий при выводе карты
+                        item.card.summon_speaker()
                         globals.player.action_points = False
                         exec('globals.player.' + globals.selected_card.element + '_mana -= ' + str(globals.selected_card.level)) #Отнимаем ману
                         globals.interface.remove(globals.cardsofelementshower1) #Закрываем окна выбора карты

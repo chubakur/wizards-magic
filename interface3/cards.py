@@ -226,6 +226,9 @@ if yes_pygame:
                     Prototype.turn(card)
                 for card in globals.ccards_2:
                     card.additional_turn_action()
+        def summon_speaker(self): #tell to other cards about summon
+            for card in globals.ccards_1.sprites() + globals.ccards_2.sprites():
+                card.card_summoned(self)
         def damage(self, damage, enemy, cast=False): #Функция, срабатываемая при получении урона.
             self.health -= damage
             self.update()
@@ -465,6 +468,14 @@ if yes_pygame:
             self.health = 25
             self.image = pygame.image.load(current_folder+'/misc/cards/water/poseidon.gif')
             Prototype.__init__(self)
+        def spell_used(self, spell):
+            if spell.element == "water":
+                self.parent.player.enemy.damage(4, self)
+                self.parent.player.heal(2)
+        def card_summoned(self, card):
+            if card.element == "water":
+                self.parent.player.enemy.damage(4, self)
+                self.parent.player.heal(2)
     class IceWizard(Prototype):
         def __init__(self):
             self.name = "IceWizard"
