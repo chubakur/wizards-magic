@@ -77,24 +77,44 @@ def playmusic(time=None):
     ''' global function to control music and sounds '''
     ''' time used for fadeout (ms)'''
     if sound=='Y':
-        pygame.mixer.music.play()
-        if time != None:
-            pygame.mixer.music.fadeout(time)
+        try:
+            pygame.mixer.music.play()
+            if time != None:
+                pygame.mixer.music.fadeout(time)
+        except:
+            print "Unexpected error: while trying play sound"
 
 def set_element_sound(element):
     if element == 'water':
-        pygame.mixer.music.load(current_folder+'/misc/sounds/water_elem_click.mp3')
+        try: 
+            pygame.mixer.music.load(current_folder+'/misc/sounds/water_elem_click.mp3')
+        except:
+            print "Unexpected error: while trying load water sound"
     elif element == 'air':
-        pygame.mixer.music.load(current_folder+'/misc/sounds/air_elem_click.mp3')
+        try: 
+            pygame.mixer.music.load(current_folder+'/misc/sounds/air_elem_click.mp3')
+        except:
+            print "Unexpected error: while trying load air sound"
     elif element == 'fire':
-        pygame.mixer.music.load(current_folder+'/misc/sounds/fire_elem_click.mp3')
+        try: 
+            pygame.mixer.music.load(current_folder+'/misc/sounds/fire_elem_click.mp3')
+        except:
+            print "Unexpected error: while trying load fire sound"
     elif element == 'earth':
-        pygame.mixer.music.load(current_folder+'/misc/sounds/earth_elem_click.mp3')
+        try: 
+            pygame.mixer.music.load(current_folder+'/misc/sounds/earth_elem_click.mp3')
+        except:
+            print "Unexpected error: while trying load earth sound"
     elif element == 'death':
-        pygame.mixer.music.load(current_folder+'/misc/sounds/death_elem_click.mp3')
+        try: 
+            pygame.mixer.music.load(current_folder+'/misc/sounds/death_elem_click.mp3')
+        except:
+            print "Unexpected error: while trying load death sound"
     elif element == 'life':
-        pygame.mixer.music.load(current_folder+'/misc/sounds/life_elem_click.mp3')
-
+        try:
+            pygame.mixer.music.load(current_folder+'/misc/sounds/life_elem_click.mp3')
+        except:
+            print "Unexpected error: while trying load life sound"
 
 
 
