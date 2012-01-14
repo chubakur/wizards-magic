@@ -109,7 +109,10 @@ def me_finish_turn():
     globals.player.enemy.mana['life'] += 1
     globals.player.enemy.mana['death'] += 1
     #Меняем игрока
-    pygame.mixer.music.load(current_folder+'/misc/sounds/card_attack.mp3')
+    try:
+        pygame.mixer.music.load(current_folder+'/misc/sounds/card_attack.mp3')
+    except:
+        print "Unexpected error: while trying play attack sound"
     globals.playmusic()
     if globals.player.id == 1:
         globals.player = globals.player2
