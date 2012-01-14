@@ -189,7 +189,12 @@ if yes_pygame:
         def run_attack_animation(self):
             cardbox_location = (globals.cardboxes[self.parent.position].rect[0],globals.cardboxes[self.parent.position].rect[1])
             attack_animation = animations.CustomAnimation(self.image,cardbox_location) #Instantiating a animation object
-            attack_animation.path = [(cardbox_location[0], cardbox_location[1]-40),(cardbox_location),(50,40),(200,300)]
+            # dump method to determine which cardbox is used (top/enemy or button/your)
+            # TODO make different attack animation which not depend from Y axis value.  
+            if (cardbox_location[1] > 200):
+                attack_animation.path = [(cardbox_location[0], cardbox_location[1]-30)]
+            else:
+                attack_animation.path = [(cardbox_location[0], cardbox_location[1]+30)]
             attack_animation.attacking() #Selecting Method
         def attack(self): #Функция , срабатываемая при атаке персонажа
             if self.moves_alive:
@@ -247,7 +252,10 @@ if yes_pygame:
             self.kill() #Выкидываем карту из всех групп
             for card in self.get_enemy_cards() + self.get_self_cards():
                 card.card_died(self)
-            pygame.mixer.music.load(current_folder+'/misc/sounds/card_die.mp3')
+            try:
+                pygame.mixer.music.load(current_folder+'/misc/sounds/card_die.mp3')
+            except:
+                print "Unexpected error: while trying load die sound"
             globals.playmusic()
             del self.image
         def enemy_die(self): #когда карта убивает противолежащего юнита
